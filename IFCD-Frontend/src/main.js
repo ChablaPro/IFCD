@@ -20,6 +20,15 @@ import DashboardLayout from './layouts/Dashboard.vue'
 import DashboardRTLLayout from './layouts/DashboardRTL.vue'
 import router from './router'
 // import './plugins/click-away'
+import store from './store';
+import axios from 'axios';
+
+
+// Configuration d'axios
+axios.defaults.baseURL = 'http://localhost:8000/api';
+if (store.state.token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
+}
 
 import './scss/app.scss';
 
@@ -34,5 +43,6 @@ Vue.component("layout-dashboard-rtl", DashboardRTLLayout);
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

@@ -6,24 +6,178 @@
 <template>
 	<div>
 
-		<!-- Authors Table -->
-		<a-row :gutter="24" type="flex">
+		<a-modal v-model:open="openOrg" width="1000px" title="Add Organisation" @ok="handleOkOrg">
+			<p>
+				<label >Année de collecte</label>
+				<a-select
+					v-model="year"
+					style="width: 100%"
+					@focus="focus"
+					@change="handleChange"
+					>
+					<a-select-option value="2024">2024</a-select-option>
+					<a-select-option value="2025">2025</a-select-option>
+					<a-select-option value="2026">2026</a-select-option>
+					<a-select-option value="2027">2027</a-select-option>
+				</a-select>
+			</p>
+			<p>
+				<label >Nouvelle OPA?</label>
+				<a-radio-group v-model="newOPA" style="width: 100%">
+					<a-radio :style="radioStyle" value="oui">Oui</a-radio>
+					<a-radio :style="radioStyle" value="non">Non</a-radio>
+				</a-radio-group>
+			</p>
+			<p>
+				<label >Département</label>
+				<a-select v-model="depOrg"
+					show-search
+					placeholder="Select a Department"
+					option-filter-prop="children"
+					style="width: 100%"
+					:filter-option="filterOptionDep"
+				>
+					<a-select-option value="Alibori">
+						Alibori
+					</a-select-option>
+					<a-select-option value="Atacora">
+						Atacora
+					</a-select-option>
+					<a-select-option value="Atlantique">
+						Atlantique
+					</a-select-option>
+				</a-select>
+			</p>
+			<p>
+				<label >Commune</label>
+				<a-select v-model="comOrg"
+					show-search
+					placeholder="Select a commune"
+					option-filter-prop="children"
+					style="width: 100%"
+					:filter-option="filterOptionDep"
+				>
+					<a-select-option value="Banikoara">
+						Banikoara
+					</a-select-option>
+					<a-select-option value="Natitingou">
+						Natitingou
+					</a-select-option>
+					<a-select-option value="Abomey-Calavi">
+						Abomey-Calavi
+					</a-select-option>
+				</a-select>
+			</p>
+			<p>
+				<label >Arrondissement</label>
+				<a-select v-model="depAr"
+					show-search
+					placeholder="Select a Arrondissement"
+					option-filter-prop="children"
+					style="width: 100%"
+					:filter-option="filterOptionDep"
+				>
+				   <a-select-option value="Gogounou">
+						Gogounou
+					</a-select-option>
+					<a-select-option value="Kandi I">
+						Kandi I
+					</a-select-option>
+					<a-select-option value="Cotonou I">
+						Cotonou I
+					</a-select-option>
+				</a-select>
+			</p>
+			<p>
+				<label >Village</label>
+				<label >Arrondissement</label>
+				<a-select v-model="depVil"
+					show-search
+					placeholder="Select a Village"
+					option-filter-prop="children"
+					style="width: 100%"
+					:filter-option="filterOptionDep"
+				>
+					<a-select-option value="Lafia">
+						Lafia
+					</a-select-option>
+					<a-select-option value="Kpérou">
+						Kpérou
+					</a-select-option>
+					<a-select-option value="Akassato">
+						Akassato
+					</a-select-option>
+				</a-select>
+			</p>
+			<p>
+				<label >Adresse/Maison</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Type d'OPA</label>
+				<a-select
+					v-model="typeOPA"
+					style="width: 100%"
+					@focus="focus"
+					@change="handleChange"
+					>
+					<a-select-option value="Coopérative">Coopérative</a-select-option>
+					<a-select-option value="Association">Association</a-select-option>
+					<a-select-option value="GIE">Groupe d'Intérêt Economique (GIE)</a-select-option>
+					<a-select-option value="Union Communale">Union Communale</a-select-option>
+				</a-select>
+			</p>
+			<p>
+				<label >Dénomination de l'OPA</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Mallions</label>
+				<a-select
+					v-model="maillons"
+					style="width: 100%"
+					@focus="focus"
+					@change="handleChange"
+					>
+					<a-select-option value="Coopérative">Production Végétale</a-select-option>
+					<a-select-option value="Association">Transformation</a-select-option>
+					<a-select-option value="GIE">Commercialisation</a-select-option>
+					<a-select-option value="Union Communale">Production animale</a-select-option>
+					<a-select-option value="Coopérative">Fourniture de biens et services</a-select-option>
+					<a-select-option value="Association">Acteurs Publics</a-select-option>
+					<a-select-option value="GIE">ATDA4</a-select-option>
+					<a-select-option value="Union Communale">CCIC</a-select-option>
+					<a-select-option value="Coopérative">GIC</a-select-option>
+					<a-select-option value="Association">INRAB</a-select-option>
+					<a-select-option value="GIE">Transporteur</a-select-option>
+					<a-select-option value="Union Communale">mPME</a-select-option>
+				</a-select>
+			</p>
+			<p>
+				<label >L'OPA a t-elle un comité de gestion?</label>
+				<a-radio-group v-model="newOPA" style="width: 100%">
+					<a-radio :style="radioStyle" value="oui">Oui</a-radio>
+					<a-radio :style="radioStyle" value="non">Non</a-radio>
+				</a-radio-group>
+			</p>
+			<p>
+				<label >L'OPA a-t-elle un conseil d’administration ?</label>
+				<a-radio-group v-model="newOPA" style="width: 100%">
+					<a-radio :style="radioStyle" value="oui">Oui</a-radio>
+					<a-radio :style="radioStyle" value="non">Non</a-radio>
+				</a-radio-group>
+			</p>
+			<p>
+				<label >L'OPA a-t-elle un Bureau exécutif?</label>
+				<a-radio-group v-model="newOPA" style="width: 100%">
+					<a-radio :style="radioStyle" value="oui">Oui</a-radio>
+					<a-radio :style="radioStyle" value="non">Non</a-radio>
+				</a-radio-group>
+			</p>
+			
+		</a-modal>
 
-			<!-- Authors Table Column -->
-			<a-col :span="24" class="mb-24">
 
-				<!-- Authors Table Card -->
-				<CardAuthorTable
-					:data="table1Data"
-					:columns="table1Columns"
-				></CardAuthorTable>
-				<!-- / Authors Table Card -->
-
-			</a-col>
-			<!-- / Authors Table Column -->
-
-		</a-row>
-		<!-- / Authors Table -->
 
 		<!-- Projects Table -->
 		<a-row :gutter="24" type="flex">
@@ -175,28 +329,33 @@
 	// "Projects" table list of columns and their properties.
 	const table2Columns = [
 		{
-			title: 'COMPANIES',
+			title: 'Organisation',
 			dataIndex: 'company',
 			scopedSlots: { customRender: 'company' },
 			width: 300,
 		},
 		{
-			title: 'BUDGET',
+			title: 'Type',
 			dataIndex: 'budget',
 			class: 'font-semibold text-muted',
 		},
 		{
-			title: 'STATUS',
+			title: 'Village',
 			dataIndex: 'status',
 			class: 'font-semibold text-muted text-sm',
 		},
 		{
-			title: 'COMPLETION',
-			scopedSlots: { customRender: 'completion' },
-			dataIndex: 'completion',
+			title: 'Value chain',
+			dataIndex: 'value',
+			class: 'font-semibold text-muted text-sm',
 		},
 		{
-			title: '',
+			title: 'Date de création',
+			dataIndex: 'value',
+			class: 'font-semibold text-muted text-sm',
+		},
+		{
+			title: 'Actions',
 			scopedSlots: { customRender: 'editBtn' },
 			width: 50,
 		},
@@ -282,6 +441,14 @@
 		},
 		data() {
 			return {
+				itemsDepOrg: ['jack', 'lucy'],
+				
+				nameDepOrg: '',
+				inputRef: null,
+				index: 0,
+				openOrg: true,
+				newOPA: "oui",
+
 				// Associating "Authors" table data with its corresponding property.
 				table1Data: table1Data,
 
@@ -294,6 +461,19 @@
 				// Associating "Projects" table columns with its corresponding property.
 				table2Columns: table2Columns,
 			}
+		},
+		methods: {
+			handleOkOrg(){
+
+			},
+			filterOptionDep(input, option) {
+				return (
+					option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+				);
+			},
+		},
+		mounted() {
+			this.inputRef = this.$refs.inputRef;
 		},
 	})
 
