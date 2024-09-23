@@ -167,6 +167,7 @@
 					<a-radio :style="radioStyle" value="non">Non</a-radio>
 				</a-radio-group>
 			</p>
+			
 			<p>
 				<label >L'OPA a-t-elle un Bureau exécutif?</label>
 				<a-radio-group v-model="newOPA" style="width: 100%">
