@@ -132,6 +132,22 @@
 				<a-input  />
 			</p>
 			<p>
+				<label >Date de création</label>
+				<a-date-picker v-model:value="value1" style="width: 100%" />
+			</p>
+			<p>
+				<label >Personne de contact</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Contact</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Courriel</label>
+				<a-input  />
+			</p>
+			<p>
 				<label >Mallions</label>
 				<a-select
 					v-model="maillons"
@@ -152,6 +168,34 @@
 					<a-select-option value="GIE">Transporteur</a-select-option>
 					<a-select-option value="Union Communale">mPME</a-select-option>
 				</a-select>
+			</p>
+			<p>
+				<label >Total des membres de la coopérative</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Nombre d'hommes dans la coopérative</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Nombre de femmes dans la coopérative</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Nombre de jeunes hommes dans la coopérative</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Nombre de jeunes femmes dans la coopérative</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Quelles sont les services que vous rendez à vos membres?</label>
+				<a-input  />
+			</p>
+			<p>
+				<label >Quelles sont les filières sur lesquelles l'OPA est-elle positionné</label>
+				<a-input  />
 			</p>
 			<p>
 				<label >L'OPA a t-elle un comité de gestion?</label>
