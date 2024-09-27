@@ -91,7 +91,7 @@
       <!-- Copyright Notice -->
       <p class="copyright">
         Copyright © 2024
-        <a href="https://creative-tim.com">IFCD</a>.
+        <a href="https://creative-tim.com">IFDC</a>.
       </p>
       <!-- / Copyright Notice -->
     </a-layout-footer>

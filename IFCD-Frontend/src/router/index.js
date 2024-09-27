@@ -1,78 +1,74 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store' // Make sure to adjust the path as per your store file location
 
 Vue.use(VueRouter)
 
 let routes = [
 	{
-		// will match everything
+
 		path: '*',
 		component: () => import('../views/404.vue'),
 	},
 
 	{
+
 		path: '/',
 		name: 'Home',
 		redirect: '/sign-in',
+		meta: { guest: true }
 	},
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
 		layout: "dashboard",
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
 		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
+		meta: { requiresAuth: true }
 	},
 	{
 		path: '/politique',
 		name: 'Politique',
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
 		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Politique.vue'),
+		meta: { guest: true }
 	},
 	{
 		path: '/terms',
 		name: 'Terms',
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
 		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Terms.vue'),
+		meta: { guest: true }
 	},
 	{
 		path: '/mention',
 		name: 'Mention',
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
 		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Mention.vue'),
+		meta: { guest: true }
 	},
 	{
 		path: '/condition',
 		name: 'Condition',
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
 		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Condition.vue'),
+		meta: { guest: true }
 	},
 	{
 		path: '/layout',
 		name: 'Layout',
 		layout: "dashboard",
 		component: () => import('../views/Layout.vue'),
+		meta: { requiresAuth: true }
 	},
 	{
 		path: '/tables',
-		name: 'Tables',
+		name: 'Organisations',
 		layout: "dashboard",
 		component: () => import('../views/Tables.vue'),
+		meta: { requiresAuth: true }
 	},
 	{
 		path: '/billing',
 		name: 'Billing',
 		layout: "dashboard",
 		component: () => import('../views/Billing.vue'),
+		meta: { requiresAuth: true }
 	},
 	{
 		path: '/rtl',
@@ -80,15 +76,17 @@ let routes = [
 		layout: "dashboard-rtl",
 		meta: {
 			layoutClass: 'dashboard-rtl',
+			requiresAuth: true
 		},
 		component: () => import('../views/RTL.vue'),
 	},
 	{
-		path: '/Profile',
+		path: '/profile',
 		name: 'Profile',
 		layout: "dashboard",
 		meta: {
 			layoutClass: 'layout-profile',
+			requiresAuth: true
 		},
 		component: () => import('../views/Profile.vue'),
 	},
@@ -96,19 +94,27 @@ let routes = [
 		path: '/sign-in-default',
 		name: 'Sign-In',
 		component: () => import('../views/Sign-In.vue'),
+		meta: { guest: true }
 	},
 	{
 		path: '/sign-in',
 		name: 'Sign-Up',
 		meta: {
 			layoutClass: 'layout-sign-up',
+			guest: true // Fixed the duplicated `meta` property
 		},
-		component: () => import('../views/Sign-Up.vue'),
+		component: () => import('../views/Sign-Up.vue')
+	},
+	// Catch-all route should be at the end
+	{
+		// will match everything
+		path: '*',
+		component: () => import('../views/404.vue'),
+		meta: { guest: true }
 	},
 ]
 
-// Adding layout property from each route to the meta
-// object so it can be accessed later.
+// Adding layout property from each route to the meta object
 function addLayoutToRoute(route, parentLayout = "default") {
 	route.meta = route.meta || {};
 	route.meta.layout = route.layout || parentLayout;
@@ -139,5 +145,15 @@ const router = new VueRouter({
 		}
 	}
 })
+
+router.beforeEach((to, from, next) => {
+	if (to.matched.some(record => record.meta.requiresAuth) && !store.getters.isAuthenticated) {
+		next('/sign-in');
+	} else if (to.matched.some(record => record.meta.guest) && store.getters.isAuthenticated) {
+		next('/dashboard');
+	} else {
+		next();
+	}
+});
 
 export default router

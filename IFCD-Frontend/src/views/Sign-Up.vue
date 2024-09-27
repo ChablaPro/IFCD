@@ -67,47 +67,20 @@
 
       <!--p class="text-center my-25 font-semibold text-muted">Or</p-->
       <a-form
-        id="components-form-demo-normal-login"
         :form="form"
+        @submit.prevent="handleSubmit"
         class="login-form"
-        @submit="handleSubmit"
       >
-        <!--a-form-item class="mb-10">
+        <a-form-item class="mb-10" 
+                  :rules="[{ required: true, message: 'Please input your email!' }]" >
           <a-input
-            v-decorator="[
-              'name',
-              {
-                rules: [{ required: true, message: 'Please input your name!' }],
-              },
-            ]"
-            placeholder="Name"
-          >
-          </a-input>
-        </a-form-item-->
-        <a-form-item class="mb-10">
-          <a-input
-            v-decorator="[
-              'email',
-              {
-                rules: [
-                  { required: true, message: 'Please input your email!' },
-                ],
-              },
-            ]"
-            placeholder="Email"
+            v-model="email"
+            placeholder="Email" type="email"
           >
           </a-input>
         </a-form-item>
-        <a-form-item class="mb-5">
-          <a-input
-            v-decorator="[
-              'password',
-              {
-                rules: [
-                  { required: true, message: 'Please input your Password!' },
-                ],
-              },
-            ]"
+        <a-form-item class="mb-5" :rules="[{ required: true, message: 'Please input your Password!' }]">
+          <a-input  v-model="password"
             type="password"
             placeholder="Password"
           >
@@ -115,15 +88,9 @@
         </a-form-item>
         <a-form-item class="mb-10">
           <a-checkbox
-            v-decorator="[
-              'remember',
-              {
-                valuePropName: 'checked',
-                initialValue: true,
-              },
-            ]"
+            v-model="remember"
           >
-            I agree the
+            I agree to the
             <router-link to="/politique" class="font-bold text-dark"
               >Terms and Conditions</router-link
             >
@@ -139,6 +106,7 @@
             SIGN IN
           </a-button>
         </a-form-item>
+        <p v-if="errorMessage" style="color: red;" class="text-center">{{ errorMessage }}</p>
       </a-form>
       <p class="font-semibold text-muted text-center">
         <router-link to="/sign-in" class="font-bold text-dark"
@@ -167,6 +135,10 @@ export default {
   data() {
     return {
       open: true,
+      email: '',
+      password: '',
+      remember: true,
+      errorMessage: '',
       form: null, // Ajout de l'initialisation de form
     };
   },
@@ -180,14 +152,24 @@ export default {
     this.open = ifdcApprove ? JSON.parse(ifdcApprove) : true;
   },
   methods: {
-    // Handles input validation after submission.
-    handleSubmit(e) {
+    // Handles input validation and API call after submission.
+    async handleSubmit(e) {
       e.preventDefault();
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log("Received values of form: ", values);
+      if (!this.remember) {
+          this.errorMessage = "Please accept our privacy policies to continue.";
+        }else{
+          try {
+       
+            await this.$store.dispatch('login', {
+              email: this.email,
+              password: this.password
+            });
+            this.$router.push('/dashboard');
+          } catch (error) {
+            this.errorMessage = "The credentials are incorrect.";
+          }
         }
-      });
+      
     },
 
     handleOk() {

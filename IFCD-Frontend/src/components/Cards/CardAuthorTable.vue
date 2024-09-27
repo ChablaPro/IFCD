@@ -9,8 +9,8 @@
 				</a-col>
 				<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
 					<a-radio-group v-model="authorsHeaderBtns" size="small">
-						<a-radio-button value="all">ALL</a-radio-button>
-						<a-radio-button value="online">ONLINE</a-radio-button>
+						<template slot="author" slot-scope="author"></template>
+						<a-radio-button value="all" v-for="(filt, i) in filter" :key="i">{{ filt.name }}</a-radio-button>
 					</a-radio-group>
 				</a-col>
 			</a-row>
@@ -61,6 +61,10 @@
 				default: () => [],
 			},
 			columns: {
+				type: Array,
+				default: () => [],
+			},
+			filter: {
 				type: Array,
 				default: () => [],
 			},

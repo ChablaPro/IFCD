@@ -1,7 +1,4 @@
-<!-- 
-	This is the sign in page, it uses the dashboard layout in: 
-	"./layouts/Default.vue" .
- -->
+
 
 <template>
   <div class="sign-in">
@@ -137,6 +134,11 @@ export default {
       open: true,
       // Binded model property for "Sign In Form" switch button for "Remember Me" .
       rememberMe: true,
+
+      email: '',
+      password: '',
+      
+      errorMessage: ''
     };
   },
   beforeCreate() {
