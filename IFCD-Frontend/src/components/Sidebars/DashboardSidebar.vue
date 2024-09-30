@@ -17,7 +17,7 @@
     :style="{ backgroundColor: 'transparent' }"
   >
     <div class="brand">
-      <img src="/images/logos/ifdc.png" alt=""  />
+      <img src="/images/logos/ifdc.png" alt="" />
     </div>
     <hr />
 
@@ -200,7 +200,7 @@
           <span class="label">API</span>
         </router-link>
       </a-menu-item>
-     
+
       <a-menu-item>
         <router-link to="/billing">
           <span class="icon">
@@ -379,7 +379,9 @@
     </div>
     <!-- / Sidebar Footer -->
 
-    <a-button type="primary" href="#" block target="_blank"> LOG OUT </a-button>
+    <a-button type="primary" href="#" block target="_blank" @click="logout">
+      LOG OUT
+    </a-button>
   </a-layout-sider>
   <!-- / Main Sidebar -->
 </template>
@@ -409,6 +411,13 @@ export default {
     return {
       // sidebarCollapsedModel: this.sidebarCollapsed,
     };
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/sign-in");
+      });
+    },
   },
 };
 </script>

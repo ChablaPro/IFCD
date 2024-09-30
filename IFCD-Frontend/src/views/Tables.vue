@@ -4,524 +4,866 @@
  -->
 
 <template>
-	<div>
+  <div>
+    <a-modal
+      v-model="openOrg"
+      width="1000px"
+      title="Add Organisation"
+      @ok="handleOkOrg"
+    >
+      <p>
+        <label>Year of collection</label>
+        <a-select
+          v-model="data.yearOrg"
+          style="width: 100%"
+          @focus="focus"
+          @change="handleChange"
+        >
+          <a-select-option value="2024">2024</a-select-option>
+          <a-select-option value="2025">2025</a-select-option>
+          <a-select-option value="2026">2026</a-select-option>
+          <a-select-option value="2027">2027</a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>New OPA?</label>
+        <a-radio-group v-model="data.newOPAOrg" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+      <p>
+        <label>Department</label>
+        <a-select
+          v-model="data.depOrg"
+          show-search
+          placeholder="Select a Department"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option
+            v-for="(depart, i) in departs"
+            :value="depart"
+            :key="i"
+          >
+            {{ depart }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Commune</label>
+        <a-select
+          v-model="data.comOrg"
+          show-search
+          placeholder="Select a Commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(com, i) in communes" :value="com" :key="i">
+            {{ com }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Arrondissement</label>
+        <a-select
+          v-model="data.arrOrg"
+          show-search
+          placeholder="Select a Arrondissement"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option
+            v-for="(arr, i) in arrondissements"
+            :value="arr"
+            :key="i"
+          >
+            {{ arr }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Village</label>
+        <a-select
+          v-model="data.vilOrg"
+          show-search
+          placeholder="Select a Village"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(vil, i) in villages" :value="vil" :key="i">
+            {{ vil }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Address/House</label>
+        <a-input v-model="data.addressOrg" />
+      </p>
+      <p>
+        <label>Type of OPA</label>
+        <a-select v-model="data.typeOPA" style="width: 100%" @focus="focus">
+          <a-select-option value="Coopérative">Cooperative</a-select-option>
+          <a-select-option value="Association">Association</a-select-option>
+          <a-select-option value="GIE"
+            >Economic Interest Group (GIE)</a-select-option
+          >
+          <a-select-option value="Union Communale"
+            >Municipal Union</a-select-option
+          >
+        </a-select>
+      </p>
+      <p v-if="data.typeOPA == 'Coopérative'">
+        <label>Legal status</label>
+        <a-select
+          v-model="data.jurOrg"
+          show-search
+          placeholder="Select a Legal status"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(jur, i) in juridiques" :value="jur" :key="i">
+            {{ jur }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Name of the OPA</label>
+        <a-input v-model="data.nameOPAOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Creation date</label>
+        <a-date-picker v-model="data.dateOPAOrg" style="width: 100%" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Contact person</label>
+        <a-input v-model="data.contactOPAOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Contact</label>
+        <a-input v-model="data.contactOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>E-mail</label>
+        <a-input v-model="data.emailOrg" />
+      </p>
+      <p>
+        <label>Maillons</label>
+        <a-select
+          v-model="data.maiOrg"
+          show-search
+          placeholder="Select a Department"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(mai, i) in maillons" :value="mai" :key="i">
+            {{ mai }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Total cooperative members</label>
+        <a-input v-model="data.totalMemberOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Number of men in the cooperative</label>
+        <a-input v-model="data.totalMenOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Number of women in the cooperative</label>
+        <a-input v-model="data.totalWomenOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Number of young men in the cooperative</label>
+        <a-input v-model="data.totalYMenOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Number of young women in the cooperative</label>
+        <a-input v-model="data.totalYWomenOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>What services do you provide to your members?</label>
+        <a-input v-model="data.serviceOrg" />
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>What are the sectors on which the OPA is positioned?</label>
+        <a-select
+          v-model="data.posOrg"
+          show-search
+          placeholder="Select a Department"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(pos, i) in positions" :value="pos" :key="i">
+            {{ pos }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Does the OPA have a management committee?</label>
+        <a-radio-group v-model="data.manageOPA" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+      <p>
+        <label>Does the OPA have a board of directors?</label>
+        <a-radio-group v-model="data.boardOPA" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+      <p v-if="data.typeOPA != ''">
+        <label>Does the OPA have a supervisory board or commission?</label>
+        <a-radio-group v-model="data.commissionOPA" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+      <p>
+        <label>Does the OPA have an Executive Board?</label>
+        <a-radio-group v-model="data.executiveOPA" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+    </a-modal>
 
-		<a-modal v-model:open="openOrg" width="1000px" title="Add Organisation" @ok="handleOkOrg">
-			<p>
-				<label >Année de collecte</label>
-				<a-select
-					v-model="year"
-					style="width: 100%"
-					@focus="focus"
-					@change="handleChange"
-					>
-					<a-select-option value="2024">2024</a-select-option>
-					<a-select-option value="2025">2025</a-select-option>
-					<a-select-option value="2026">2026</a-select-option>
-					<a-select-option value="2027">2027</a-select-option>
-				</a-select>
-			</p>
-			<p>
-				<label >Nouvelle OPA?</label>
-				<a-radio-group v-model="newOPA" style="width: 100%">
-					<a-radio :style="radioStyle" value="oui">Oui</a-radio>
-					<a-radio :style="radioStyle" value="non">Non</a-radio>
-				</a-radio-group>
-			</p>
-			<p>
-				<label >Département</label>
-				<a-select v-model="depOrg"
-					show-search
-					placeholder="Select a Department"
-					option-filter-prop="children"
-					style="width: 100%"
-					:filter-option="filterOptionDep"
-				>
-					<a-select-option value="Alibori">
-						Alibori
-					</a-select-option>
-					<a-select-option value="Atacora">
-						Atacora
-					</a-select-option>
-					<a-select-option value="Atlantique">
-						Atlantique
-					</a-select-option>
-				</a-select>
-			</p>
-			<p>
-				<label >Commune</label>
-				<a-select v-model="comOrg"
-					show-search
-					placeholder="Select a commune"
-					option-filter-prop="children"
-					style="width: 100%"
-					:filter-option="filterOptionDep"
-				>
-					<a-select-option value="Banikoara">
-						Banikoara
-					</a-select-option>
-					<a-select-option value="Natitingou">
-						Natitingou
-					</a-select-option>
-					<a-select-option value="Abomey-Calavi">
-						Abomey-Calavi
-					</a-select-option>
-				</a-select>
-			</p>
-			<p>
-				<label >Arrondissement</label>
-				<a-select v-model="depAr"
-					show-search
-					placeholder="Select a Arrondissement"
-					option-filter-prop="children"
-					style="width: 100%"
-					:filter-option="filterOptionDep"
-				>
-				   <a-select-option value="Gogounou">
-						Gogounou
-					</a-select-option>
-					<a-select-option value="Kandi I">
-						Kandi I
-					</a-select-option>
-					<a-select-option value="Cotonou I">
-						Cotonou I
-					</a-select-option>
-				</a-select>
-			</p>
-			<p>
-				<label >Village</label>
-				<label >Arrondissement</label>
-				<a-select v-model="depVil"
-					show-search
-					placeholder="Select a Village"
-					option-filter-prop="children"
-					style="width: 100%"
-					:filter-option="filterOptionDep"
-				>
-					<a-select-option value="Lafia">
-						Lafia
-					</a-select-option>
-					<a-select-option value="Kpérou">
-						Kpérou
-					</a-select-option>
-					<a-select-option value="Akassato">
-						Akassato
-					</a-select-option>
-				</a-select>
-			</p>
-			<p>
-				<label >Adresse/Maison</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Type d'OPA</label>
-				<a-select
-					v-model="typeOPA"
-					style="width: 100%"
-					@focus="focus"
-					@change="handleChange"
-					>
-					<a-select-option value="Coopérative">Coopérative</a-select-option>
-					<a-select-option value="Association">Association</a-select-option>
-					<a-select-option value="GIE">Groupe d'Intérêt Economique (GIE)</a-select-option>
-					<a-select-option value="Union Communale">Union Communale</a-select-option>
-				</a-select>
-			</p>
-			<p>
-				<label >Dénomination de l'OPA</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Date de création</label>
-				<a-date-picker v-model:value="value1" style="width: 100%" />
-			</p>
-			<p>
-				<label >Personne de contact</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Contact</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Courriel</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Mallions</label>
-				<a-select
-					v-model="maillons"
-					style="width: 100%"
-					@focus="focus"
-					@change="handleChange"
-					>
-					<a-select-option value="Coopérative">Production Végétale</a-select-option>
-					<a-select-option value="Association">Transformation</a-select-option>
-					<a-select-option value="GIE">Commercialisation</a-select-option>
-					<a-select-option value="Union Communale">Production animale</a-select-option>
-					<a-select-option value="Coopérative">Fourniture de biens et services</a-select-option>
-					<a-select-option value="Association">Acteurs Publics</a-select-option>
-					<a-select-option value="GIE">ATDA4</a-select-option>
-					<a-select-option value="Union Communale">CCIC</a-select-option>
-					<a-select-option value="Coopérative">GIC</a-select-option>
-					<a-select-option value="Association">INRAB</a-select-option>
-					<a-select-option value="GIE">Transporteur</a-select-option>
-					<a-select-option value="Union Communale">mPME</a-select-option>
-				</a-select>
-			</p>
-			<p>
-				<label >Total des membres de la coopérative</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Nombre d'hommes dans la coopérative</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Nombre de femmes dans la coopérative</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Nombre de jeunes hommes dans la coopérative</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Nombre de jeunes femmes dans la coopérative</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Quelles sont les services que vous rendez à vos membres?</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >Quelles sont les filières sur lesquelles l'OPA est-elle positionné</label>
-				<a-input  />
-			</p>
-			<p>
-				<label >L'OPA a t-elle un comité de gestion?</label>
-				<a-radio-group v-model="newOPA" style="width: 100%">
-					<a-radio :style="radioStyle" value="oui">Oui</a-radio>
-					<a-radio :style="radioStyle" value="non">Non</a-radio>
-				</a-radio-group>
-			</p>
-			<p>
-				<label >L'OPA a-t-elle un conseil d’administration ?</label>
-				<a-radio-group v-model="newOPA" style="width: 100%">
-					<a-radio :style="radioStyle" value="oui">Oui</a-radio>
-					<a-radio :style="radioStyle" value="non">Non</a-radio>
-				</a-radio-group>
-			</p>
-			
-			<p>
-				<label >L'OPA a-t-elle un Bureau exécutif?</label>
-				<a-radio-group v-model="newOPA" style="width: 100%">
-					<a-radio :style="radioStyle" value="oui">Oui</a-radio>
-					<a-radio :style="radioStyle" value="non">Non</a-radio>
-				</a-radio-group>
-			</p>
-			
-		</a-modal>
+    <a-modal
+      v-model="openEditOrg"
+      width="1000px"
+      title="Edit Organisation"
+      @ok="handleEditOrg"
+    >
+      <p>
+        <label>Year of collection</label>
+        <a-select
+          v-model="editData.year"
+          style="width: 100%"
+          @focus="focus"
+          @change="handleChange"
+        >
+          <a-select-option value="2024">2024</a-select-option>
+          <a-select-option value="2025">2025</a-select-option>
+          <a-select-option value="2026">2026</a-select-option>
+          <a-select-option value="2027">2027</a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>New OPA?</label>
+        <a-radio-group v-model="editData.newOpa" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+      <p>
+        <label>Department</label>
+        <a-select
+          v-model="editData.departement"
+          show-search
+          placeholder="Select a Department"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option
+            v-for="(depart, i) in departs"
+            :value="depart"
+            :key="i"
+          >
+            {{ depart }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <!--p>
+        <label>Commune</label>
+        <a-select
+          v-model="editData.comOrg"
+          show-search
+          placeholder="Select a Commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(com, i) in communes" :value="com" :key="i">
+            {{ com }}
+          </a-select-option>
+        </a-select>
+      </p-->
+      <p>
+        <label>Arrondissement</label>
+        <a-select
+          v-model="editData.arrondissement"
+          show-search
+          placeholder="Select a Arrondissement"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option
+            v-for="(arr, i) in arrondissements"
+            :value="arr"
+            :key="i"
+          >
+            {{ arr }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Village</label>
+        <a-select
+          v-model="editData.village"
+          show-search
+          placeholder="Select a Village"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(vil, i) in villages" :value="vil" :key="i">
+            {{ vil }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Address/House</label>
+        <a-input v-model="editData.adresse" />
+      </p>
+      <p>
+        <label>Type of OPA</label>
+        <a-select v-model="editData.typeOpa" style="width: 100%" @focus="focus">
+          <a-select-option value="Coopérative">Cooperative</a-select-option>
+          <a-select-option value="Association">Association</a-select-option>
+          <a-select-option value="GIE"
+            >Economic Interest Group (GIE)</a-select-option
+          >
+          <a-select-option value="Union Communale"
+            >Municipal Union</a-select-option
+          >
+        </a-select>
+      </p>
+      <p v-if="editData.typeOpa == 'Coopérative'">
+        <label>Legal status</label>
+        <a-select
+          v-model="editData.juridique"
+          show-search
+          placeholder="Select a Legal status"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(jur, i) in juridiques" :value="jur" :key="i">
+            {{ jur }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Name of the OPA</label>
+        <a-input v-model="editData.denominationOpa" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Creation date</label>
+        <a-date-picker v-model="editData.dateCreaction" style="width: 100%" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Contact person</label>
+        <a-input v-model="editData.personneContact" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Contact</label>
+        <a-input v-model="editData.contact" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>E-mail</label>
+        <a-input v-model="editData.courriel" />
+      </p>
+      <p>
+        <label>Maillons</label>
+        <a-select
+          v-model="editData.maillon"
+          show-search
+          placeholder="Select a Department"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(mai, i) in maillons" :value="mai" :key="i">
+            {{ mai }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Total cooperative members</label>
+        <a-input v-model="editData.totalMembre" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Number of men in the cooperative</label>
+        <a-input v-model="editData.nbrHomme" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Number of women in the cooperative</label>
+        <a-input v-model="editData.nbrFemme" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Number of young men in the cooperative</label>
+        <a-input v-model="editData.nbrJHomme" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Number of young women in the cooperative</label>
+        <a-input v-model="editData.nbrJFemme" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>What services do you provide to your members?</label>
+        <a-input v-model="editData.services" />
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>What are the sectors on which the OPA is positioned?</label>
+        <a-select
+          v-model="editData.position"
+          show-search
+          placeholder="Select a Department"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option v-for="(pos, i) in positions" :value="pos" :key="i">
+            {{ pos }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Does the OPA have a management committee?</label>
+        <a-radio-group v-model="editData.gestionOpa" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+      <p>
+        <label>Does the OPA have a board of directors?</label>
+        <a-radio-group v-model="editData.administrationOpa" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+      <p v-if="editData.typeOpa != ''">
+        <label>Does the OPA have a supervisory board or commission?</label>
+        <a-radio-group v-model="editData.surveillanceOpa" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+      <p>
+        <label>Does the OPA have an Executive Board?</label>
+        <a-radio-group v-model="editData.bureauOpa" style="width: 100%">
+          <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+          <a-radio :style="radioStyle" value="non">No</a-radio>
+        </a-radio-group>
+      </p>
+    </a-modal>
 
-
-
-		<!-- Projects Table -->
-		<a-row :gutter="24" type="flex">
-
-			<!-- Projects Table Column -->
-			<a-col :span="24" class="mb-24">
-
-				<!-- Projects Table Column -->
-				<CardProjectTable2
-					:data="table2Data"
-					:columns="table2Columns"
-				></CardProjectTable2>
-				<!-- / Projects Table Column -->
-
-			</a-col>
-			<!-- / Projects Table Column -->
-
-		</a-row>
-		<!-- / Projects Table -->
-
-	</div>
+    <!-- Projects Table -->
+    <a-row :gutter="24" type="flex">
+      <!-- Projects Table Column -->
+      <a-col :span="24" class="mb-24">
+        <!-- Projects Table Column -->
+        <CardProjectTable2
+          :data="table2Data"
+          :columns="table2Columns"
+          @openFunc="handleOpenFunc"
+          @handleValidate="handleValidate"
+          @handleDelete="handleDelete"
+          @handleEdit="handleEdit"
+          @handleView="handleView"
+          @handleNotValidate="handleNotValidate"
+          @handleAll="handleAll"
+        ></CardProjectTable2>
+        <!-- / Projects Table Column -->
+      </a-col>
+      <!-- / Projects Table Column -->
+    </a-row>
+    <!-- / Projects Table -->
+  </div>
 </template>
 
 <script>
+// "Authors" table component.
+import CardAuthorTable from "../components/Cards/CardAuthorTable";
 
-	// "Authors" table component.
-	import CardAuthorTable from '../components/Cards/CardAuthorTable' ;
+// "Projects" table component.
+import CardProjectTable2 from "../components/Cards/CardProjectTable2";
 
-	// "Projects" table component.
-	import CardProjectTable2 from '../components/Cards/CardProjectTable2' ;
-	
-	// "Authors" table list of columns and their properties.
-	const table1Columns = [
-		{
-			title: 'AUTHOR',
-			dataIndex: 'author',
-			scopedSlots: { customRender: 'author' },
-		},
-		{
-			title: 'FUNCTION',
-			dataIndex: 'func',
-			scopedSlots: { customRender: 'func' },
-		},
-		{
-			title: 'STATUS',
-			dataIndex: 'status',
-			scopedSlots: { customRender: 'status' },
-		},
-		{
-			title: 'EMPLOYED',
-			dataIndex: 'employed',
-			class: 'text-muted',
-		},
-		{
-			title: '',
-			scopedSlots: { customRender: 'editBtn' },
-			width: 50,
-		},
-	];
+// Table.vue
+import axios from "axios";
 
-	// "Authors" table list of rows and their properties.
-	const table1Data = [
-		{
-			key: '1',
-			author: {
-				avatar: 'images/face-2.jpg',
-				name: 'Michael John',
-				email: 'michael@mail.com',
-			},
-			func: {
-				job: 'Manager',
-				department: 'Organization',
-			},
-			status: 1,
-			employed: '23/04/18',
-		},
-		{
-			key: '2',
-			author: {
-				avatar: 'images/face-3.jpg',
-				name: 'Alexa Liras',
-				email: 'alexa@mail.com',
-			},
-			func: {
-				job: 'Programator',
-				department: 'Developer',
-			},
-			status: 0,
-			employed: '23/12/20',
-		},
-		{
-			key: '3',
-			author: {
-				avatar: 'images/face-1.jpg',
-				name: 'Laure Perrier',
-				email: 'laure@mail.com',
-			},
-			func: {
-				job: 'Executive',
-				department: 'Projects',
-			},
-			status: 1,
-			employed: '13/04/19',
-		},
-		{
-			key: '4',
-			author: {
-				avatar: 'images/face-4.jpg',
-				name: 'Miriam Eric',
-				email: 'miriam@mail.com',
-			},
-			func: {
-				job: 'Marketing',
-				department: 'Organization',
-			},
-			status: 1,
-			employed: '03/04/21',
-		},
-		{
-			key: '5',
-			author: {
-				avatar: 'images/face-5.jpeg',
-				name: 'Richard Gran',
-				email: 'richard@mail.com',
-			},
-			func: {
-				job: 'Manager',
-				department: 'Organization',
-			},
-			status: 0,
-			employed: '23/03/20',
-		},
-		{
-			key: '6',
-			author: {
-				avatar: 'images/face-6.jpeg',
-				name: 'John Levi',
-				email: 'john@mail.com',
-			},
-			func: {
-				job: 'Tester',
-				department: 'Developer',
-			},
-			status: 0,
-			employed: '14/04/17',
-		},
-	];
-	
-	// "Projects" table list of columns and their properties.
-	const table2Columns = [
-		{
-			title: 'Organisation',
-			dataIndex: 'company',
-			scopedSlots: { customRender: 'company' },
-			width: 300,
-		},
-		{
-			title: 'Type',
-			dataIndex: 'budget',
-			class: 'font-semibold text-muted',
-		},
-		{
-			title: 'Village',
-			dataIndex: 'status',
-			class: 'font-semibold text-muted text-sm',
-		},
-		{
-			title: 'Value chain',
-			dataIndex: 'value',
-			class: 'font-semibold text-muted text-sm',
-		},
-		{
-			title: 'Date de création',
-			dataIndex: 'value',
-			class: 'font-semibold text-muted text-sm',
-		},
-		{
-			title: 'Actions',
-			scopedSlots: { customRender: 'editBtn' },
-			width: 50,
-		},
-	];
+// "Authors" table list of columns and their properties.
+const table1Columns = [
+  {
+    title: "AUTHOR",
+    dataIndex: "author",
+    scopedSlots: { customRender: "author" },
+  },
+  {
+    title: "FUNCTION",
+    dataIndex: "func",
+    scopedSlots: { customRender: "func" },
+  },
+  {
+    title: "STATUS",
+    dataIndex: "status",
+    scopedSlots: { customRender: "status" },
+  },
+  {
+    title: "EMPLOYED",
+    dataIndex: "employed",
+    class: "text-muted",
+  },
+  {
+    title: "",
+    scopedSlots: { customRender: "editBtn" },
+    width: 50,
+  },
+];
 
-	// "Projects" table list of rows and their properties.
-	const table2Data = [
-		{
-			key: '1',
-			company: {
-				name: 'Spotify Version',
-				logo: 'images/logos/logo-spotify.svg',
-			},
-			status: "working",
-			budget: '$14,000',
-			completion: 60,
-		},
-		{
-			key: '2',
-			company: {
-				name: 'Progress Track',
-				logo: 'images/logos/logo-atlassian.svg',
-			},
-			status: "working",
-			budget: '$3,000',
-			completion: 10,
-		},
-		{
-			key: '3',
-			company: {
-				name: 'Jira Platform Errors',
-				logo: 'images/logos/logo-slack.svg',
-			},
-			status: "done",
-			budget: 'Not Set',
-			completion: {
-				status: 'success',
-				value: 100,
-			},
-		},
-		{
-			key: '4',
-			company: {
-				name: 'Launch new Mobile App',
-				logo: 'images/logos/logo-spotify.svg',
-			},
-			status: "canceled",
-			budget: '$20,600',
-			completion: {
-				status: 'exception',
-				value: 50,
-			},
-		},
-		{
-			key: '5',
-			company: {
-				name: 'Web Dev',
-				logo: 'images/logos/logo-webdev.svg',
-			},
-			status: "working",
-			budget: '$4,000',
-			completion: 80,
-		},
-		{
-			key: '6',
-			company: {
-				name: 'Redesign Online Store',
-				logo: 'images/logos/logo-invision.svg',
-			},
-			status: "canceled",
-			budget: '$2,000',
-			completion: {
-				status: 'exception',
-				value: 0,
-			},
-		},
-	];
+// "Authors" table list of rows and their properties.
+const table1Data = [
+  {
+    key: "1",
+    author: {
+      avatar: "images/face-2.jpg",
+      name: "Michael John",
+      email: "michael@mail.com",
+    },
+    func: {
+      job: "Manager",
+      department: "Organization",
+    },
+    status: 1,
+    employed: "23/04/18",
+  },
+  {
+    key: "2",
+    author: {
+      avatar: "images/face-3.jpg",
+      name: "Alexa Liras",
+      email: "alexa@mail.com",
+    },
+    func: {
+      job: "Programator",
+      department: "Developer",
+    },
+    status: 0,
+    employed: "23/12/20",
+  },
+  {
+    key: "3",
+    author: {
+      avatar: "images/face-1.jpg",
+      name: "Laure Perrier",
+      email: "laure@mail.com",
+    },
+    func: {
+      job: "Executive",
+      department: "Projects",
+    },
+    status: 1,
+    employed: "13/04/19",
+  },
+  {
+    key: "4",
+    author: {
+      avatar: "images/face-4.jpg",
+      name: "Miriam Eric",
+      email: "miriam@mail.com",
+    },
+    func: {
+      job: "Marketing",
+      department: "Organization",
+    },
+    status: 1,
+    employed: "03/04/21",
+  },
+  {
+    key: "5",
+    author: {
+      avatar: "images/face-5.jpeg",
+      name: "Richard Gran",
+      email: "richard@mail.com",
+    },
+    func: {
+      job: "Manager",
+      department: "Organization",
+    },
+    status: 0,
+    employed: "23/03/20",
+  },
+  {
+    key: "6",
+    author: {
+      avatar: "images/face-6.jpeg",
+      name: "John Levi",
+      email: "john@mail.com",
+    },
+    func: {
+      job: "Tester",
+      department: "Developer",
+    },
+    status: 0,
+    employed: "14/04/17",
+  },
+];
 
-	export default ({
-		components: {
-			CardAuthorTable,
-			CardProjectTable2,
-		},
-		data() {
-			return {
-				itemsDepOrg: ['jack', 'lucy'],
-				
-				nameDepOrg: '',
-				inputRef: null,
-				index: 0,
-				openOrg: true,
-				newOPA: "oui",
+// "Projects" table list of columns and their properties.
+//'id', 'denominationOpa', 'typeOpa', 'village', 'position', 'dateCreaction', 'email'
+const table2Columns = [
+  {
+    title: "Organisation",
+    dataIndex: "denominationOpa",
+    scopedSlots: { customRender: "denominationOpa" },
+    width: 300,
+  },
+  {
+    title: "Type",
+    dataIndex: "typeOpa",
+    class: "font-semibold text-muted",
+  },
+  {
+    title: "Village",
+    dataIndex: "village",
+    class: "font-semibold text-muted text-sm",
+  },
+  {
+    title: "Value chain",
+    dataIndex: "position",
+    class: "font-semibold text-muted text-sm",
+  },
+  {
+    title: "Date de création",
+    dataIndex: "dateCreaction",
+    class: "font-semibold text-muted text-sm",
+  },
+  {
+    title: "Add by",
+    dataIndex: "user",
+    scopedSlots: { customRender: "user" },
+    class: "font-semibold text-muted text-sm",
+  },
+  {
+    title: "Actions",
+    scopedSlots: { customRender: "editBtn" },
+    width: 50,
+  },
+];
 
-				// Associating "Authors" table data with its corresponding property.
-				table1Data: table1Data,
+// "Projects" table list of rows and their properties.
+const table2Data = [];
 
-				// Associating "Authors" table columns with its corresponding property.
-				table1Columns: table1Columns,
+export default {
+  components: {
+    CardAuthorTable,
+    CardProjectTable2,
+  },
+  data() {
+    return {
+      openEditOrg: false,
+      user: [],
+      editData: {},
+      data: {
+        user_id: 0,
+        typeOPA: "",
+        addressOrg: "",
+        nameOPAOrg: "",
+        dateOPAOrg: "",
+        contactOPAOrg: "",
+        contactOrg: "",
+        emailOrg: "",
+        totalMemberOrg: "",
+        totalMenOrg: "",
+        totalWomenOrg: "",
+        totalYMenOrg: "",
+        totalYWomenOrg: "",
+        serviceOrg: "",
+        manageOPA: "non",
+        boardOPA: "non",
+        executiveOPA: "non",
+        commissionOPA: "non",
+        yearOrg: "",
+        depOrg: "",
+        comOrg: "",
+        arrOrg: "",
+        vilOrg: "",
+        maiOrg: "",
+        jurOrg: "",
+        posOrg: "",
 
-				// Associating "Projects" table data with its corresponding property.
-				table2Data: table2Data,
+        newOPAOrg: "oui",
+      },
 
-				// Associating "Projects" table columns with its corresponding property.
-				table2Columns: table2Columns,
-			}
-		},
-		methods: {
-			handleOkOrg(){
+      departs: [],
+      communes: [],
+      arrondissements: [],
+      villages: [],
+      maillons: [],
+      juridiques: [],
+      positions: [],
 
-			},
-			filterOptionDep(input, option) {
-				return (
-					option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-				);
-			},
-		},
-		mounted() {
-			this.inputRef = this.$refs.inputRef;
-		},
-	})
+      nameDepOrg: "",
+      inputRef: null,
+      index: 0,
+      openOrg: false,
+      newOPA: "oui",
+      // Associating "Authors" table data with its corresponding property.
+      table1Data: table1Data,
 
+      // Associating "Authors" table columns with its corresponding property.
+      table1Columns: table1Columns,
+
+      // Associating "Projects" table data with its corresponding property.
+      table2Data: [],
+
+      // Associating "Projects" table columns with its corresponding property.
+      table2Columns: table2Columns,
+    };
+  },
+  methods: {
+    handleNotValidate() {
+      this.table2Data = this.table2Data.filter((item) => item.state == "new");
+    },
+    async handleAll() {
+      const resP = await axios.get("/compagny/paginate6");
+      this.table2Data = resP.data.compagnies.data;
+    },
+    handleOpenFunc() {
+      this.openOrg = true; // Met à jour opeOrg lorsque l'événement est reçu
+    },
+    async handleValidate(row) {
+      row.state = "validated";
+      const res = await axios.post("/compagny/validate", row);
+    },
+    async handleDelete(row) {
+      this.table2Data = this.table2Data.filter((item) => item.id !== row.id);
+      const res = await axios.post("/compagny/delete", row);
+    },
+    handleEdit(row) {
+      this.editData = row;
+      this.openEditOrg = true;
+    },
+    async handleEditOrg() {
+      const res = await axios.post("/compagny/update", this.editData);
+      this.openEditOrg = false;
+    },
+    async handleOkOrg() {
+      const res = await axios.post("/compagny/create", this.data);
+      if (res.status == 200) {
+        this.table2Data = res.data.compagnies.data;
+        this.openOrg = false;
+      }
+    },
+    filterOptionDep(input, option) {
+      return (
+        option.componentOptions.children[0].text
+          .toLowerCase()
+          .indexOf(input.toLowerCase()) >= 0
+      );
+    },
+  },
+  async created() {
+    const res = await axios.get("/compagny/utilities");
+    const resP = await axios.get("/compagny/paginate6");
+
+    if (res.status == 200) {
+      this.departs = res.data.departs.map((depart) => depart.name);
+      this.communes = res.data.communes.map((com) => com.name);
+      this.arrondissements = res.data.arrondissements.map((arr) => arr.name);
+      this.villages = res.data.villages.map((vill) => vill.name);
+      this.maillons = res.data.maillons.map((mail) => mail.name);
+      this.juridiques = res.data.juris.map((jur) => jur.name);
+      this.positions = res.data.positions.map((position) => position.name);
+    }
+
+    if (resP.status == 200) {
+      this.table2Data = resP.data.compagnies.data;
+    }
+  },
+  mounted() {
+    this.inputRef = this.$refs.inputRef;
+  },
+};
 </script>
 
 <style lang="scss">

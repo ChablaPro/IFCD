@@ -40,6 +40,8 @@ return new class extends Migration
             $table->string('administrationOpa')->nullable();
             $table->string('surveillanceOpa')->nullable();
             $table->string('bureauOpa')->nullable();
+            $table->string('state')->default('new');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }
