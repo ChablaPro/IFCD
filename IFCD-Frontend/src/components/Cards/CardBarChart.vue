@@ -4,7 +4,7 @@
 	<a-card :bordered="false" class="dashboard-bar-chart">
 		<chart-bar :height="220" :data="barChartData"></chart-bar>
 		<div class="card-title">
-			<h6>Active Users</h6>
+			<h6>Activities participation</h6>
 			<p>than last week <span class="text-success">+23%</span></p>
 		</div>
 		<div class="card-content">
@@ -13,15 +13,15 @@
 		<a-row class="card-footer" type="flex" justify="center" align="top">
 			<a-col :span="6">
 				<h4>3,6K</h4>
-				<span>Users</span>
+				<span>Women</span>
 			</a-col>
 			<a-col :span="6">
 				<h4>2m</h4>
-				<span>Clicks</span>
+				<span>Men</span>
 			</a-col>
 			<a-col :span="6">
-				<h4>$772</h4>
-				<span>Sales</span>
+				<h4>772</h4>
+				<span>Youth</span>
 			</a-col>
 			<a-col :span="6">
 				<h4>82</h4>
