@@ -14,6 +14,7 @@ The above copyright notice and this permission notice shall be included in all c
 import Vue from 'vue'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import ViewUI from 'view-design';
 import App from './App.vue'
 import DefaultLayout from './layouts/Default.vue'
 import DashboardLayout from './layouts/Dashboard.vue'
@@ -33,6 +34,7 @@ if (store.state.token) {
 import './scss/app.scss';
 
 Vue.use(Antd);
+Vue.use(ViewUI);
 
 Vue.config.productionTip = false
 

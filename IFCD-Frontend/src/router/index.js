@@ -64,6 +64,20 @@ let routes = [
 		meta: { requiresAuth: true }
 	},
 	{
+		path: '/actors',
+		name: 'Actors',
+		layout: "dashboard",
+		component: () => import('../views/Actor.vue'),
+		meta: { requiresAuth: true }
+	},
+	{
+		path: '/activities',
+		name: 'Activities',
+		layout: "dashboard",
+		component: () => import('../views/Activity.vue'),
+		meta: { requiresAuth: true }
+	},
+	{
 		path: '/billing',
 		name: 'Billing',
 		layout: "dashboard",

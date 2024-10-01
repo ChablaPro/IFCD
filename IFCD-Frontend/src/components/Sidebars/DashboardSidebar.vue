@@ -76,7 +76,7 @@
           </router-link>
         </a-menu-item>
         <a-menu-item>
-          <router-link to="/billing">
+          <router-link to="/actors">
             <span class="icon">
               <svg
                 width="20"
@@ -101,7 +101,7 @@
           </router-link>
         </a-menu-item>
         <a-menu-item>
-          <router-link to="/billing">
+          <router-link to="/activities">
             <span class="icon">
               <svg
                 width="20"
@@ -379,7 +379,7 @@
       </div>
       <!-- / Sidebar Footer -->
   
-      <a-button type="primary" href="#" block target="_blank"> LOG OUT </a-button>
+      <a-button type="primary" href="#" block target="_blank" @click="logout"> LOG OUT </a-button>
     </a-layout-sider>
     <!-- / Main Sidebar -->
   </template>
@@ -410,6 +410,13 @@
         // sidebarCollapsedModel: this.sidebarCollapsed,
       };
     },
+    methods: {
+      logout() {
+				this.$store.dispatch('logout').then(() => {
+					this.$router.push('/sign-in');
+				});
+			},
+    }
   };
   </script>
   
