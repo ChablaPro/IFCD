@@ -22,8 +22,9 @@ class Actor extends Model
         'state'
     ];
 
-    public function organisation(){
-        return $this->belongsTo(Compagny::class);
+    public function organisation()
+    {
+        return $this->belongsTo(Compagny::class, 'compagny_id');
     }
 
     public function user(){

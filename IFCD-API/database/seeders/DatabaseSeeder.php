@@ -28,6 +28,10 @@ class DatabaseSeeder extends Seeder
                 OpaSeeder::class,
                 PositionSeeder::class,
                 VillageSeeder::class,
+                ChaineSeeder::class,
+                DomaineSeeder::class,
+                EventNameSeeder::class,
+                PaysSeeder::class
 
             ]
         );

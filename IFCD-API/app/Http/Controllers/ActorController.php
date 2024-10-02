@@ -11,7 +11,7 @@ class ActorController extends Controller
 {
     public function actors()
     {
-        $users = Actor::with('organisation', 'user')->orderBy('id', 'desc')->paginate(6);
+        $users = Actor::with(['organisation', 'user'])->orderBy('id', 'desc')->paginate(6);
 
 
         return response()->json([ 
@@ -73,10 +73,13 @@ class ActorController extends Controller
             'user_id' => $user->id,
         ]);
         // Récupérer l'utilisateur avec ses relations
-        $user = Actor::with('organisation','user')->where('id', $user->id)->first();
+        //$user = Actor::with('organisation','user')->where('id', $user->id)->first();
 
+        $compagnies = Actor::with(['organisation','user']) // Include user_id in the select statement
+        ->orderBy('id', 'desc')
+        ->paginate(6);
         return response()->json([
-            'user' => $user,
+            'users' => $compagnies
         ]);
     }
 
@@ -84,9 +87,9 @@ class ActorController extends Controller
 
 
     // Mettre à jour les informations d'un utilisateur par son ID
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = Actor::with('organisation','user')->find($id);
+        $user = Actor::with(['organisation','user'])->find($request->id);
         $dataToUpdate = $request->except(['id', 'user', 'organisation' ,'created_at', 'updated_at']); // Exclure 'user'
         if ($user) {
             $user->update($dataToUpdate);
@@ -97,9 +100,9 @@ class ActorController extends Controller
     }
 
     // Supprimer un utilisateur par son ID
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $user = Actor::find($id);
+        $user = Actor::find($request->id);
         if ($user) {
             $user->delete();
             return response()->json(['message' => 'User deleted successfully'], 200);
@@ -148,12 +151,12 @@ class ActorController extends Controller
         }
 
         public function search($name){
-            return Actor::with('organisation','user')->orderBy('id','desc')->where('name', 'like', '%'.$name.'%' )->get();
+            return Actor::with(['organisation','user'])->orderBy('id','desc')->where('name', 'like', '%'.$name.'%' )->get();
         }
 
         public function show($id)
         {
-            $user = Actor::with('organisation','user')->find($id);
+            $user = Actor::with(['organisation','user'])->find($id);
             if ($user) {
                 return response()->json(['user' => $user]);
             } else {

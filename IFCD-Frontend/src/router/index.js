@@ -163,9 +163,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 	if (to.matched.some(record => record.meta.requiresAuth) && !store.getters.isAuthenticated) {
 		next('/sign-in');
-	} else if (to.matched.some(record => record.meta.guest) && store.getters.isAuthenticated) {
-		next('/dashboard');
-	} else {
+	}else {
 		next();
 	}
 });

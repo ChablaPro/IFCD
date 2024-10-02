@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActorController;
 use App\Http\Controllers\ArrondissementController;
 use App\Http\Controllers\CommuneController;
@@ -83,4 +84,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/actor/delete', [ActorController::class, 'delete']);
     Route::post('/actor/upload', [ActorController::class, 'upload']);
     Route::post('/actor/delete-img', [ActorController::class, 'deleteImg']);
+
+    //compagnies
+    Route::get('/activity/utilities', [ActivityController::class, 'utilities']);
+    Route::get('/activity/paginate6', [ActivityController::class, 'activities']);
+    Route::post('/activity/create', [ActivityController::class, 'create']);
+    Route::post('/activity/update', [ActivityController::class, 'update']);
+    Route::post('/activity/validate', [ActivityController::class, 'validated']);
+    Route::post('/activity/delete', [ActivityController::class, 'delete']);
+    Route::post('/activity/upload', [ActivityController::class, 'upload']);
+    Route::post('/activity/delete-img', [ActivityController::class, 'deleteImg']);
 });
