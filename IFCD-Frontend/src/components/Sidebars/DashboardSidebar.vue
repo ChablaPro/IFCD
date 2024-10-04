@@ -125,7 +125,7 @@
             <span class="label">Activities</span>
           </router-link>
         </a-menu-item>
-        <a-menu-item>
+        <!--a-menu-item>
           <router-link to="/billing">
             <span class="icon">
               <svg
@@ -225,7 +225,7 @@
             </span>
             <span class="label">About</span>
           </router-link>
-        </a-menu-item>
+        </a-menu-item-->
         <a-menu-item>
           <router-link to="/rtl">
             <span class="icon">
@@ -379,7 +379,7 @@
       </div>
       <!-- / Sidebar Footer -->
   
-      <a-button type="primary" href="#" block target="_blank" @click="logout"> LOG OUT </a-button>
+      <a-button type="primary"  block target="_blank" @click="logout"> LOG OUT </a-button>
     </a-layout-sider>
     <!-- / Main Sidebar -->
   </template>

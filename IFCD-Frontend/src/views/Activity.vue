@@ -8,7 +8,7 @@
       <a-modal
         v-model="openOrg"
         width="1000px"
-        title="Add Actor"
+        title="Add Activity"
       >
 
           <p>
@@ -31,8 +31,18 @@
                 Support for a single image upload. Strictly upload only image files (jpeg, png, jpg, gif) with a maximum size of 2MB.
                 </p>
             </a-upload-dragger>
-            <img :src="'http://localhost:8000' + data.picture" alt="" v-if="data.picture" style="width: 100%">
-            <a-button type="danger" danger style="width: 100%" v-if="data.picture" @click="handleRemove">Remove Image</a-button>
+            <a-row type="flex">
+              <a-col class="col-img" :span="24" :xl="12">
+                    <div class="card-img-bg">
+                      <img :src="'http://localhost:8000' + data.picture"  v-if="data.picture" style="max-width: 150px; border-radius: 5px;">
+                    </div>
+                  </a-col>
+                  <a-col class="col-content" :span="24" :xl="12" style="justify-content: center;">
+                    <a-button type="danger" danger style="width: 100%" v-if="data.avatar" @click="handleRemove">Remove Image</a-button>
+                  </a-col>
+                  
+                </a-row>
+         
           </p>
           <p>
             <label>Title</label>
@@ -186,7 +196,7 @@
       <a-modal
         v-model="openEditOrg"
         width="1000px"
-        title="Edit Actor"
+        title="Edit Activity"
       >
 
           <p>
@@ -209,8 +219,17 @@
                 Support for a single image upload. Strictly upload only image files (jpeg, png, jpg, gif) with a maximum size of 2MB.
                 </p>
             </a-upload-dragger>
-            <img :src="'http://localhost:8000' + editData.picture" alt="" v-if="editData.picture" style="width: 100%">
-            <a-button type="danger" danger style="width: 100%" v-if="editData.picture" @click="handleRemove">Remove Image</a-button>
+            <a-row type="flex">
+              <a-col class="col-img" :span="24" :xl="12">
+                    <div class="card-img-bg">
+                      <img :src="'http://localhost:8000' + editData.picture"  v-if="editData.picture" style="max-width: 150px; border-radius: 5px;">
+                    </div>
+                  </a-col>
+                  <a-col class="col-content" :span="24" :xl="12" style="justify-content: center;">
+                    <a-button type="danger" danger style="width: 100%" v-if="editData.picture" @click="handleRemove">Remove Image</a-button>
+                  </a-col>
+                  
+                </a-row>
           </p>
           <p>
             <label>Title</label>
@@ -352,7 +371,43 @@
             <label>Address</label>
             <a-input v-model="editData.lieu" />
           </p>
-          
+          <p v-if="editData.state=='validated'">
+            <label>Status</label>
+            <a-select
+              v-model="editData.state"
+              show-search
+              placeholder="Select a status"
+              option-filter-prop="children"
+              style="width: 100%"
+              :filter-option="
+                (input, option) =>
+                  option.componentOptions.children[0].text
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+              "
+            >
+              <a-select-option
+                value="done"
+              >
+                Done
+              </a-select-option>
+             
+            </a-select>
+          </p>
+
+          <p v-if="editData.state=='done'">
+            <label>Actors</label>
+            <a-select
+            v-model="editData.actorIds"
+            mode="multiple"
+            style="width: 100%"
+            placeholder="Select Item..."
+            :max-tag-text-length="maxTagTextLength"
+            :options="options"
+          ></a-select>
+          </p>
+
+
       
           <template #footer >
             <a-button key="back" @click="openEditOrg = false" >Cancel</a-button>
@@ -393,6 +448,15 @@
                   <a-radio-button value="all" @click="handleAll">ALL</a-radio-button>
                   <a-radio-button value="online" @click="handleNotValidate"
                     >Not Validated</a-radio-button
+                  >
+                  <a-radio-button value="validate" @click="handleShowValidate"
+                    >To be achieved</a-radio-button
+                  >
+                  <a-radio-button value="progress" @click="handleShowProgress"
+                    >In progress</a-radio-button
+                  >
+                  <a-radio-button value="done" @click="handleDone"
+                    >Done</a-radio-button
                   >
                   <!--a-radio-button value="stores">STORES</a-radio-button-->
                 </a-radio-group>
@@ -696,6 +760,10 @@
     data() {
       
       return {
+        options: [],
+        maxTagCount: 2,
+        maxTagTextLength: 10,
+        actors: [],
         fileList: [],
         search: "",
         projects,
@@ -757,6 +825,18 @@
         },
       },
     methods: {
+      incrementMaxTagCount() {
+      this.maxTagCount++;
+    },
+    decrementMaxTagCount() {
+      this.maxTagCount--;
+    },
+    incrementMaxTagTextLength() {
+      this.maxTagTextLength++;
+    },
+    decrementMaxTagTextLength() {
+      this.maxTagTextLength--;
+    },
       async handleRemove(){
         const res = await axios.post('/actor/delete-img', {photo: this.data.picture})
         this.data.picture = "";
@@ -846,8 +926,37 @@
           handleNotValidate() {
             this.events = this.filteredData.filter((item) => item.state == "new");
           },
-          async handleAll() {
+           handleAll() {
             this.events = this.filteredData;
+          },
+          handleShowValidate() {
+              const today = new Date().toISOString().split('T')[0]; // Récupère la date actuelle au format 'YYYY-MM-DD'
+              
+              this.events = this.filteredData.filter((item) => {
+                  const itemDate = new Date(item.date).toISOString().split('T')[0]; // Convertit item.date en format 'YYYY-MM-DD'
+                  
+                  // Vérifie si l'état est "validated" et si la date est bien inférieure à aujourd'hui
+                  return item.state === "validated" && itemDate > today;
+              });
+          },
+          handleDone() {
+              const today = new Date().toISOString().split('T')[0]; // Récupère la date actuelle au format 'YYYY-MM-DD'
+              
+              this.events = this.filteredData.filter((item) => {
+                  const itemDate = new Date(item.date).toISOString().split('T')[0]; // Convertit item.date en format 'YYYY-MM-DD'
+                  
+                  // Vérifie si l'état est "validated" et si la date est bien inférieure à aujourd'hui
+                  return item.state === "done" && itemDate <= today;
+              });
+          },
+
+          handleShowProgress() {
+              // Utilisez `new Date()` pour obtenir la date actuelle et comparez-la correctement
+              this.events = this.filteredData.filter((item) => {
+                  const today = new Date().toISOString().split('T')[0]; // Récupère la date au format 'YYYY-MM-DD'
+                  const itemDate = new Date(item.date).toISOString().split('T')[0]; // Format la date de l'élément pour comparaison
+                  return item.state === "validated" && itemDate === today;
+              });
           },
           handleOpenFunc() {
             this.openOrg = true; // Met à jour opeOrg lorsque l'événement est reçu
@@ -878,6 +987,20 @@
             const res = await axios.post("/activity/create", this.data);
             if (res.status == 200) {
               this.events = res.data.activities.data;
+              this.data = {
+                titre: '',
+                picture: '',
+                objectif: '',
+                type: '',
+                domaine: '',
+                pays: '',
+                etat: '',
+                commune: '',
+                bassin: '',
+                date: '',
+                lieu: '',
+                state: ''
+              };
               this.loadingAdd = false;
               this.openOrg = false;
               message.success('Activity successfully registered.', 5);
@@ -904,6 +1027,13 @@
         this.domaines = res.data.domaines.map((vill) => vill.name);
         this.types = res.data.events.map((mail) => mail.name);
         this.communes = res.data.communes.map((mail) => mail.name);
+        this.options = res.data.actors.map((actor) => {
+          // Assurez-vous que actor.name existe
+          return {
+            label: actor.name,
+            value: actor.id,
+          };
+        });
       }
   
       if (resP.status == 200) {
@@ -913,6 +1043,7 @@
     },
     mounted() {
       this.inputRef = this.$refs.inputRef;
+
     },
   };
   </script>

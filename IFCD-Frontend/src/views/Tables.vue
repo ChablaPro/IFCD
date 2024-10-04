@@ -207,23 +207,23 @@
 
         <p v-if="data.typeOPA != ''">
           <label>Total cooperative members</label>
-          <a-input v-model="data.totalMemberOrg" />
+          <a-input-number min="1" style="width: 100%;"    v-model="data.totalMemberOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>Number of men in the cooperative</label>
-          <a-input v-model="data.totalMenOrg" />
+          <a-input-number min="1" :max="data.totalMemberOrg" style="width: 100%;"   v-model="data.totalMenOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>Number of women in the cooperative</label>
-          <a-input v-model="data.totalWomenOrg" />
+          <a-input-number min="0" :max="data.totalMemberOrg - data.totalMenOrg" style="width: 100%;"   v-model="data.totalWomenOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>Number of young men in the cooperative</label>
-          <a-input v-model="data.totalYMenOrg" />
+          <a-input-number min="0" :max="data.totalMemberOrg - (data.totalMenOrg + data.totalWomenOrg)"  style="width: 100%;"   v-model="data.totalYMenOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>Number of young women in the cooperative</label>
-          <a-input v-model="data.totalYWomenOrg" />
+          <a-input-number min="0" :max="data.totalMemberOrg - (data.totalMenOrg + data.totalWomenOrg + data.totalYMenOrg)"  style="width: 100%;"   v-model="data.totalYWomenOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>What services do you provide to your members?</label>
@@ -490,25 +490,25 @@
 
       <div v-if="currentEdit==1">
 
-        <p v-if="editData.typeOpa != ''">
-        <label>Total cooperative members</label>
-        <a-input v-model="editData.totalMembre" />
+        <p v-if="editData.typeOPA != ''">
+          <label>Total cooperative members</label>
+          <a-input-number min="1" style="width: 100%;"    v-model="editData.totalMemberOrg" />
         </p>
-        <p v-if="editData.typeOpa != ''">
+        <p v-if="editData.typeOPA != ''">
           <label>Number of men in the cooperative</label>
-          <a-input v-model="editData.nbrHomme" />
+          <a-input-number min="1" :max="editData.totalMemberOrg" style="width: 100%;"   v-model="editData.totalMenOrg" />
         </p>
-        <p v-if="editData.typeOpa != ''">
+        <p v-if="editData.typeOPA != ''">
           <label>Number of women in the cooperative</label>
-          <a-input v-model="editData.nbrFemme" />
+          <a-input-number min="0" :max="editData.totalMemberOrg - editData.totalMenOrg" style="width: 100%;"   v-model="editData.totalWomenOrg" />
         </p>
-        <p v-if="editData.typeOpa != ''">
+        <p v-if="editData.typeOPA != ''">
           <label>Number of young men in the cooperative</label>
-          <a-input v-model="editData.nbrJHomme" />
+          <a-input-number min="0" :max="editData.totalMemberOrg - (editData.totalMenOrg + editData.totalWomenOrg)"  style="width: 100%;"   v-model="editData.totalYMenOrg" />
         </p>
-        <p v-if="editData.typeOpa != ''">
+        <p v-if="editData.typeOPA != ''">
           <label>Number of young women in the cooperative</label>
-          <a-input v-model="editData.nbrJFemme" />
+          <a-input-number min="0" :max="editData.totalMemberOrg - (editData.totalMenOrg + editData.totalWomenOrg + editData.totalYMenOrg)"  style="width: 100%;"   v-model="editData.totalYWomenOrg" />
         </p>
         <p v-if="editData.typeOpa != ''">
           <label>What services do you provide to your members?</label>
@@ -909,11 +909,10 @@ export default {
       this.openInfoOrg = true;
     },
     handleNotValidate() {
-      this.table2Data = this.table2Data.filter((item) => item.state == "new");
+      this.table2Data = this.filteredData.filter((item) => item.state == "new");
     },
     async handleAll() {
-      const resP = await axios.get("/compagny/paginate6");
-      this.table2Data = resP.data.compagnies.data;
+      this.table2Data = this.filteredData;
     },
     handleOpenFunc() {
       this.openOrg = true; // Met à jour opeOrg lorsque l'événement est reçu
@@ -944,6 +943,36 @@ export default {
       const res = await axios.post("/compagny/create", this.data);
       if (res.status == 200) {
         this.table2Data = res.data.compagnies.data;
+        this.data = {
+        user_id: 0,
+        typeOPA: "",
+        addressOrg: "",
+        nameOPAOrg: "",
+        dateOPAOrg: "",
+        contactOPAOrg: "",
+        contactOrg: "",
+        emailOrg: "",
+        totalMemberOrg: "",
+        totalMenOrg: "",
+        totalWomenOrg: "",
+        totalYMenOrg: "",
+        totalYWomenOrg: "",
+        serviceOrg: "",
+        manageOPA: "non",
+        boardOPA: "non",
+        executiveOPA: "non",
+        commissionOPA: "non",
+        yearOrg: "",
+        depOrg: "",
+        comOrg: "",
+        arrOrg: "",
+        vilOrg: "",
+        maiOrg: "",
+        jurOrg: "",
+        posOrg: "",
+
+        newOPAOrg: "oui",
+      };
         this.loadingAdd = false;
         this.openOrg = false;
         message.success('Organization successfully registered.', 5);

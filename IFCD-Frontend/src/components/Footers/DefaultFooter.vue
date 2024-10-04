@@ -6,10 +6,10 @@
       <a-menu mode="horizontal">
         <a-menu-item>Company </a-menu-item>
         <a-menu-item>About Us</a-menu-item>
-        <a-menu-item>Team </a-menu-item>
-        <a-menu-item>Products</a-menu-item>
-        <a-menu-item>Blog</a-menu-item>
-        <a-menu-item>Pricing</a-menu-item>
+        <a-menu-item>Activities </a-menu-item>
+        <a-menu-item>Actors</a-menu-item>
+        <a-menu-item>Documentation</a-menu-item>
+        <!--a-menu-item>Pricing</a-menu-item-->
       </a-menu>
       <!-- / Footer Navigation Menu -->
 

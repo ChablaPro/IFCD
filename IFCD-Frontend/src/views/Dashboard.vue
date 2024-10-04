@@ -48,7 +48,7 @@
 				
 				<!-- Projects Table Card -->
 				<CardProjectTable
-					:data="tableData"
+					:data="tableDataEvent"
 					:columns="tableColumns"
 				></CardProjectTable>
 				<!-- / Projects Table Card -->
@@ -60,7 +60,7 @@
 			<a-col :span="24" :lg="8" class="mb-24">
 
 				<!-- Orders History Timeline Card -->
-				<CardOrderHistory></CardOrderHistory>
+				<CardOrderHistory :row="last6"></CardOrderHistory>
 				<!-- / Orders History Timeline Card -->
 
 			</a-col>
@@ -91,7 +91,7 @@
 </template>
 
 <script>
-
+import axios from "axios";
 	// Bar chart for "Active Users" card.
 	import CardBarChart from '../components/Cards/CardBarChart' ;
 
@@ -102,16 +102,16 @@
 	import WidgetCounter from '../components/Widgets/WidgetCounter' ;
 
 	// "Projects" table component.
-	import CardProjectTable from '../components/Cards/CardProjectTable' ;
+	import CardProjectTable from '../components/Cards/CardProjectTableBord' ;
 
 	// Order History card component.
-	import CardOrderHistory from '../components/Cards/CardOrderHistory' ;
+	import CardOrderHistory from '../components/Cards/CardOrderHistoryBord' ;
 
 	// Information card 1.
-	import CardInfo from '../components/Cards/CardInfo' ;
+	import CardInfo from '../components/Cards/CardInfoBord' ;
 
 	// Information card 2.
-	import CardInfo2 from '../components/Cards/CardInfo2' ;
+	import CardInfo2 from '../components/Cards/CardInfo2Bord' ;
 
 	// Counter Widgets stats
 	const stats = [
@@ -143,7 +143,7 @@
 		{
 			title: "Activities",
 			value: 1200,
-			prefix: "+",
+			prefix: "",
 			status: "danger",
 			suffix: "-20%",
 			icon: `
@@ -169,19 +169,18 @@
 	// "Projects" table list of columns and their properties.
 	const tableColumns = [
 		{
-			title: 'COMPANIES',
-			dataIndex: 'company',
-			scopedSlots: { customRender: 'company' },
+			title: 'Title',
+			dataIndex: 'titre',
 			width: 300,
 		},
 		{
-			title: 'MEMBERS',
-			dataIndex: 'members',
-			scopedSlots: { customRender: 'members' },
+			title: 'Date',
+			dataIndex: 'date',
+			class: 'font-bold text-muted text-sm',
 		},
 		{
-			title: 'BUDGET',
-			dataIndex: 'budget',
+			title: 'Number of participants',
+			dataIndex: 'actorCount',
 			class: 'font-bold text-muted text-sm',
 		},
 		{
@@ -279,9 +278,10 @@
 		},
 		data() {
 			return {
-
+                last6: [],
 				// Associating table data with its corresponding property.
 				tableData,
+				tableDataEvent: [],
 
 				// Associating table columns with its corresponding property.
 				tableColumns,
@@ -290,6 +290,20 @@
 				stats,
 			}
 		},
+
+		async created(){
+			const res = await axios.get("/activity/past");
+			const resL = await axios.get("/activity/last6");
+			if (res.status == 200) {
+				this.tableDataEvent = res.data.activities;
+			}
+
+			if (resL.status == 200) {
+				this.last6 = resL.data.activities;
+			}
+           
+			
+		}
 	})
 
 </script>

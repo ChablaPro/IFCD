@@ -12,21 +12,6 @@
 		<p>
 			{{ content }}
 		</p>
-		<a-row type="flex" :gutter="6" class="card-footer" align="middle">
-			<a-col :span="20">
-				<a-space >
-					<a-button size="small"  @click="validated(row)" v-if="row.state == 'new'">VALIDATE</a-button>
-					<a-button size="small" @click="view(row)">VIEW</a-button>
-					<a-button size="small" primary type="primary" @click="edited(row)">EDIT</a-button>
-					<a-button size="small" danger type="danger" @click="deleted(row)">DELETE</a-button>
-				</a-space>
-			</a-col>
-			<a-col :span="4" class="text-right">
-				<a-space class="avatar-chips">
-					<a-avatar  size="small" v-for="(img, index) in team" :key="index" :src="img" />
-				</a-space>
-			</a-col>
-		</a-row>
 	</a-card>
 	<!-- / Project Card -->
 

@@ -6,12 +6,13 @@ use App\Models\Actor;
 use App\Models\Compagny;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ActorController extends Controller
 {
     public function actors()
     {
-        $users = Actor::with(['organisation', 'user'])->orderBy('id', 'desc')->paginate(6);
+        $users = Actor::with(['organisation', 'user', 'activities'])->orderBy('id', 'desc')->paginate(6);
 
 
         return response()->json([ 
@@ -50,38 +51,54 @@ class ActorController extends Controller
 
     public function create(Request $request)
     {
+        // Récupérer l'utilisateur connecté
         $user = $request->user();
+
+        // Valider les champs
         $request->validate([
             'name' => 'required',
             'avatar' => 'required',
             'genre' => 'required',
-            'age' => 'required',
+            'age' => 'required|integer',
             'langue' => 'required',
             'niveau' => 'required',
-            'compagny_id' => 'required',
-            'compagny_id.*' => 'exists:compagnies,id'
+            'compagny_id' => 'required|exists:compagnies,id' // Ajout de la validation pour compagny_id
         ]);
 
-        $user = Actor::create([
+        // Générer un code unique
+        do {
+            $code = 'IFDC' . Str::random(10);
+        } while (Actor::where('code', $code)->exists());
+
+        // Créer un nouvel acteur (user)
+        $actor = Actor::create([
             'name' => $request->name,
             'avatar' => $request->avatar,
             'genre' => $request->genre,
             'age' => $request->age,
             'langue' => $request->langue,
             'niveau' => $request->niveau,
-            'compagny_id' => $request->compagny_id,
+            'superficie' => $request->superficie, 
+            'handicap' => $request->handicap, 
+            'occupation' => $request->occupation, 
+            'nbrBetail' => $request->nbrBetail,
+            'compagny_id' => $request->compagny_id, // Utilisation du bon champ
             'user_id' => $user->id,
+            'code' => $code,  // Code unique
         ]);
-        // Récupérer l'utilisateur avec ses relations
-        //$user = Actor::with('organisation','user')->where('id', $user->id)->first();
 
-        $compagnies = Actor::with(['organisation','user']) // Include user_id in the select statement
-        ->orderBy('id', 'desc')
-        ->paginate(6);
+        // Récupérer les acteurs paginés avec les relations
+        $actors = Actor::with(['organisation', 'user', 'activities'])
+            ->orderBy('id', 'desc')
+            ->paginate(6);
+
+        // Retourner la réponse JSON
         return response()->json([
-            'users' => $compagnies
+            'users' => $actors
         ]);
     }
+
+
 
    
 
@@ -89,8 +106,8 @@ class ActorController extends Controller
     // Mettre à jour les informations d'un utilisateur par son ID
     public function update(Request $request)
     {
-        $user = Actor::with(['organisation','user'])->find($request->id);
-        $dataToUpdate = $request->except(['id', 'user', 'organisation' ,'created_at', 'updated_at']); // Exclure 'user'
+        $user = Actor::with(['organisation','user' , 'activities'])->find($request->id);
+        $dataToUpdate = $request->except(['id', 'user', 'organisation', 'activities' ,'created_at', 'updated_at']); // Exclure 'user'
         if ($user) {
             $user->update($dataToUpdate);
             return response()->json(['user' => $user], 200);
@@ -151,12 +168,12 @@ class ActorController extends Controller
         }
 
         public function search($name){
-            return Actor::with(['organisation','user'])->orderBy('id','desc')->where('name', 'like', '%'.$name.'%' )->get();
+            return Actor::with(['organisation','user' , 'activities'])->orderBy('id','desc')->where('name', 'like', '%'.$name.'%' )->get();
         }
 
         public function show($id)
         {
-            $user = Actor::with(['organisation','user'])->find($id);
+            $user = Actor::with(['organisation','user' , 'activities'])->find($id);
             if ($user) {
                 return response()->json(['user' => $user]);
             } else {

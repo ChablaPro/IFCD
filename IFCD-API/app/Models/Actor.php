@@ -19,8 +19,16 @@ class Actor extends Model
         'niveau',
         'compagny_id',
         'user_id',
-        'state'
+        'state',
+        'superficie', 
+        'handicap', 
+        'occupation', 
+        'nbrBetail'
     ];
+
+    public function activities(){
+        return $this->belongsToMany(Activity::class, 'actorevents');
+    }
 
     public function organisation()
     {

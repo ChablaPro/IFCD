@@ -113,7 +113,7 @@
           >did you forget your password ?</router-link
         >
       </p>
-      <div class="sign-up-gateways">
+      <!--div class="sign-up-gateways">
         <a-row>
           <a-col :span="8"
             ><img src="images/logos/care.png" width="100%" alt=""
@@ -125,7 +125,7 @@
             <img src="images/logos/kit.png" width="100%" alt=""
           /></a-col>
         </a-row>
-      </div>
+      </div-->
     </a-card>
     <!-- / Sign In Form -->
   </div>
@@ -183,3 +183,11 @@ export default {
   },
 };
 </script>
+<style>
+.layout-default.layout-sign-up {
+    padding: 0px;
+}
+.sign-up-header {
+    border-radius: 0px;
+}
+</style>

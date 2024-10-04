@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
+use App\Models\Actor;
 use App\Models\Arrondissement;
 use App\Models\Chaine;
 use App\Models\Commune;
@@ -14,10 +16,44 @@ use App\Models\Maillon;
 use App\Models\Pay;
 use App\Models\Position;
 use App\Models\Village;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
+
+
+    public function getLastSixPastActivities()
+    {
+        $today = Carbon::now(); // Récupère la date actuelle
+
+        // Récupère les 6 dernières activités dont la date est passée, triées par date décroissante
+        $activities = Activity::with(['user', 'actors'])->where('date', '<', $today)
+            ->orderBy('date', 'desc')
+            ->where('state', 'validated')
+            ->take(6)
+            ->get();
+
+        return response()->json([
+            'activities' => ActivityResource::collection($activities)
+        ]);
+    }
+
+    public function getLastSix()
+    {
+
+        // Récupère les 6 dernières activités dont la date est passée, triées par date décroissante
+        $activities = Activity::with(['user', 'actors'])
+            ->orderBy('date', 'desc')
+            ->take(6)
+            ->get();
+
+        return response()->json([
+            'activities' => ActivityResource::collection($activities)
+        ]);
+    }
+
+
     public function activities()
     {
 
@@ -39,6 +75,7 @@ class ActivityController extends Controller
         $communes = Commune::select('name')->orderBy('id', 'desc')->get();
         $departs = Department::select('name')->orderBy('id', 'desc')->get();
         $events = EventName::select('name')->orderBy('id', 'desc')->get();
+        $actors = Actor::select('id','name')->orderBy('id', 'desc')->get();
 
 
         return response()->json([ 
@@ -47,7 +84,8 @@ class ActivityController extends Controller
             'domaines' => $domaines,
             'departs' => $departs,
             'events' => $events,
-            'communes' => $communes
+            'communes' => $communes,
+            'actors' => $actors 
         ]);
 
     }
@@ -87,13 +125,15 @@ class ActivityController extends Controller
             'lieu' => 'required|string',
         ]);
 
+       
+
         // Création de l'activité avec les nouveaux attributs
         $activity = Activity::create([
             'titre' => $request->titre,
             'objectif' => $request->objectif,
             'type' => $request->type,
             'domaine' => $request->domaine,
-            'picture' => $request->picture,
+            'picture' => $request->picture?$request->picture:'/default.jpg',
             'pays' => $request->pays,
             'etat' => $request->etat,
             'commune' => $request->commune,
@@ -102,6 +142,8 @@ class ActivityController extends Controller
             'lieu' => $request->lieu,
             'user_id' => $user->id
         ]);
+
+        
 
         // Récupération des activités avec relations
         $compagnies = Activity::with(['user', 'actors'])
@@ -124,6 +166,10 @@ class ActivityController extends Controller
         $dataToUpdate = $request->except(['id', 'user', 'actors' ,'created_at', 'updated_at']); // Exclure 'user'
         if ($user) {
             $user->update($dataToUpdate);
+            if ($request->actorIds) {
+                $user->actors()->attach($request->actorIds);
+            }
+            
             return response()->json(['user' => $user], 200);
         } else {
             return response()->json(['message' => 'User not found'], 404);
@@ -134,12 +180,10 @@ class ActivityController extends Controller
     public function delete(Request $request)
     {
         $user = Activity::find($request->id);
-        if ($user) {
+      
             $user->delete();
             return response()->json(['message' => 'User deleted successfully'], 200);
-        } else {
-            return response()->json(['message' => 'User not found'], 404);
-        }
+        
     }
 
     public function upload(Request $request){

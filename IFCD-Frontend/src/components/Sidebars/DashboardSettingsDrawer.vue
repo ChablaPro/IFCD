@@ -7,7 +7,7 @@
 		:placement="rtl ? 'left' : 'right'"
 		:closable="false"
 		:visible="showSettingsDrawer"
-		width="360"
+		width="500"
 		:getContainer="() => wrapper"
 		@close="$emit('toggleSettingsDrawer', false)"
 	>
@@ -51,7 +51,7 @@
 				<h6>Navbar Fixed</h6>
 				<a-switch default-checked v-model="navbarFixedModel" @change="$emit('toggleNavbarPosition', navbarFixedModel)" />
 			</div>
-			<div class="download">
+			<!--div class="download">
 				<a-button type="dark" href="https://www.creative-tim.com/product/muse-vue-ant-design-dashboard" block target="_blank">FREE DOWNLOAD</a-button>
 				<a-button type="primary" href="https://www.creative-tim.com/product/muse-vue-ant-design-dashboard-pro" block target="_blank">UPGRADE TO PRO</a-button>
 				<a-button type="secondary" href="https://demos.creative-tim.com/muse-vue-ant-design-dashboard/documentation" block target="_blank">VIEW DOCUMENTATION</a-button>
@@ -71,6 +71,87 @@
 						SHARE
 					</a-button>
 				</div>
+			</div-->
+			<div class="download">
+				<h6>Logs</h6>
+				<a-collapse
+					v-model:activeKey="activeKey"
+					:bordered="false"
+					style="background: rgb(255, 255, 255)"
+				>
+					<template #expandIcon="{ isActive }">
+					<caret-right-outlined :rotate="isActive ? 90 : 0" />
+					</template>
+					<a-collapse-panel key="1" header="Log 1" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Log 1 Settings</p>
+					</a-collapse-panel>
+					<a-collapse-panel key="2" header="Log 2" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Log 2 Settings</p>
+					</a-collapse-panel>
+					<a-collapse-panel key="3" header="Log 3" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Log 3 Settings</p>
+					</a-collapse-panel>
+				</a-collapse>
+			</div>
+
+			<div class="download">
+				<h6>Sessions</h6>
+				<a-collapse
+					v-model:activeKey="activeKey"
+					:bordered="false"
+					style="background: rgb(255, 255, 255)"
+				>
+					<template #expandIcon="{ isActive }">
+					<caret-right-outlined :rotate="isActive ? 90 : 0" />
+					</template>
+					<a-collapse-panel key="1" header="Session 1" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Session 1 Settings</p>
+					</a-collapse-panel>
+					<a-collapse-panel key="2" header="Session 2" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Session 2 Settings</p>
+					</a-collapse-panel>
+					<a-collapse-panel key="3" header="Session 3" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Session 3 Settings</p>
+					</a-collapse-panel>
+				</a-collapse>
+			</div>
+
+			<div class="download">
+				<h6>API</h6>
+				<a-collapse
+					v-model:activeKey="activeKey"
+					:bordered="false"
+					style="background: rgb(255, 255, 255)"
+				>
+					<template #expandIcon="{ isActive }">
+					<caret-right-outlined :rotate="isActive ? 90 : 0" />
+					</template>
+					<a-collapse-panel key="1" header="Endpoints" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Endpoint 1 Settings</p>
+					</a-collapse-panel>
+				</a-collapse>
+			</div>
+
+			<div class="download">
+				<h6>User Permissions</h6>
+				<a-collapse
+					v-model:activeKey="activeKey"
+					:bordered="false"
+					style="background: rgb(255, 255, 255)"
+				>
+					<template #expandIcon="{ isActive }">
+					<caret-right-outlined :rotate="isActive ? 90 : 0" />
+					</template>
+					<a-collapse-panel key="1" header="Super Admin" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Super Admin Settings</p>
+					</a-collapse-panel>
+					<a-collapse-panel key="2" header="Admin" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Admin Settings</p>
+					</a-collapse-panel>
+					<a-collapse-panel key="3" header="Visitor" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+					<p>Visitor Settings</p>
+					</a-collapse-panel>
+				</a-collapse>
 			</div>
 		</div>
 		<!-- / Settings Drawer Content -->
@@ -81,9 +162,11 @@
 </template>
 
 <script>
+
 	import 'vue-github-buttons/dist/vue-github-buttons.css'; // Stylesheet
 	import VueGitHubButtons from 'vue-github-buttons';
 	import Vue from 'vue';
+	
 	Vue.use(VueGitHubButtons, { useCache: true });
 
 	export default ({

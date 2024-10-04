@@ -33,8 +33,18 @@
                 Support for a single image upload. Strictly upload only image files (jpeg, png, jpg, gif) with a maximum size of 2MB.
                 </p>
             </a-upload-dragger>
-            <img :src="'http://localhost:8000' + data.avatar" alt="" v-if="data.avatar" style="width: 100%">
-            <a-button type="danger" danger style="width: 100%" v-if="data.avatar" @click="handleRemove">Remove Image</a-button>
+            <a-row type="flex">
+              <a-col class="col-img" :span="24" :xl="12">
+                    <div class="card-img-bg">
+                      <img :src="'http://localhost:8000' + data.avatar"  v-if="data.avatar" style="max-width: 150px; border-radius: 5px;">
+                    </div>
+                  </a-col>
+                  <a-col class="col-content" :span="24" :xl="12" style="justify-content: center;">
+                    <a-button type="danger" danger style="width: 100%" v-if="data.avatar" @click="handleRemove">Remove Image</a-button>
+                  </a-col>
+                  
+                </a-row>
+           
           </p>
           <p>
             <label>Name</label>
@@ -69,7 +79,7 @@
           </p>
           <p>
             <label>Age</label>
-            <a-input v-model="data.age" />
+            <a-input-number style="width: 100%;" min="1" v-model="data.age" />
           </p>
           <p>
             <label>Langage</label>
@@ -78,6 +88,48 @@
           <p>
             <label>Level</label>
             <a-input v-model="data.niveau" />
+          </p>
+          <p>
+            <label>Person with a disability</label>
+            <a-radio-group v-model="data.handicap" style="width: 100%">
+              <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+              <a-radio :style="radioStyle" value="non">No</a-radio>
+            </a-radio-group>
+          </p>
+          <p>
+            <label>Occupation</label>
+            <a-select
+              v-model="data.occupation"
+              show-search
+              placeholder="Select a occupation"
+              option-filter-prop="children"
+              style="width: 100%"
+              :filter-option="
+                (input, option) =>
+                  option.componentOptions.children[0].text
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+              "
+            >
+              <a-select-option
+                value="agricole"
+              >
+              Agricultural producer
+              </a-select-option>
+              <a-select-option
+                value="eleveur"
+              >
+              Breeder
+             </a-select-option>
+            </a-select>
+          </p>
+          <p v-if="data.occupation=='agricole'">
+            <label>Land area</label>
+            <a-input-number style="width: 100%;" min="1" v-model="data.superficie" />
+          </p>
+          <p v-if="data.occupation=='eleveur'">
+            <label>Number of livestock</label>
+            <a-input-number style="width: 100%;" min="1" v-model="data.nbrBetail" />
           </p>
           <p>
             <label>Company</label>
@@ -140,8 +192,17 @@
                 Support for a single image upload. Strictly upload only image files (jpeg, png, jpg, gif) with a maximum size of 2MB.
                 </p>
             </a-upload-dragger>
-            <img :src="'http://localhost:8000' + editData.avatar" alt="" v-if="editData.avatar" style="width: 100%">
-            <a-button type="danger" danger style="width: 100%" v-if="editData.avatar" @click="handleRemove">Remove Image</a-button>
+            <a-row type="flex">
+              <a-col class="col-img" :span="24" :xl="12">
+                    <div class="card-img-bg">
+                      <img :src="'http://localhost:8000' + editData.avatar"  v-if="editData.avatar" style="max-width: 150px; border-radius: 5px;">
+                    </div>
+                  </a-col>
+                  <a-col class="col-content" :span="24" :xl="12" style="justify-content: center;">
+                    <a-button type="danger" danger style="width: 100%" v-if="editData.avatar" @click="handleRemove">Remove Image</a-button>
+                  </a-col>
+                  
+                </a-row>
           </p>
           <p>
             <label>Name</label>
@@ -176,7 +237,7 @@
           </p>
           <p>
             <label>Age</label>
-            <a-input v-model="editData.age" />
+            <a-input-number style="width: 100%;" min="1" v-model="editData.age" />
           </p>
           <p>
             <label>Langage</label>
@@ -185,6 +246,48 @@
           <p>
             <label>Level</label>
             <a-input v-model="editData.niveau" />
+          </p>
+          <p>
+            <label>Person with a disability</label>
+            <a-radio-group v-model="editData.handicap" style="width: 100%">
+              <a-radio :style="radioStyle" value="oui">Yes</a-radio>
+              <a-radio :style="radioStyle" value="non">No</a-radio>
+            </a-radio-group>
+          </p>
+          <p>
+            <label>Occupation</label>
+            <a-select
+              v-model="editData.occupation"
+              show-search
+              placeholder="Select a occupation"
+              option-filter-prop="children"
+              style="width: 100%"
+              :filter-option="
+                (input, option) =>
+                  option.componentOptions.children[0].text
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+              "
+            >
+              <a-select-option
+                value="agricole"
+              >
+              Agricultural producer
+              </a-select-option>
+              <a-select-option
+                value="eleveur"
+              >
+              Breeder
+             </a-select-option>
+            </a-select>
+          </p>
+          <p v-if="editData.occupation=='agricole'">
+            <label>Land area</label>
+            <a-input-number style="width: 100%;" min="1" v-model="editData.superficie" />
+          </p>
+          <p v-if="editData.occupation=='eleveur'">
+            <label>Number of livestock</label>
+            <a-input-number style="width: 100%;" min="1" v-model="editData.nbrBetail" />
           </p>
           <p>
             <label>Company</label>
@@ -224,7 +327,24 @@
       <a-modal v-model="openInfoOrg"
         width="1000px"
         title="View Actor">
-        <CardBillingInfoActor :info="viewData" @handleDeleteInfo="handleDeleteInfo" @handleEditInfo="handleEditInfo"></CardBillingInfoActor>
+
+        <a-row>
+           
+          <a-col :span="24" >
+            <CardBillingInfoActor :info="viewData" @handleDeleteInfo="handleDeleteInfo" @handleEditInfo="handleEditInfo"></CardBillingInfoActor>
+          </a-col>
+
+          <a-col :span="24" :md="12" :xl="6" v-for="(project, index) in viewData.activities" :key="index">
+            <h6>Participated activities</h6> <br>
+            <CardProject :row="project" 
+              :id="project.id"
+              :title="project.titre"
+              :content="project.objectif"
+              :cover="'http://localhost:8000'+project.picture"
+            ></CardProject>
+          </a-col>
+
+        </a-row>
   
         <template #footer>
           <a-button key="back" @click="handleCancelInfo">Cancel</a-button>
@@ -264,6 +384,8 @@
   
   // "Authors" table component.
   import CardAuthorTable from "../components/Cards/CardAuthorTable";
+
+  import CardProject from "../components/Cards/CardActor"
   
   // "Projects" table component.
   import CardProjectTable2 from "../components/Cards/CardProjectTableActor";
@@ -447,6 +569,7 @@
       CardBillingInfoActor,
       Steps,
       InboxOutlined,
+      CardProject
     },
     data() {
       return {
@@ -467,7 +590,11 @@
         age: "",
         langue: "",
         niveau: "",
-        compagny_id: ""
+        compagny_id: "",
+        superficie: "", 
+        handicap: "non", 
+        occupation: "", 
+        nbrBetail: ""
         },
   
         departs: [],
@@ -566,8 +693,7 @@
           this.table2Data = this.filteredData.filter(item => {
               // Remplacez 'name' et 'description' par les propriétés que vous souhaitez filtrer
               return (
-                item.name.toLowerCase().includes(value.toLowerCase()) ||
-                item.code.toLowerCase().includes(value.toLowerCase())
+                item.name.toLowerCase().includes(value.toLowerCase()) 
               );
             });
           } else {
@@ -593,11 +719,10 @@
         this.openInfoOrg = true;
       },
       handleNotValidate() {
-        this.table2Data = this.table2Data.filter((item) => item.state == "new");
+        this.table2Data = this.filteredData.filter((item) => item.state == "new");
       },
       async handleAll() {
-        const resP = await axios.get("/compagny/paginate6");
-        this.table2Data = resP.data.compagnies.data;
+        this.table2Data = this.filteredData;
       },
       handleOpenFunc() {
         this.openOrg = true; // Met à jour opeOrg lorsque l'événement est reçu
@@ -628,6 +753,19 @@
         const res = await axios.post("/actor/create", this.data);
         if (res.status == 200) {
           this.table2Data = res.data.users.data;
+          this.data = {
+            name: "",
+            avatar: "",
+            genre: "",
+            age: "",
+            langue: "",
+            niveau: "",
+            compagny_id: "",
+            superficie: "", 
+            handicap: "non", 
+            occupation: "", 
+            nbrBetail: ""
+            };
           this.loadingAdd = false;
           this.openOrg = false;
           message.success('Actor successfully registered.', 5);

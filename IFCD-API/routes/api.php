@@ -94,4 +94,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/activity/delete', [ActivityController::class, 'delete']);
     Route::post('/activity/upload', [ActivityController::class, 'upload']);
     Route::post('/activity/delete-img', [ActivityController::class, 'deleteImg']);
+    Route::get('/activity/past', [ActivityController::class, 'getLastSixPastActivities']);
+    Route::get('/activity/last6', [ActivityController::class, 'getLastSix']);
 });

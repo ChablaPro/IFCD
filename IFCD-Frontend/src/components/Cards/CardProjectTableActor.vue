@@ -280,3 +280,10 @@ export default {
   },
 };
 </script>
+<style>
+.ant-table-column-title {
+  font-weight: bold;
+  color: green;
+  font-size:medium;
+}
+</style>
