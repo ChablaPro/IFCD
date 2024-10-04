@@ -2,7 +2,7 @@
 
 	<!-- Project Card -->
 	<a-card class="card-project">
-		<img style="max-height: 300px;"
+		<img style="max-height: 200px;"
 			slot="cover"
 			alt="example"
 			:src="cover"

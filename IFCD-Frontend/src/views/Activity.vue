@@ -38,7 +38,7 @@
                     </div>
                   </a-col>
                   <a-col class="col-content" :span="24" :xl="12" style="justify-content: center;">
-                    <a-button type="danger" danger style="width: 100%" v-if="data.avatar" @click="handleRemove">Remove Image</a-button>
+                    <a-button type="danger" danger style="width: 100%" v-if="data.picture" @click="handleRemove">Remove Image</a-button>
                   </a-col>
                   
                 </a-row>
@@ -984,28 +984,36 @@
           },
           async handleOkOrg() {
             this.loadingAdd = true;
-            const res = await axios.post("/activity/create", this.data);
-            if (res.status == 200) {
-              this.events = res.data.activities.data;
-              this.data = {
-                titre: '',
-                picture: '',
-                objectif: '',
-                type: '',
-                domaine: '',
-                pays: '',
-                etat: '',
-                commune: '',
-                bassin: '',
-                date: '',
-                lieu: '',
-                state: ''
-              };
+            try {
+
+              const res = await axios.post("/activity/create", this.data);
+              if (res.status == 200) {
+                this.events = res.data.activities.data;
+                this.data = {
+                  titre: '',
+                  picture: '',
+                  objectif: '',
+                  type: '',
+                  domaine: '',
+                  pays: '',
+                  etat: '',
+                  commune: '',
+                  bassin: '',
+                  date: '',
+                  lieu: '',
+                  state: ''
+                };
+                this.loadingAdd = false;
+                this.openOrg = false;
+                message.success('Activity successfully registered.', 5);
+              }
               this.loadingAdd = false;
-              this.openOrg = false;
-              message.success('Activity successfully registered.', 5);
-            }
+                
+            } catch (error) {
+              message.error('Vérifiez vos champs.', 5);
             this.loadingAdd = false;
+            }
+           
           },
           filterOptionDep(input, option) {
             return (

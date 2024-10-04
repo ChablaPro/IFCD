@@ -121,6 +121,7 @@ class ActorController extends Controller
     {
         $user = Actor::find($request->id);
         if ($user) {
+            $user->activities()->detach();
             $user->delete();
             return response()->json(['message' => 'User deleted successfully'], 200);
         } else {

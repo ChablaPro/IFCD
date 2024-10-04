@@ -492,23 +492,23 @@
 
         <p v-if="editData.typeOPA != ''">
           <label>Total cooperative members</label>
-          <a-input-number min="1" style="width: 100%;"    v-model="editData.totalMemberOrg" />
+          <a-input-number min="1" style="width: 100%;"    v-model="editData.totalMembre" />
         </p>
         <p v-if="editData.typeOPA != ''">
           <label>Number of men in the cooperative</label>
-          <a-input-number min="1" :max="editData.totalMemberOrg" style="width: 100%;"   v-model="editData.totalMenOrg" />
+          <a-input-number min="1"  style="width: 100%;"   v-model="editData.nbrHomme" />
         </p>
         <p v-if="editData.typeOPA != ''">
           <label>Number of women in the cooperative</label>
-          <a-input-number min="0" :max="editData.totalMemberOrg - editData.totalMenOrg" style="width: 100%;"   v-model="editData.totalWomenOrg" />
+          <a-input-number min="0"  style="width: 100%;"   v-model="editData.nbrFemme" />
         </p>
         <p v-if="editData.typeOPA != ''">
           <label>Number of young men in the cooperative</label>
-          <a-input-number min="0" :max="editData.totalMemberOrg - (editData.totalMenOrg + editData.totalWomenOrg)"  style="width: 100%;"   v-model="editData.totalYMenOrg" />
+          <a-input-number min="0"   style="width: 100%;"   v-model="editData.nbrJHomme" />
         </p>
         <p v-if="editData.typeOPA != ''">
           <label>Number of young women in the cooperative</label>
-          <a-input-number min="0" :max="editData.totalMemberOrg - (editData.totalMenOrg + editData.totalWomenOrg + editData.totalYMenOrg)"  style="width: 100%;"   v-model="editData.totalYWomenOrg" />
+          <a-input-number :min="0"   style="width: 100%;"   v-model="editData.nbrJFemme" />
         </p>
         <p v-if="editData.typeOpa != ''">
           <label>What services do you provide to your members?</label>
@@ -940,7 +940,8 @@ export default {
     },
     async handleOkOrg() {
       this.loadingAdd = true;
-      const res = await axios.post("/compagny/create", this.data);
+      try {
+        const res = await axios.post("/compagny/create", this.data);
       if (res.status == 200) {
         this.table2Data = res.data.compagnies.data;
         this.data = {
@@ -978,6 +979,11 @@ export default {
         message.success('Organization successfully registered.', 5);
       }
       this.loadingAdd = false;
+      } catch (error) {
+        this.loadingAdd = false;
+        message.error('Vérifiez vos champs.', 5);
+      }
+      
     },
     filterOptionDep(input, option) {
       return (

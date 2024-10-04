@@ -750,27 +750,35 @@
       },
       async handleOkOrg() {
         this.loadingAdd = true;
-        const res = await axios.post("/actor/create", this.data);
-        if (res.status == 200) {
-          this.table2Data = res.data.users.data;
-          this.data = {
-            name: "",
-            avatar: "",
-            genre: "",
-            age: "",
-            langue: "",
-            niveau: "",
-            compagny_id: "",
-            superficie: "", 
-            handicap: "non", 
-            occupation: "", 
-            nbrBetail: ""
-            };
+        try {
+
+          const res = await axios.post("/actor/create", this.data);
+          if (res.status == 200) {
+            this.table2Data = res.data.users.data;
+            this.data = {
+              name: "",
+              avatar: "",
+              genre: "",
+              age: "",
+              langue: "",
+              niveau: "",
+              compagny_id: "",
+              superficie: "", 
+              handicap: "non", 
+              occupation: "", 
+              nbrBetail: ""
+              };
+            this.loadingAdd = false;
+            this.openOrg = false;
+            message.success('Actor successfully registered.', 5);
+          }
           this.loadingAdd = false;
-          this.openOrg = false;
-          message.success('Actor successfully registered.', 5);
+          
+        } catch (error) {
+          message.error('Vérifiez vos champs.', 5);
+          this.loadingAdd = false;
         }
-        this.loadingAdd = false;
+        
       },
       filterOptionDep(input, option) {
         return (
