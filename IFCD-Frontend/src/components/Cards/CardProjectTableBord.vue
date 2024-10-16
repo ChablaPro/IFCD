@@ -72,6 +72,18 @@
 				projectHeaderBtns: 'all',
 			}
 		},
+		methods:{
+			formatDate(dateString) {
+				const inputDate = new Date(dateString);
+				const year = inputDate.getFullYear();
+				const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+				const month = monthNames[inputDate.getMonth()]; // Utilisation du nom abrégé du mois
+				const day = String(inputDate.getDate()).padStart(2, '0'); // Ajoute un zéro initial si le jour est < 10
+			
+				return `${year}-${month}-${day}`;
+			},
+    
+		}
 	})
 
 </script>
