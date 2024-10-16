@@ -631,7 +631,7 @@ const table2Columns = [
   },
   {
     title: "Date de création",
-    dataIndex: "dateCreaction",
+    dataIndex: "created_at",
     class: "font-semibold text-muted text-sm",
   },
   {
@@ -727,6 +727,14 @@ export default {
     };
   },
   methods: {
+    formatDate(dateString) {
+				const inputDate = new Date(dateString);
+				const year = inputDate.getFullYear();
+				const month = String(inputDate.getMonth() + 1).padStart(2, '0'); // Mois en entier, ajoute un zéro initial si < 10
+				const day = String(inputDate.getDate()).padStart(2, '0'); // Ajoute un zéro initial si le jour est < 10
+
+				return `${year}-${month}-${day}`;
+			},
     handleNext() {
       this.current = 1;
     },
@@ -807,7 +815,12 @@ export default {
       try {
         const res = await axios.post("/compagny/create", this.data);
         if (res.status == 200) {
-          this.table2Data = res.data.compagnies.data;
+          this.table2Data = res.data.compagnies.data.map(company => {
+            return {
+              ...company,
+              created_at: this.formatDate(company.created_at) // Formate l'attribut date
+            };
+          });
           this.data = {
             user_id: 0,
             typeOPA: "",
@@ -873,8 +886,22 @@ export default {
     }
 
     if (resP.status == 200) {
-      this.table2Data = resP.data.compagnies.data;
-      this.filteredData = resP.data.compagnies.data;
+      this.table2Data = resP.data.compagnies.data.map(company => {
+					return {
+						...company,
+						created_at: this.formatDate(company.created_at) // Formate l'attribut date
+					};
+				});
+
+      console.log(this.table2Data);
+      this.filteredData = resP.data.compagnies.data.map(company => {
+					return {
+						...company,
+						created_at: this.formatDate(company.created_at) // Formate l'attribut date
+					};
+				});
+
+        console.log(this.filteredData);
     }
   },
   mounted() {
