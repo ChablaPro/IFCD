@@ -1,28 +1,23 @@
 <template>
 
 	<!-- Settings Drawer -->
-	<a-drawer
-		class="settings-drawer"
-		:class="[ rtl ? 'settings-drawer-rtl' : '' ]"
-		:placement="rtl ? 'left' : 'right'"
-		:closable="false"
-		:visible="showSettingsDrawer"
-		width="500"
-		:getContainer="() => wrapper"
-		@close="$emit('toggleSettingsDrawer', false)"
-	>
+	<a-drawer class="settings-drawer" :class="[rtl ? 'settings-drawer-rtl' : '']" :placement="rtl ? 'left' : 'right'"
+		:closable="false" :visible="showSettingsDrawer" width="500" :getContainer="() => wrapper"
+		@close="$emit('toggleSettingsDrawer', false)">
 
 		<!-- Settings Drawer Close Button -->
 		<a-button type="link" class="btn-close" @click="$emit('toggleSettingsDrawer', false)">
 			<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9">
 				<g id="close" transform="translate(0.75 0.75)">
-					<path id="Path" d="M7.5,0,0,7.5" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
-					<path id="Path-2" data-name="Path" d="M0,0,7.5,7.5" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+					<path id="Path" d="M7.5,0,0,7.5" fill="none" stroke="#000" stroke-linecap="round"
+						stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" />
+					<path id="Path-2" data-name="Path" d="M0,0,7.5,7.5" fill="none" stroke="#000" stroke-linecap="round"
+						stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" />
 				</g>
 			</svg>
 		</a-button>
 		<!-- / Settings Drawer Close Button -->
-		
+
 		<!-- Settings Drawer Content -->
 		<div class="drawer-content">
 			<h6>Configurator</h6>
@@ -30,7 +25,8 @@
 			<hr>
 			<div class="sidebar-color">
 				<h6>Sidebar Color</h6>
-				<a-radio-group v-model="sidebarColorModel" @change="$emit('updateSidebarColor', $event.target.value)" defaultValue="primary">
+				<a-radio-group v-model="sidebarColorModel" @change="$emit('updateSidebarColor', $event.target.value)"
+					defaultValue="primary">
 					<a-radio-button value="primary" class="bg-primary"></a-radio-button>
 					<a-radio-button value="secondary" class="bg-secondary"></a-radio-button>
 					<a-radio-button value="success" class="bg-success"></a-radio-button>
@@ -42,14 +38,16 @@
 			<div class="sidenav-type">
 				<h6>Sidenav Type</h6>
 				<p>Choose between 2 different sidenav types.</p>
-				<a-radio-group button-style="solid" v-model="sidebarThemeModel" @change="$emit('updateSidebarTheme', $event.target.value)" defaultValue="primary">
+				<a-radio-group button-style="solid" v-model="sidebarThemeModel"
+					@change="$emit('updateSidebarTheme', $event.target.value)" defaultValue="primary">
 					<a-radio-button value="light">TRANSPARENT</a-radio-button>
 					<a-radio-button value="white">WHITE</a-radio-button>
 				</a-radio-group>
 			</div>
 			<div class="navbar-fixed">
 				<h6>Navbar Fixed</h6>
-				<a-switch default-checked v-model="navbarFixedModel" @change="$emit('toggleNavbarPosition', navbarFixedModel)" />
+				<a-switch default-checked v-model="navbarFixedModel"
+					@change="$emit('toggleNavbarPosition', navbarFixedModel)" />
 			</div>
 			<!--div class="download">
 				<a-button type="dark" href="https://www.creative-tim.com/product/muse-vue-ant-design-dashboard" block target="_blank">FREE DOWNLOAD</a-button>
@@ -74,82 +72,76 @@
 			</div-->
 			<div class="download">
 				<h6>Logs</h6>
-				<a-collapse
-					v-model:activeKey="activeKey"
-					:bordered="false"
-					style="background: rgb(255, 255, 255)"
-				>
+				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
-					<caret-right-outlined :rotate="isActive ? 90 : 0" />
+						<caret-right-outlined :rotate="isActive ? 90 : 0" />
 					</template>
-					<a-collapse-panel key="1" header="Log 1" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Log 1 Settings</p>
+					<a-collapse-panel key="1" header="Log 1"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Log 1 Settings</p>
 					</a-collapse-panel>
-					<a-collapse-panel key="2" header="Log 2" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Log 2 Settings</p>
+					<a-collapse-panel key="2" header="Log 2"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Log 2 Settings</p>
 					</a-collapse-panel>
-					<a-collapse-panel key="3" header="Log 3" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Log 3 Settings</p>
+					<a-collapse-panel key="3" header="Log 3"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Log 3 Settings</p>
 					</a-collapse-panel>
 				</a-collapse>
 			</div>
 
 			<div class="download">
 				<h6>Sessions</h6>
-				<a-collapse
-					v-model:activeKey="activeKey"
-					:bordered="false"
-					style="background: rgb(255, 255, 255)"
-				>
+				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
-					<caret-right-outlined :rotate="isActive ? 90 : 0" />
+						<caret-right-outlined :rotate="isActive ? 90 : 0" />
 					</template>
-					<a-collapse-panel key="1" header="Session 1" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Session 1 Settings</p>
+					<a-collapse-panel key="1" header="Session 1"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Session 1 Settings</p>
 					</a-collapse-panel>
-					<a-collapse-panel key="2" header="Session 2" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Session 2 Settings</p>
+					<a-collapse-panel key="2" header="Session 2"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Session 2 Settings</p>
 					</a-collapse-panel>
-					<a-collapse-panel key="3" header="Session 3" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Session 3 Settings</p>
+					<a-collapse-panel key="3" header="Session 3"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Session 3 Settings</p>
 					</a-collapse-panel>
 				</a-collapse>
 			</div>
 
 			<div class="download">
 				<h6>API</h6>
-				<a-collapse
-					v-model:activeKey="activeKey"
-					:bordered="false"
-					style="background: rgb(255, 255, 255)"
-				>
+				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
-					<caret-right-outlined :rotate="isActive ? 90 : 0" />
+						<caret-right-outlined :rotate="isActive ? 90 : 0" />
 					</template>
-					<a-collapse-panel key="1" header="Endpoints" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Endpoint 1 Settings</p>
+					<a-collapse-panel key="1" header="Endpoints"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Endpoint 1 Settings</p>
 					</a-collapse-panel>
 				</a-collapse>
 			</div>
 
 			<div class="download">
 				<h6>User Permissions</h6>
-				<a-collapse
-					v-model:activeKey="activeKey"
-					:bordered="false"
-					style="background: rgb(255, 255, 255)"
-				>
+				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
-					<caret-right-outlined :rotate="isActive ? 90 : 0" />
+						<caret-right-outlined :rotate="isActive ? 90 : 0" />
 					</template>
-					<a-collapse-panel key="1" header="Super Admin" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Super Admin Settings</p>
+					<a-collapse-panel key="1" header="Super Admin"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Super Admin Settings</p>
 					</a-collapse-panel>
-					<a-collapse-panel key="2" header="Admin" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Admin Settings</p>
+					<a-collapse-panel key="2" header="Admin"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Admin Settings</p>
 					</a-collapse-panel>
-					<a-collapse-panel key="3" header="Visitor" style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-					<p>Visitor Settings</p>
+					<a-collapse-panel key="3" header="Visitor"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
+						<p>Visitor Settings</p>
 					</a-collapse-panel>
 				</a-collapse>
 			</div>
@@ -163,63 +155,63 @@
 
 <script>
 
-	import 'vue-github-buttons/dist/vue-github-buttons.css'; // Stylesheet
-	import VueGitHubButtons from 'vue-github-buttons';
-	import Vue from 'vue';
-	
-	Vue.use(VueGitHubButtons, { useCache: true });
+import 'vue-github-buttons/dist/vue-github-buttons.css'; // Stylesheet
+import VueGitHubButtons from 'vue-github-buttons';
+import Vue from 'vue';
 
-	export default ({
-		props: {
-			// Settings drawer visiblility status.
-			showSettingsDrawer: {
-				type: Boolean,
-				default: false,
-			},
-			
+Vue.use(VueGitHubButtons, { useCache: true });
+
+export default ({
+	props: {
+		// Settings drawer visiblility status.
+		showSettingsDrawer: {
+			type: Boolean,
+			default: false,
+		},
+
+		// Main sidebar color.
+		sidebarColor: {
+			type: String,
+			default: "primary",
+		},
+
+		// Main sidebar theme : light, white, dark.
+		sidebarTheme: {
+			type: String,
+			default: "light",
+		},
+
+		// Header fixed status.
+		navbarFixed: {
+			type: Boolean,
+			default: false,
+		},
+
+		// Drawer direction.
+		rtl: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data() {
+		return {
+			// The wrapper element to attach dropdowns to.
+			wrapper: document.body,
+
 			// Main sidebar color.
-			sidebarColor: {
-				type: String,
-				default: "primary",
-			},
-			
+			sidebarColorModel: this.sidebarColor,
+
 			// Main sidebar theme : light, white, dark.
-			sidebarTheme: {
-				type: String,
-				default: "light",
-			},
+			sidebarThemeModel: this.sidebarTheme,
 
 			// Header fixed status.
-			navbarFixed: {
-				type: Boolean,
-				default: false,
-			},
-
-			// Drawer direction.
-			rtl: {
-				type: Boolean,
-				default: false,
-			},
-		},
-		data() {
-			return {
-				// The wrapper element to attach dropdowns to.
-				wrapper: document.body,
-				
-				// Main sidebar color.
-				sidebarColorModel: this.sidebarColor,
-				
-				// Main sidebar theme : light, white, dark.
-				sidebarThemeModel: this.sidebarTheme,
-
-				// Header fixed status.
-				navbarFixedModel: this.navbarFixed,
-			}
-		},
-		mounted: function(){
-			// Set the wrapper to the proper element, layout wrapper.
-			this.wrapper = document.getElementById('layout-dashboard') ;
-		},
-	})
+			navbarFixedModel: this.navbarFixed,
+		}
+	},
+	mounted: function () {
+		// Set the wrapper to the proper element, layout wrapper.
+		this.wrapper = document.getElementById('layout-dashboard');
+	},
+})
 
 </script>

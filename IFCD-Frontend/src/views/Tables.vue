@@ -5,28 +5,19 @@
 
 <template>
   <div>
-    <a-modal
-      v-model="openOrg"
-      width="1000px"
-      title="Add Organisation"
-    >
+    <a-modal v-model="openOrg" width="1000px" title="Add Organisation">
       <p>
-        <Steps :current="current"/>
+        <Steps :current="current" />
       </p>
-      <div v-if="current==0">
+      <div v-if="current == 0">
         <p>
-        <label>Year of collection</label>
-        <a-select
-          v-model="data.yearOrg"
-          style="width: 100%"
-          @focus="focus"
-          @change="handleChange"
-        >
-          <a-select-option value="2024">2024</a-select-option>
-          <a-select-option value="2025">2025</a-select-option>
-          <a-select-option value="2026">2026</a-select-option>
-          <a-select-option value="2027">2027</a-select-option>
-        </a-select>
+          <label>Year of collection</label>
+          <a-select v-model="data.yearOrg" style="width: 100%" @focus="focus" @change="handleChange">
+            <a-select-option value="2024">2024</a-select-option>
+            <a-select-option value="2025">2025</a-select-option>
+            <a-select-option value="2026">2026</a-select-option>
+            <a-select-option value="2027">2027</a-select-option>
+          </a-select>
         </p>
         <p>
           <label>New OPA?</label>
@@ -37,43 +28,25 @@
         </p>
         <p>
           <label>Department</label>
-          <a-select
-            v-model="data.depOrg"
-            show-search
-            placeholder="Select a Department"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="data.depOrg" show-search placeholder="Select a Department" option-filter-prop="children"
+            style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
-            <a-select-option
-              v-for="(depart, i) in departs"
-              :value="depart"
-              :key="i"
-            >
+              ">
+            <a-select-option v-for="(depart, i) in departs" :value="depart" :key="i">
               {{ depart }}
             </a-select-option>
           </a-select>
         </p>
         <p>
           <label>Commune</label>
-          <a-select
-            v-model="data.comOrg"
-            show-search
-            placeholder="Select a Commune"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="data.comOrg" show-search placeholder="Select a Commune" option-filter-prop="children"
+            style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(com, i) in communes" :value="com" :key="i">
               {{ com }}
             </a-select-option>
@@ -81,43 +54,25 @@
         </p>
         <p>
           <label>Arrondissement</label>
-          <a-select
-            v-model="data.arrOrg"
-            show-search
-            placeholder="Select a Arrondissement"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="data.arrOrg" show-search placeholder="Select a Arrondissement"
+            option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
-            <a-select-option
-              v-for="(arr, i) in arrondissements"
-              :value="arr"
-              :key="i"
-            >
+              ">
+            <a-select-option v-for="(arr, i) in arrondissements" :value="arr" :key="i">
               {{ arr }}
             </a-select-option>
           </a-select>
         </p>
         <p>
           <label>Village</label>
-          <a-select
-            v-model="data.vilOrg"
-            show-search
-            placeholder="Select a Village"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="data.vilOrg" show-search placeholder="Select a Village" option-filter-prop="children"
+            style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(vil, i) in villages" :value="vil" :key="i">
               {{ vil }}
             </a-select-option>
@@ -127,35 +82,24 @@
           <label>Address/House</label>
           <a-input v-model="data.addressOrg" />
         </p>
-        
+
         <p>
-        <label>Type of OPA</label>
-        <a-select v-model="data.typeOPA" style="width: 100%" @focus="focus">
-          <a-select-option value="Coopérative">Cooperative</a-select-option>
-          <a-select-option value="Association">Association</a-select-option>
-          <a-select-option value="GIE"
-            >Economic Interest Group (GIE)</a-select-option
-          >
-          <a-select-option value="Union Communale"
-            >Municipal Union</a-select-option
-          >
-        </a-select>
+          <label>Type of OPA</label>
+          <a-select v-model="data.typeOPA" style="width: 100%" @focus="focus">
+            <a-select-option value="Coopérative">Cooperative</a-select-option>
+            <a-select-option value="Association">Association</a-select-option>
+            <a-select-option value="GIE">Economic Interest Group (GIE)</a-select-option>
+            <a-select-option value="Union Communale">Municipal Union</a-select-option>
+          </a-select>
         </p>
         <p v-if="data.typeOPA == 'Coopérative'">
           <label>Legal status</label>
-          <a-select
-            v-model="data.jurOrg"
-            show-search
-            placeholder="Select a Legal status"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="data.jurOrg" show-search placeholder="Select a Legal status" option-filter-prop="children"
+            style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(jur, i) in juridiques" :value="jur" :key="i">
               {{ jur }}
             </a-select-option>
@@ -183,19 +127,12 @@
         </p>
         <p>
           <label>Maillons</label>
-          <a-select
-            v-model="data.maiOrg"
-            show-search
-            placeholder="Select a Department"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="data.maiOrg" show-search placeholder="Select a Department" option-filter-prop="children"
+            style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(mai, i) in maillons" :value="mai" :key="i">
               {{ mai }}
             </a-select-option>
@@ -203,27 +140,31 @@
         </p>
       </div>
 
-      <div v-if="current==1">
+      <div v-if="current == 1">
 
         <p v-if="data.typeOPA != ''">
           <label>Total cooperative members</label>
-          <a-input-number min="1" style="width: 100%;"    v-model="data.totalMemberOrg" />
+          <a-input-number min="1" style="width: 100%;" v-model="data.totalMemberOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>Number of men in the cooperative</label>
-          <a-input-number min="1" :max="data.totalMemberOrg" style="width: 100%;"   v-model="data.totalMenOrg" />
+          <a-input-number min="1" :max="data.totalMemberOrg" style="width: 100%;" v-model="data.totalMenOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>Number of women in the cooperative</label>
-          <a-input-number min="0" :max="data.totalMemberOrg - data.totalMenOrg" style="width: 100%;"   v-model="data.totalWomenOrg" />
+          <a-input-number min="0" :max="data.totalMemberOrg - data.totalMenOrg" style="width: 100%;"
+            v-model="data.totalWomenOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>Number of young men in the cooperative</label>
-          <a-input-number min="0" :max="data.totalMemberOrg - (data.totalMenOrg + data.totalWomenOrg)"  style="width: 100%;"   v-model="data.totalYMenOrg" />
+          <a-input-number min="0" :max="data.totalMemberOrg - (data.totalMenOrg + data.totalWomenOrg)"
+            style="width: 100%;" v-model="data.totalYMenOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>Number of young women in the cooperative</label>
-          <a-input-number min="0" :max="data.totalMemberOrg - (data.totalMenOrg + data.totalWomenOrg + data.totalYMenOrg)"  style="width: 100%;"   v-model="data.totalYWomenOrg" />
+          <a-input-number min="0"
+            :max="data.totalMemberOrg - (data.totalMenOrg + data.totalWomenOrg + data.totalYMenOrg)"
+            style="width: 100%;" v-model="data.totalYWomenOrg" />
         </p>
         <p v-if="data.typeOPA != ''">
           <label>What services do you provide to your members?</label>
@@ -231,19 +172,12 @@
         </p>
         <p v-if="data.typeOPA != ''">
           <label>What are the sectors on which the OPA is positioned?</label>
-          <a-select
-            v-model="data.posOrg"
-            show-search
-            placeholder="Select a Department"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="data.posOrg" show-search placeholder="Select a Department" option-filter-prop="children"
+            style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(pos, i) in positions" :value="pos" :key="i">
               {{ pos }}
             </a-select-option>
@@ -280,34 +214,25 @@
 
 
       </div>
-    
-      <template #footer >
-        <a-button key="back" @click="handleNext" v-if="current==0">Next</a-button>
-        <a-button key="back" @click="handlePrevious" v-if="current==1">Previous</a-button>
-        <a-button key="submit" type="primary" :loading="loadingAdd" @click="handleOkOrg" v-if="current==1">Submit</a-button>
+
+      <template #footer>
+        <a-button key="back" @click="handleNext" v-if="current == 0">Next</a-button>
+        <a-button key="back" @click="handlePrevious" v-if="current == 1">Previous</a-button>
+        <a-button key="submit" type="primary" :loading="loadingAdd" @click="handleOkOrg"
+          v-if="current == 1">Submit</a-button>
       </template>
 
     </a-modal>
 
-    <a-modal
-      v-model="openEditOrg"
-      width="1000px"
-      title="Edit Organisation"
-   
-    >
-    
+    <a-modal v-model="openEditOrg" width="1000px" title="Edit Organisation">
+
       <p>
-        <Steps :current="currentEdit"/>
+        <Steps :current="currentEdit" />
       </p>
-      <div v-if="currentEdit==0">
+      <div v-if="currentEdit == 0">
         <p>
           <label>Year of collection</label>
-          <a-select
-            v-model="editData.year"
-            style="width: 100%"
-            @focus="focus"
-            @change="handleChange"
-          >
+          <a-select v-model="editData.year" style="width: 100%" @focus="focus" @change="handleChange">
             <a-select-option value="2024">2024</a-select-option>
             <a-select-option value="2025">2025</a-select-option>
             <a-select-option value="2026">2026</a-select-option>
@@ -323,24 +248,13 @@
         </p>
         <p>
           <label>Department</label>
-          <a-select
-            v-model="editData.departement"
-            show-search
-            placeholder="Select a Department"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="editData.departement" show-search placeholder="Select a Department"
+            option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
-            <a-select-option
-              v-for="(depart, i) in departs"
-              :value="depart"
-              :key="i"
-            >
+              ">
+            <a-select-option v-for="(depart, i) in departs" :value="depart" :key="i">
               {{ depart }}
             </a-select-option>
           </a-select>
@@ -367,43 +281,25 @@
         </p-->
         <p>
           <label>Arrondissement</label>
-          <a-select
-            v-model="editData.arrondissement"
-            show-search
-            placeholder="Select a Arrondissement"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="editData.arrondissement" show-search placeholder="Select a Arrondissement"
+            option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
-            <a-select-option
-              v-for="(arr, i) in arrondissements"
-              :value="arr"
-              :key="i"
-            >
+              ">
+            <a-select-option v-for="(arr, i) in arrondissements" :value="arr" :key="i">
               {{ arr }}
             </a-select-option>
           </a-select>
         </p>
         <p>
           <label>Village</label>
-          <a-select
-            v-model="editData.village"
-            show-search
-            placeholder="Select a Village"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="editData.village" show-search placeholder="Select a Village" option-filter-prop="children"
+            style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(vil, i) in villages" :value="vil" :key="i">
               {{ vil }}
             </a-select-option>
@@ -418,29 +314,18 @@
           <a-select v-model="editData.typeOpa" style="width: 100%" @focus="focus">
             <a-select-option value="Coopérative">Cooperative</a-select-option>
             <a-select-option value="Association">Association</a-select-option>
-            <a-select-option value="GIE"
-              >Economic Interest Group (GIE)</a-select-option
-            >
-            <a-select-option value="Union Communale"
-              >Municipal Union</a-select-option
-            >
+            <a-select-option value="GIE">Economic Interest Group (GIE)</a-select-option>
+            <a-select-option value="Union Communale">Municipal Union</a-select-option>
           </a-select>
         </p>
         <p v-if="editData.typeOpa == 'Coopérative'">
           <label>Legal status</label>
-          <a-select
-            v-model="editData.juridique"
-            show-search
-            placeholder="Select a Legal status"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="editData.juridique" show-search placeholder="Select a Legal status"
+            option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(jur, i) in juridiques" :value="jur" :key="i">
               {{ jur }}
             </a-select-option>
@@ -468,19 +353,12 @@
         </p>
         <p>
           <label>Maillons</label>
-          <a-select
-            v-model="editData.maillon"
-            show-search
-            placeholder="Select a Department"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="editData.maillon" show-search placeholder="Select a Department"
+            option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(mai, i) in maillons" :value="mai" :key="i">
               {{ mai }}
             </a-select-option>
@@ -488,27 +366,27 @@
         </p>
       </div>
 
-      <div v-if="currentEdit==1">
+      <div v-if="currentEdit == 1">
 
         <p v-if="editData.typeOPA != ''">
           <label>Total cooperative members</label>
-          <a-input-number min="1" style="width: 100%;"    v-model="editData.totalMembre" />
+          <a-input-number min="1" style="width: 100%;" v-model="editData.totalMembre" />
         </p>
         <p v-if="editData.typeOPA != ''">
           <label>Number of men in the cooperative</label>
-          <a-input-number min="1"  style="width: 100%;"   v-model="editData.nbrHomme" />
+          <a-input-number min="1" style="width: 100%;" v-model="editData.nbrHomme" />
         </p>
         <p v-if="editData.typeOPA != ''">
           <label>Number of women in the cooperative</label>
-          <a-input-number min="0"  style="width: 100%;"   v-model="editData.nbrFemme" />
+          <a-input-number min="0" style="width: 100%;" v-model="editData.nbrFemme" />
         </p>
         <p v-if="editData.typeOPA != ''">
           <label>Number of young men in the cooperative</label>
-          <a-input-number min="0"   style="width: 100%;"   v-model="editData.nbrJHomme" />
+          <a-input-number min="0" style="width: 100%;" v-model="editData.nbrJHomme" />
         </p>
         <p v-if="editData.typeOPA != ''">
           <label>Number of young women in the cooperative</label>
-          <a-input-number :min="0"   style="width: 100%;"   v-model="editData.nbrJFemme" />
+          <a-input-number :min="0" style="width: 100%;" v-model="editData.nbrJFemme" />
         </p>
         <p v-if="editData.typeOpa != ''">
           <label>What services do you provide to your members?</label>
@@ -516,19 +394,12 @@
         </p>
         <p v-if="editData.typeOpa != ''">
           <label>What are the sectors on which the OPA is positioned?</label>
-          <a-select
-            v-model="editData.position"
-            show-search
-            placeholder="Select a Department"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
+          <a-select v-model="editData.position" show-search placeholder="Select a Department"
+            option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
                 option.componentOptions.children[0].text
                   .toLowerCase()
                   .includes(input.toLowerCase())
-            "
-          >
+              ">
             <a-select-option v-for="(pos, i) in positions" :value="pos" :key="i">
               {{ pos }}
             </a-select-option>
@@ -565,19 +436,19 @@
 
       </div>
 
-      <template #footer >
-        <a-button key="back" @click="handleEditNext" v-if="currentEdit==0">Next</a-button>
-        <a-button key="back" @click="handleEditPrevious" v-if="currentEdit==1">Previous</a-button>
-        <a-button key="submit" type="primary" :loading="loadingEdit" @click="handleEditOrg" v-if="currentEdit==1">Submit</a-button>
+      <template #footer>
+        <a-button key="back" @click="handleEditNext" v-if="currentEdit == 0">Next</a-button>
+        <a-button key="back" @click="handleEditPrevious" v-if="currentEdit == 1">Previous</a-button>
+        <a-button key="submit" type="primary" :loading="loadingEdit" @click="handleEditOrg"
+          v-if="currentEdit == 1">Submit</a-button>
       </template>
-     
+
     </a-modal>
 
 
-    <a-modal v-model="openInfoOrg"
-      width="1000px"
-      title="View Organisation">
-      <CardBillingInfoOrg :info="viewData" @handleDeleteInfo="handleDeleteInfo" @handleEditInfo="handleEditInfo"></CardBillingInfoOrg>
+    <a-modal v-model="openInfoOrg" width="1000px" title="View Organisation">
+      <CardBillingInfoOrg :info="viewData" @handleDeleteInfo="handleDeleteInfo" @handleEditInfo="handleEditInfo">
+      </CardBillingInfoOrg>
 
       <template #footer>
         <a-button key="back" @click="handleCancelInfo">Cancel</a-button>
@@ -590,17 +461,10 @@
       <!-- Projects Table Column -->
       <a-col :span="24" class="mb-24">
         <!-- Projects Table Column -->
-        <CardProjectTable2
-          :data="table2Data"
-          :columns="table2Columns"
-          @openFunc="handleOpenFunc"
-          @handleValidate="handleValidate"
-          @handleDelete="handleDelete"
-          @handleEdit="handleEdit"
-          @handleView="handleView"
-          @handleNotValidate="handleNotValidate"
-          @handleAll="handleAll"  @search="handleSearch"
-        ></CardProjectTable2>
+        <CardProjectTable2 :data="table2Data" :columns="table2Columns" @openFunc="handleOpenFunc"
+          @handleValidate="handleValidate" @handleDelete="handleDelete" @handleEdit="handleEdit"
+          @handleView="handleView" @handleNotValidate="handleNotValidate" @handleAll="handleAll" @search="handleSearch">
+        </CardProjectTable2>
         <!-- / Projects Table Column -->
       </a-col>
       <!-- / Projects Table Column -->
@@ -863,16 +727,16 @@ export default {
     };
   },
   methods: {
-    handleNext(){
-   this.current = 1;
+    handleNext() {
+      this.current = 1;
     },
-    handlePrevious(){
+    handlePrevious() {
       this.current = 0;
     },
-    handleEditNext(){
-   this.currentEdit = 1;
+    handleEditNext() {
+      this.currentEdit = 1;
     },
-    handleEditPrevious(){
+    handleEditPrevious() {
       this.currentEdit = 0;
     },
     handleSearch(value) {
@@ -880,31 +744,31 @@ export default {
       // Ajoutez votre logique de recherche ici
       if (value) {
         this.table2Data = this.filteredData.filter(item => {
-            // Remplacez 'name' et 'description' par les propriétés que vous souhaitez filtrer
-            return (
-              item.denominationOpa.toLowerCase().includes(value.toLowerCase()) ||
-              item.position.toLowerCase().includes(value.toLowerCase())
-            );
-          });
-        } else {
-          // Si aucune valeur de recherche, on réinitialise les données filtrées
-          this.table2Data = this.filteredData;
-        }
+          // Remplacez 'name' et 'description' par les propriétés que vous souhaitez filtrer
+          return (
+            item.denominationOpa.toLowerCase().includes(value.toLowerCase()) ||
+            item.position.toLowerCase().includes(value.toLowerCase())
+          );
+        });
+      } else {
+        // Si aucune valeur de recherche, on réinitialise les données filtrées
+        this.table2Data = this.filteredData;
+      }
     },
-    async handleDeleteInfo(row){
+    async handleDeleteInfo(row) {
       this.table2Data = this.table2Data.filter((item) => item.id !== row.id);
       const res = await axios.post("/compagny/delete", row);
       this.openInfoOrg = false;
     },
-    async handleEditInfo(row){
+    async handleEditInfo(row) {
       this.editData = row;
       this.openInfoOrg = false;
       this.openEditOrg = true;
     },
-    handleCancelInfo(){
+    handleCancelInfo() {
       this.openInfoOrg = false;
     },
-    handleView(row){
+    handleView(row) {
       this.viewData = row;
       this.openInfoOrg = true;
     },
@@ -942,48 +806,48 @@ export default {
       this.loadingAdd = true;
       try {
         const res = await axios.post("/compagny/create", this.data);
-      if (res.status == 200) {
-        this.table2Data = res.data.compagnies.data;
-        this.data = {
-        user_id: 0,
-        typeOPA: "",
-        addressOrg: "",
-        nameOPAOrg: "",
-        dateOPAOrg: "",
-        contactOPAOrg: "",
-        contactOrg: "",
-        emailOrg: "",
-        totalMemberOrg: "",
-        totalMenOrg: "",
-        totalWomenOrg: "",
-        totalYMenOrg: "",
-        totalYWomenOrg: "",
-        serviceOrg: "",
-        manageOPA: "non",
-        boardOPA: "non",
-        executiveOPA: "non",
-        commissionOPA: "non",
-        yearOrg: "",
-        depOrg: "",
-        comOrg: "",
-        arrOrg: "",
-        vilOrg: "",
-        maiOrg: "",
-        jurOrg: "",
-        posOrg: "",
+        if (res.status == 200) {
+          this.table2Data = res.data.compagnies.data;
+          this.data = {
+            user_id: 0,
+            typeOPA: "",
+            addressOrg: "",
+            nameOPAOrg: "",
+            dateOPAOrg: "",
+            contactOPAOrg: "",
+            contactOrg: "",
+            emailOrg: "",
+            totalMemberOrg: "",
+            totalMenOrg: "",
+            totalWomenOrg: "",
+            totalYMenOrg: "",
+            totalYWomenOrg: "",
+            serviceOrg: "",
+            manageOPA: "non",
+            boardOPA: "non",
+            executiveOPA: "non",
+            commissionOPA: "non",
+            yearOrg: "",
+            depOrg: "",
+            comOrg: "",
+            arrOrg: "",
+            vilOrg: "",
+            maiOrg: "",
+            jurOrg: "",
+            posOrg: "",
 
-        newOPAOrg: "oui",
-      };
+            newOPAOrg: "oui",
+          };
+          this.loadingAdd = false;
+          this.openOrg = false;
+          message.success('Organization successfully registered.', 5);
+        }
         this.loadingAdd = false;
-        this.openOrg = false;
-        message.success('Organization successfully registered.', 5);
-      }
-      this.loadingAdd = false;
       } catch (error) {
         this.loadingAdd = false;
         message.error('Vérifiez vos champs.', 5);
       }
-      
+
     },
     filterOptionDep(input, option) {
       return (
@@ -994,7 +858,7 @@ export default {
     },
   },
   async created() {
-    
+
     const res = await axios.get("/compagny/utilities");
     const resP = await axios.get("/compagny/paginate6");
 
@@ -1019,5 +883,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
