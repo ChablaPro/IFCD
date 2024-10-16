@@ -1,6 +1,6 @@
 <template>
 
-	<a-card :bordered="false" class="widget-1">
+	<a-card :bordered="false" class="widget-1" style="box-shadow: 0 0 10px rgba(0, 0, 0, .2)">
 		<a-statistic
 			:title="title"
 			:value="value"
