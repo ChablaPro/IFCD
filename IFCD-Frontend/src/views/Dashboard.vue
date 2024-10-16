@@ -340,12 +340,30 @@ export default ({
 			}
 		},
 
+		methods:{
+
+			formatDate(dateString) {
+				const inputDate = new Date(dateString);
+				const year = inputDate.getFullYear();
+				const month = String(inputDate.getMonth() + 1).padStart(2, '0'); // Mois en entier, ajoute un zéro initial si < 10
+				const day = String(inputDate.getDate()).padStart(2, '0'); // Ajoute un zéro initial si le jour est < 10
+
+				return `${year}-${month}-${day}`;
+			},
+
+		},
+
 		async created(){
 			const res = await axios.get("/activity/past");
 			const resL = await axios.get("/activity/last6");
 			const statsD = await axios.get('/stats');
 			if (res.status == 200) {
-				this.tableDataEvent = res.data.activities;
+				this.tableDataEvent =  res.data.activities.map(activity => {
+					return {
+						...activity,
+						date: this.formatDate(activity.date) // Formate l'attribut date
+					};
+				});
 			}
 
 
