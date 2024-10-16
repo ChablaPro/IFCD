@@ -338,15 +338,20 @@
       <a-row type="flex" :gutter="[24, 24]" align="stretch">
 
 
-        <!-- Project Column -->
-        <a-col :span="24" :md="12" :xl="6" v-for="(project, index) in events" :key="index">
-          <CardProject :row="project" :id="project.id" :title="project.titre" :content="project.objectif"
-            :cover="'http://localhost:8000' + project.picture" :team="['http://localhost:8000' + project.user.photo]"
-            @handleValidate="handleValidate" @handleDelete="handleDelete" @handleEdit="handleEdit"
-            @handleView="handleView">
-          </CardProject>
-        </a-col>
-        <!-- / Project Column -->
+				<!-- Project Column -->
+				<a-col :span="24" :md="12" :xl="6" v-for="(project, index) in events" :key="index">
+					<CardProject :row="project" 
+						:id="project.id"
+						:title="project.titre"
+						:content="project.objectif"
+						:cover="'http://localhost:8000'+project.picture"
+						:team="['http://localhost:8000'+project.user.photo]"  @handleValidate="handleValidate"
+            @handleDelete="handleDelete"
+            @handleEdit="handleEdit"
+            @handleView="handleView"
+					></CardProject>
+				</a-col>
+				<!-- / Project Column -->
 
 
 
@@ -684,99 +689,99 @@ export default {
       }
     },
 
-
-    // Handle file drop event
-    handleDrop(e) {
-      console.log(e);
-    },
-
-    // Before uploading, validate if the file is an image and restrict to only one image
-    beforeUpload(file) {
-      const isImage = file.type.startsWith('image/');
-      const isLt2M = file.size / 1024 / 1024 < 2; // Check if the file is less than 2MB
-
-      if (!isImage) {
-        message.error('You can only upload image files!');
-        return false;
-      }
-      if (!isLt2M) {
-        message.error('Image must be smaller than 2MB!');
-        return false;
-      }
-
-      this.fileList = [file]; // Ensure only one file is in the list
-      return true; // Proceed with the upload
-    },
-    handleNext() {
-      this.current = 1;
-    },
-    handlePrevious() {
-      this.current = 0;
-    },
-    handleEditNext() {
-      this.currentEdit = 1;
-    },
-    handleEditPrevious() {
-      this.currentEdit = 0;
-    },
-    handleSearch() {
-      // Ajoutez votre logique de recherche ici
-      if (this.search) {
-        this.events = this.filteredData.filter(item => {
-          // Remplacez 'name' et 'description' par les propriétés que vous souhaitez filtrer
-          return (
-            item.titre.toLowerCase().includes(this.search.toLowerCase()) ||
-            item.objectif.toLowerCase().includes(this.search.toLowerCase())
-          );
-        });
-      } else {
-        // Si aucune valeur de recherche, on réinitialise les données filtrées
-        this.events = this.filteredData;
-      }
-    },
-    async handleDeleteInfo(row) {
-      this.events = this.events.filter((item) => item.id !== row.id);
-      const res = await axios.post("/activity/delete", row);
-      this.openInfoOrg = false;
-    },
-    async handleEditInfo(row) {
-      this.editData = row;
-      this.openInfoOrg = false;
-      this.openEditOrg = true;
-    },
-    handleCancelInfo() {
-      this.openInfoOrg = false;
-    },
-    handleView(row) {
-      this.viewData = row;
-      this.openInfoOrg = true;
-    },
-    handleNotValidate() {
-      this.events = this.filteredData.filter((item) => item.state == "new");
-    },
-    handleAll() {
-      this.events = this.filteredData;
-    },
-    handleShowValidate() {
-      const today = new Date().toISOString().split('T')[0]; // Récupère la date actuelle au format 'YYYY-MM-DD'
-
-      this.events = this.filteredData.filter((item) => {
-        const itemDate = new Date(item.date).toISOString().split('T')[0]; // Convertit item.date en format 'YYYY-MM-DD'
-
-        // Vérifie si l'état est "validated" et si la date est bien inférieure à aujourd'hui
-        return item.state === "validated" && itemDate > today;
-      });
-    },
-    handleDone() {
-      const today = new Date().toISOString().split('T')[0]; // Récupère la date actuelle au format 'YYYY-MM-DD'
-
-      this.events = this.filteredData.filter((item) => {
-        const itemDate = new Date(item.date).toISOString().split('T')[0]; // Convertit item.date en format 'YYYY-MM-DD'
-
-        // Vérifie si l'état est "validated" et si la date est bien inférieure à aujourd'hui
-        return item.state === "done" && itemDate <= today;
-      });
-    },
+        
+        // Handle file drop event
+        handleDrop(e) {
+          console.log(e);
+        },
+        
+        // Before uploading, validate if the file is an image and restrict to only one image
+        beforeUpload(file) {
+          const isImage = file.type.startsWith('image/');
+          const isLt2M = file.size / 1024 / 1024 < 2; // Check if the file is less than 2MB
+          
+          if (!isImage) {
+            message.error('You can only upload image files!');
+            return false;
+          }
+          if (!isLt2M) {
+            message.error('Image must be smaller than 2MB!');
+            return false;
+          }
+          
+          this.fileList = [file]; // Ensure only one file is in the list
+          return true; // Proceed with the upload
+        },
+          handleNext(){
+        this.current = 1;
+          },
+          handlePrevious(){
+            this.current = 0;
+          },
+          handleEditNext(){
+        this.currentEdit = 1;
+          },
+          handleEditPrevious(){
+            this.currentEdit = 0;
+          },
+          handleSearch() {
+            // Ajoutez votre logique de recherche ici
+            if (this.search) {
+              this.events = this.filteredData.filter(item => {
+                  // Remplacez 'name' et 'description' par les propriétés que vous souhaitez filtrer
+                  return (
+                    item.titre.toLowerCase().includes(this.search.toLowerCase()) ||
+                    item.objectif.toLowerCase().includes(this.search.toLowerCase())
+                  );
+                });
+              } else {
+                // Si aucune valeur de recherche, on réinitialise les données filtrées
+                this.events = this.filteredData;
+              }
+          },
+          async handleDeleteInfo(row){
+            this.events = this.events.filter((item) => item.id !== row.id);
+            const res = await axios.post("/activity/delete", row);
+            this.openInfoOrg = false;
+          },
+          async handleEditInfo(row){
+            this.editData = row;
+            this.openInfoOrg = false;
+            this.openEditOrg = true;
+          },
+          handleCancelInfo(){
+            this.openInfoOrg = false;
+          },
+          handleView(row){
+            this.viewData = row;
+            this.openInfoOrg = true;
+          },
+          handleNotValidate() {
+            this.events = this.filteredData.filter((item) => item.state == "new");
+          },
+           handleAll() {
+            this.events = this.filteredData;
+          },
+          handleShowValidate() {
+              const today = new Date().toISOString().split('T')[0]; // Récupère la date actuelle au format 'YYYY-MM-DD'
+              
+              this.events = this.filteredData.filter((item) => {
+                  const itemDate = new Date(item.date).toISOString().split('T')[0]; // Convertit item.date en format 'YYYY-MM-DD'
+                  
+                  // Vérifie si l'état est "validated" et si la date est bien inférieure à aujourd'hui
+                  return item.state === "validated" && itemDate > today;
+              });
+          },
+          handleDone() {
+              const today = new Date().toISOString().split('T')[0]; // Récupère la date actuelle au format 'YYYY-MM-DD'
+              
+              this.events = this.filteredData.filter((item) => {
+                  const itemDate = new Date(item.date).toISOString().split('T')[0]; // Convertit item.date en format 'YYYY-MM-DD'
+                  
+                  // Vérifie si l'état est "validated" et si la date est bien inférieure à aujourd'hui
+                  return item.state === "done" && itemDate <= today;
+              });
+          },
 
     handleShowProgress() {
       // Utilisez `new Date()` pour obtenir la date actuelle et comparez-la correctement
@@ -814,71 +819,71 @@ export default {
       this.loadingAdd = true;
       try {
 
-        const res = await axios.post("/activity/create", this.data);
-        if (res.status == 200) {
-          this.events = res.data.activities.data;
-          this.data = {
-            titre: '',
-            picture: '',
-            objectif: '',
-            type: '',
-            domaine: '',
-            pays: '',
-            etat: '',
-            commune: '',
-            bassin: '',
-            date: '',
-            lieu: '',
-            state: ''
+              const res = await axios.post("/activity/create", this.data);
+              if (res.status == 200) {
+                this.events = res.data.activities.data;
+                this.data = {
+                  titre: '',
+                  picture: '',
+                  objectif: '',
+                  type: '',
+                  domaine: '',
+                  pays: '',
+                  etat: '',
+                  commune: '',
+                  bassin: '',
+                  date: '',
+                  lieu: '',
+                  state: ''
+                };
+                this.loadingAdd = false;
+                this.openOrg = false;
+                message.success('Activity successfully registered.', 5);
+              }
+              this.loadingAdd = false;
+                
+            } catch (error) {
+              message.error('Vérifiez vos champs.', 5);
+            this.loadingAdd = false;
+            }
+           
+          },
+          filterOptionDep(input, option) {
+            return (
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
+            );
+          },
+        },
+    async created() {
+      
+      const res = await axios.get("/activity/utilities");
+      const resP = await axios.get("/activity/paginate6");
+  
+      if (res.status == 200) {
+        this.departs = res.data.departs.map((depart) => depart.name);
+        this.pays = res.data.pays.map((com) => com.name);
+        this.chaines = res.data.chaines.map((arr) => arr.name);
+        this.domaines = res.data.domaines.map((vill) => vill.name);
+        this.types = res.data.events.map((mail) => mail.name);
+        this.communes = res.data.communes.map((mail) => mail.name);
+        this.options = res.data.actors.map((actor) => {
+          // Assurez-vous que actor.name existe
+          return {
+            label: actor.name,
+            value: actor.id,
           };
-          this.loadingAdd = false;
-          this.openOrg = false;
-          message.success('Activity successfully registered.', 5);
-        }
-        this.loadingAdd = false;
-
-      } catch (error) {
-        message.error('Vérifiez vos champs.', 5);
-        this.loadingAdd = false;
+        });
       }
-
+  
+      if (resP.status == 200) {
+        this.events = resP.data.activities.data;
+        this.filteredData = resP.data.activities.data;
+      }
     },
-    filterOptionDep(input, option) {
-      return (
-        option.componentOptions.children[0].text
-          .toLowerCase()
-          .indexOf(input.toLowerCase()) >= 0
-      );
-    },
-  },
-  async created() {
-
-    const res = await axios.get("/activity/utilities");
-    const resP = await axios.get("/activity/paginate6");
-
-    if (res.status == 200) {
-      this.departs = res.data.departs.map((depart) => depart.name);
-      this.pays = res.data.pays.map((com) => com.name);
-      this.chaines = res.data.chaines.map((arr) => arr.name);
-      this.domaines = res.data.domaines.map((vill) => vill.name);
-      this.types = res.data.events.map((mail) => mail.name);
-      this.communes = res.data.communes.map((mail) => mail.name);
-      this.options = res.data.actors.map((actor) => {
-        // Assurez-vous que actor.name existe
-        return {
-          label: actor.name,
-          value: actor.id,
-        };
-      });
-    }
-
-    if (resP.status == 200) {
-      this.events = resP.data.activities.data;
-      this.filteredData = resP.data.activities.data;
-    }
-  },
-  mounted() {
-    this.inputRef = this.$refs.inputRef;
+    mounted() {
+      this.inputRef = this.$refs.inputRef;
 
   },
 };

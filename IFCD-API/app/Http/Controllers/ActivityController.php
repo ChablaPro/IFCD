@@ -30,7 +30,7 @@ class ActivityController extends Controller
         // Récupère les 6 dernières activités dont la date est passée, triées par date décroissante
         $activities = Activity::with(['user', 'actors'])->where('date', '<', $today)
             ->orderBy('date', 'desc')
-            ->where('state', 'validated')
+            ->where('state', 'done')
             ->take(6)
             ->get();
 

@@ -7,7 +7,7 @@
 			alt="example"
 			:src="cover"
 		/>
-		<div class="card-tag">Activity #{{ id }}</div>
+		<div class="card-tag">{{ id }}</div>
 		<h5>{{ title }}</h5>
 		<p>
 			{{ content }}

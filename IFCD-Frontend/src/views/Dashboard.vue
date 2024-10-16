@@ -277,17 +277,17 @@ export default ({
 			// Associating table columns with its corresponding property.
 			tableColumns,
 
-			// Counter Widgets Stats
-			stats,
-		}
-	},
+				// Counter Widgets Stats
+				stats,
+			}
+		},
 
-	async created() {
-		const res = await axios.get("/activity/past");
-		const resL = await axios.get("/activity/last6");
-		if (res.status == 200) {
-			this.tableDataEvent = res.data.activities;
-		}
+		async created(){
+			const res = await axios.get("/activity/past");
+			const resL = await axios.get("/activity/last6");
+			if (res.status == 200) {
+				this.tableDataEvent = res.data.activities;
+			}
 
 		if (resL.status == 200) {
 			this.last6 = resL.data.activities;
