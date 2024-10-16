@@ -9,6 +9,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\JuridiqueController;
 use App\Http\Controllers\MaillonController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\StatistiqueController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VillageController;
 use Illuminate\Http\Request;
@@ -96,4 +97,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/activity/delete-img', [ActivityController::class, 'deleteImg']);
     Route::get('/activity/past', [ActivityController::class, 'getLastSixPastActivities']);
     Route::get('/activity/last6', [ActivityController::class, 'getLastSix']);
+
+
+    Route::get('/stats', [StatistiqueController::class, 'index']);
 });
