@@ -325,7 +325,12 @@ export default ({
 
 
 			if (resL.status == 200) {
-				this.last6 = resL.data.activities;
+				this.last6 = resL.data.activities.map(activity => {
+					return {
+						...activity,
+						date: this.formatDate(activity.date) // Formate l'attribut date
+					};
+				});
 			}
 
 			if (statsD.status== 200) {

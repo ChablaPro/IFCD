@@ -10,7 +10,7 @@
       <p>
         <label>Activity Picture</label>
         <a-upload-dragger v-if="!data.picture" :file-list="fileList" name="photo" :multiple="false"
-          :action="'http://localhost:8000/api/activity/upload'" :headers="uploadHeaders" :before-upload="beforeUpload"
+          :action="'https://api.queenbloh.com/api/activity/upload'" :headers="uploadHeaders" :before-upload="beforeUpload"
           @change="handleChange" @drop="handleDrop">
           <p class="ant-upload-drag-icon">
             <inbox-outlined></inbox-outlined>
@@ -24,7 +24,7 @@
         <a-row type="flex">
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
-              <img :src="'http://localhost:8000' + data.picture" v-if="data.picture"
+              <img :src="'https://api.queenbloh.com' + data.picture" v-if="data.picture"
                 style="max-width: 150px; border-radius: 5px;">
             </div>
           </a-col>
@@ -135,7 +135,7 @@
       <p>
         <label>Activity Picture</label>
         <a-upload-dragger v-if="!editData.picture" :file-list="fileList" name="photo" :multiple="false"
-          :action="'http://localhost:8000/api/activity/upload'" :headers="uploadHeaders" :before-upload="beforeUpload"
+          :action="'https://api.queenbloh.com/api/activity/upload'" :headers="uploadHeaders" :before-upload="beforeUpload"
           @change="handleChange" @drop="handleDrop">
           <p class="ant-upload-drag-icon">
             <inbox-outlined></inbox-outlined>
@@ -150,7 +150,7 @@
         <a-row type="flex">
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
-              <img :src="'http://localhost:8000' + editData.picture" v-if="editData.picture"
+              <img :src="'https://api.queenbloh.com' + editData.picture" v-if="editData.picture"
                 style="max-width: 150px; border-radius: 5px;">
             </div>
           </a-col>
@@ -344,8 +344,8 @@
 						:id="project.date"
 						:title="project.titre"
 						:content="project.objectif"
-						:cover="'http://localhost:8000'+project.picture"
-						:team="['http://localhost:8000'+project.user.photo]"  @handleValidate="handleValidate"
+						:cover="'https://api.queenbloh.com'+project.picture"
+						:team="['https://api.queenbloh.com'+project.user.photo]"  @handleValidate="handleValidate"
             @handleDelete="handleDelete"
             @handleEdit="handleEdit"
             @handleView="handleView"
