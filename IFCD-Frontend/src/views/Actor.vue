@@ -6,37 +6,56 @@
 <template>
   <div>
     <a-modal v-model="openOrg" width="1000px" title="Add Actor">
-
-
-
       <p>
         <label>Actor avatar</label>
-        <a-upload-dragger v-if="!data.avatar" :file-list="fileList" name="photo" :multiple="false"
-          :action="'https://api.queenbloh.com/api/actor/upload'" :headers="uploadHeaders" :before-upload="beforeUpload"
-          @change="handleChange" @drop="handleDrop">
+        <a-upload-dragger
+          v-if="!data.avatar"
+          :file-list="fileList"
+          name="photo"
+          :multiple="false"
+          :action="'https://api.queenbloh.com/api/actor/upload'"
+          :headers="uploadHeaders"
+          :before-upload="beforeUpload"
+          @change="handleChange"
+          @drop="handleDrop"
+        >
           <p class="ant-upload-drag-icon">
             <inbox-outlined></inbox-outlined>
           </p>
-          <p class="ant-upload-text">Click or drag an image to this area to upload</p>
+          <p class="ant-upload-text">
+            Click or drag an image to this area to upload
+          </p>
           <p class="ant-upload-hint">
-            Support for a single image upload. Strictly upload only image files (jpeg, png, jpg, gif) with a maximum
-            size of 2MB.
+            Support for a single image upload. Strictly upload only image files
+            (jpeg, png, jpg, gif) with a maximum size of 2MB.
           </p>
         </a-upload-dragger>
         <a-row type="flex">
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
-              <img :src="'https://api.queenbloh.com' + data.avatar" v-if="data.avatar"
-                style="max-width: 150px; border-radius: 5px;">
+              <img
+                :src="'https://api.queenbloh.com' + data.avatar"
+                v-if="data.avatar"
+                style="max-width: 150px; border-radius: 5px"
+              />
             </div>
           </a-col>
-          <a-col class="col-content" :span="24" :xl="12" style="justify-content: center;">
-            <a-button type="danger" danger style="width: 100%" v-if="data.avatar" @click="handleRemove">Remove
-              Image</a-button>
+          <a-col
+            class="col-content"
+            :span="24"
+            :xl="12"
+            style="justify-content: center"
+          >
+            <a-button
+              type="danger"
+              danger
+              style="width: 100%"
+              v-if="data.avatar"
+              @click="handleRemove"
+              >Remove Image</a-button
+            >
           </a-col>
-
         </a-row>
-
       </p>
       <p>
         <label>Name</label>
@@ -44,23 +63,26 @@
       </p>
       <p>
         <label>Gender</label>
-        <a-select v-model="data.genre" show-search placeholder="Select a gender" option-filter-prop="children"
-          style="width: 100%" :filter-option="(input, option) =>
+        <a-select
+          v-model="data.genre"
+          show-search
+          placeholder="Select a gender"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
               option.componentOptions.children[0].text
                 .toLowerCase()
                 .includes(input.toLowerCase())
-            ">
-          <a-select-option value="Man">
-            Man
-          </a-select-option>
-          <a-select-option value="Woman">
-            Woman
-          </a-select-option>
+          "
+        >
+          <a-select-option value="Man"> Man </a-select-option>
+          <a-select-option value="Woman"> Woman </a-select-option>
         </a-select>
       </p>
       <p>
         <label>Age</label>
-        <a-input-number style="width: 100%;" min="1" v-model="data.age" />
+        <a-input-number style="width: 100%" min="1" v-model="data.age" />
       </p>
       <p>
         <label>Langage</label>
@@ -79,80 +101,120 @@
       </p>
       <p>
         <label>Occupation</label>
-        <a-select v-model="data.occupation" show-search placeholder="Select a occupation" option-filter-prop="children"
-          style="width: 100%" :filter-option="(input, option) =>
+        <a-select
+          v-model="data.occupation"
+          show-search
+          placeholder="Select a occupation"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
               option.componentOptions.children[0].text
                 .toLowerCase()
                 .includes(input.toLowerCase())
-            ">
+          "
+        >
           <a-select-option value="agricole">
             Agricultural producer
           </a-select-option>
-          <a-select-option value="eleveur">
-            Breeder
-          </a-select-option>
+          <a-select-option value="eleveur"> Breeder </a-select-option>
         </a-select>
       </p>
       <p v-if="data.occupation == 'agricole'">
         <label>Land area</label>
-        <a-input-number style="width: 100%;" min="1" v-model="data.superficie" />
+        <a-input-number style="width: 100%" min="1" v-model="data.superficie" />
       </p>
       <p v-if="data.occupation == 'eleveur'">
         <label>Number of livestock</label>
-        <a-input-number style="width: 100%;" min="1" v-model="data.nbrBetail" />
+        <a-input-number style="width: 100%" min="1" v-model="data.nbrBetail" />
       </p>
       <p>
         <label>Company</label>
-        <a-select v-model="data.compagny_id" show-search placeholder="Select a Arrondissement"
-          option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
+        <a-select
+          v-model="data.compagny_id"
+          show-search
+          placeholder="Select a Arrondissement"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
               option.componentOptions.children[0].text
                 .toLowerCase()
                 .includes(input.toLowerCase())
-            ">
-          <a-select-option v-for="(arr, i) in compagnies" :value="arr.id" :key="i">
+          "
+        >
+          <a-select-option
+            v-for="(arr, i) in compagnies"
+            :value="arr.id"
+            :key="i"
+          >
             {{ arr.denominationOpa }}
           </a-select-option>
         </a-select>
       </p>
 
-
       <template #footer>
         <a-button key="back" @click="openOrg = false">Cancel</a-button>
-        <a-button key="submit" type="primary" :loading="loadingAdd" @click="handleOkOrg">Submit</a-button>
+        <a-button
+          key="submit"
+          type="primary"
+          :loading="loadingAdd"
+          @click="handleOkOrg"
+          >Submit</a-button
+        >
       </template>
-
     </a-modal>
 
     <a-modal v-model="openEditOrg" width="1000px" title="Edit Actor">
-
-
       <p>
         <label>Actor avatar</label>
-        <a-upload-dragger v-if="!editData.avatar" :file-list="fileList" name="photo" :multiple="false"
-          :action="'https://api.queenbloh.com/api/actor/upload'" :headers="uploadHeaders" :before-upload="beforeUpload"
-          @change="handleChange" @drop="handleDrop">
+        <a-upload-dragger
+          v-if="!editData.avatar"
+          :file-list="fileList"
+          name="photo"
+          :multiple="false"
+          :action="'https://api.queenbloh.com/api/actor/upload'"
+          :headers="uploadHeaders"
+          :before-upload="beforeUpload"
+          @change="handleChange"
+          @drop="handleDrop"
+        >
           <p class="ant-upload-drag-icon">
             <inbox-outlined></inbox-outlined>
           </p>
-          <p class="ant-upload-text">Click or drag an image to this area to upload</p>
+          <p class="ant-upload-text">
+            Click or drag an image to this area to upload
+          </p>
           <p class="ant-upload-hint">
-            Support for a single image upload. Strictly upload only image files (jpeg, png, jpg, gif) with a maximum
-            size of
-            2MB.
+            Support for a single image upload. Strictly upload only image files
+            (jpeg, png, jpg, gif) with a maximum size of 2MB.
           </p>
         </a-upload-dragger>
         <a-row type="flex">
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
-              <img :src="'https://api.queenbloh.com' + editData.avatar" v-if="editData.avatar"
-                style="max-width: 150px; border-radius: 5px;">
+              <img
+                :src="'https://api.queenbloh.com' + editData.avatar"
+                v-if="editData.avatar"
+                style="max-width: 150px; border-radius: 5px"
+              />
             </div>
           </a-col>
-          <a-col class="col-content" :span="24" :xl="12" style="justify-content: center;">
-            <a-button type="danger" danger style="width: 100%" v-if="editData.avatar" @click="handleRemove">Remove
-              Image</a-button>
+          <a-col
+            class="col-content"
+            :span="24"
+            :xl="12"
+            style="justify-content: center"
+          >
+            <a-button
+              type="danger"
+              danger
+              style="width: 100%"
+              v-if="editData.avatar"
+              @click="handleRemove"
+              >Remove Image</a-button
+            >
           </a-col>
-
         </a-row>
       </p>
       <p>
@@ -161,23 +223,26 @@
       </p>
       <p>
         <label>Gender</label>
-        <a-select v-model="editData.genre" show-search placeholder="Select a gender" option-filter-prop="children"
-          style="width: 100%" :filter-option="(input, option) =>
+        <a-select
+          v-model="editData.genre"
+          show-search
+          placeholder="Select a gender"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
               option.componentOptions.children[0].text
                 .toLowerCase()
                 .includes(input.toLowerCase())
-            ">
-          <a-select-option value="Man">
-            Man
-          </a-select-option>
-          <a-select-option value="Woman">
-            Woman
-          </a-select-option>
+          "
+        >
+          <a-select-option value="Man"> Man </a-select-option>
+          <a-select-option value="Woman"> Woman </a-select-option>
         </a-select>
       </p>
       <p>
         <label>Age</label>
-        <a-input-number style="width: 100%;" min="1" v-model="editData.age" />
+        <a-input-number style="width: 100%" min="1" v-model="editData.age" />
       </p>
       <p>
         <label>Langage</label>
@@ -196,67 +261,106 @@
       </p>
       <p>
         <label>Occupation</label>
-        <a-select v-model="editData.occupation" show-search placeholder="Select a occupation"
-          option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
+        <a-select
+          v-model="editData.occupation"
+          show-search
+          placeholder="Select a occupation"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
               option.componentOptions.children[0].text
                 .toLowerCase()
                 .includes(input.toLowerCase())
-            ">
+          "
+        >
           <a-select-option value="agricole">
             Agricultural producer
           </a-select-option>
-          <a-select-option value="eleveur">
-            Breeder
-          </a-select-option>
+          <a-select-option value="eleveur"> Breeder </a-select-option>
         </a-select>
       </p>
       <p v-if="editData.occupation == 'agricole'">
         <label>Land area</label>
-        <a-input-number style="width: 100%;" min="1" v-model="editData.superficie" />
+        <a-input-number
+          style="width: 100%"
+          min="1"
+          v-model="editData.superficie"
+        />
       </p>
       <p v-if="editData.occupation == 'eleveur'">
         <label>Number of livestock</label>
-        <a-input-number style="width: 100%;" min="1" v-model="editData.nbrBetail" />
+        <a-input-number
+          style="width: 100%"
+          min="1"
+          v-model="editData.nbrBetail"
+        />
       </p>
       <p>
         <label>Company</label>
-        <a-select v-model="editData.compagny_id" show-search placeholder="Select a Arrondissement"
-          option-filter-prop="children" style="width: 100%" :filter-option="(input, option) =>
+        <a-select
+          v-model="editData.compagny_id"
+          show-search
+          placeholder="Select a Arrondissement"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
               option.componentOptions.children[0].text
                 .toLowerCase()
                 .includes(input.toLowerCase())
-            ">
-          <a-select-option v-for="(arr, i) in compagnies" :value="arr.id" :key="i">
+          "
+        >
+          <a-select-option
+            v-for="(arr, i) in compagnies"
+            :value="arr.id"
+            :key="i"
+          >
             {{ arr.denominationOpa }}
           </a-select-option>
         </a-select>
       </p>
 
-
       <template #footer>
         <a-button key="back" @click="openEditOrg = false">Cancel</a-button>
-        <a-button key="submit" type="primary" :loading="loadingEdit" @click="handleEditOrg">Submit</a-button>
+        <a-button
+          key="submit"
+          type="primary"
+          :loading="loadingEdit"
+          @click="handleEditOrg"
+          >Submit</a-button
+        >
       </template>
-
-
     </a-modal>
 
-
     <a-modal v-model="openInfoOrg" width="1000px" title="View Actor">
-
       <a-row>
-
         <a-col :span="24">
-          <CardBillingInfoActor :info="viewData" @handleDeleteInfo="handleDeleteInfo" @handleEditInfo="handleEditInfo">
+          <CardBillingInfoActor
+            :info="viewData"
+            @handleDeleteInfo="handleDeleteInfo"
+            @handleEditInfo="handleEditInfo"
+          >
           </CardBillingInfoActor>
         </a-col>
 
-        <a-col :span="24" :md="12" :xl="6" v-for="(project, index) in viewData.activities" :key="index">
-          <h6>Participated activities</h6> <br>
-          <CardProject :row="project" :id="project.id" :title="project.titre" :content="project.objectif"
-            :cover="'https://api.queenbloh.com' + project.picture"></CardProject>
+        <a-col
+          :span="24"
+          :md="12"
+          :xl="6"
+          v-for="(project, index) in viewData.activities"
+          :key="index"
+        >
+          <h6>Participated activities</h6>
+          <br />
+          <CardProject
+            :row="project"
+            :id="project.id"
+            :title="project.titre"
+            :content="project.objectif"
+            :cover="'https://api.queenbloh.com' + project.picture"
+          ></CardProject>
         </a-col>
-
       </a-row>
 
       <template #footer>
@@ -264,15 +368,24 @@
       </template>
     </a-modal>
 
-
     <!-- Projects Table -->
     <a-row :gutter="24" type="flex">
       <!-- Projects Table Column -->
       <a-col :span="24" class="mb-24">
         <!-- Projects Table Column -->
-        <CardProjectTable2 :data="table2Data" :columns="table2Columns" @openFunc="handleOpenFunc"
-          @handleValidate="handleValidate" @handleDelete="handleDelete" @handleEdit="handleEdit"
-          @handleView="handleView" @handleNotValidate="handleNotValidate" @handleAll="handleAll" @search="handleSearch">
+        <CardProjectTable2
+          :anim="anim"
+          :data="table2Data"
+          :columns="table2Columns"
+          @openFunc="handleOpenFunc"
+          @handleValidate="handleValidate"
+          @handleDelete="handleDelete"
+          @handleEdit="handleEdit"
+          @handleView="handleView"
+          @handleNotValidate="handleNotValidate"
+          @handleAll="handleAll"
+          @search="handleSearch"
+        >
         </CardProjectTable2>
         <!-- / Projects Table Column -->
       </a-col>
@@ -283,20 +396,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { InboxOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
+import { mapGetters } from "vuex";
+import { InboxOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
 import Steps from "./Steps.vue";
 
 // "Authors" table component.
 import CardAuthorTable from "../components/Cards/CardAuthorTable";
 
-import CardProject from "../components/Cards/CardActor"
+import CardProject from "../components/Cards/CardActor";
 
 // "Projects" table component.
 import CardProjectTable2 from "../components/Cards/CardProjectTableActor";
 
-import CardBillingInfoActor from "../components/Cards/CardBillingInfoActor"
+import CardBillingInfoActor from "../components/Cards/CardBillingInfoActor";
 
 // Table.vue
 import axios from "axios";
@@ -475,10 +588,11 @@ export default {
     CardBillingInfoActor,
     Steps,
     InboxOutlined,
-    CardProject
+    CardProject,
   },
   data() {
     return {
+      anim: true,
       fileList: [],
       loadingAdd: false,
       loadingEdit: false,
@@ -500,7 +614,7 @@ export default {
         superficie: "",
         handicap: "non",
         occupation: "",
-        nbrBetail: ""
+        nbrBetail: "",
       },
 
       departs: [],
@@ -533,30 +647,33 @@ export default {
   computed: {
     uploadHeaders() {
       return {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       };
     },
   },
   methods: {
     async handleRemove() {
-      const res = await axios.post('/actor/delete-img', { photo: this.data.avatar })
+      const res = await axios.post("/actor/delete-img", {
+        photo: this.data.avatar,
+      });
       this.data.avatar = "";
     },
     // Handle upload change events
     handleChange(info) {
       const status = info.file.status;
       console.log(status);
-      if (status === 'done') {
+      if (status === "done") {
         this.fileList = [info.file]; // Restrict to a single file in the list
 
         // Access the image URL returned from the backend
         this.data.avatar = info.file.response.image_url;
-        message.success(`Image uploaded successfully. URL: ${this.data.avatar}`);
-      } else if (status === 'error') {
+        message.success(
+          `Image uploaded successfully. URL: ${this.data.avatar}`
+        );
+      } else if (status === "error") {
         message.error(`${info.file.name} image upload failed.`);
       }
     },
-
 
     // Handle file drop event
     handleDrop(e) {
@@ -565,15 +682,15 @@ export default {
 
     // Before uploading, validate if the file is an image and restrict to only one image
     beforeUpload(file) {
-      const isImage = file.type.startsWith('image/');
+      const isImage = file.type.startsWith("image/");
       const isLt2M = file.size / 1024 / 1024 < 2; // Check if the file is less than 2MB
 
       if (!isImage) {
-        message.error('You can only upload image files!');
+        message.error("You can only upload image files!");
         return false;
       }
       if (!isLt2M) {
-        message.error('Image must be smaller than 2MB!');
+        message.error("Image must be smaller than 2MB!");
         return false;
       }
 
@@ -593,14 +710,12 @@ export default {
       this.currentEdit = 0;
     },
     handleSearch(value) {
-      console.log('Recherche effectuée avec:', value);
+      console.log("Recherche effectuée avec:", value);
       // Ajoutez votre logique de recherche ici
       if (value) {
-        this.table2Data = this.filteredData.filter(item => {
+        this.table2Data = this.filteredData.filter((item) => {
           // Remplacez 'name' et 'description' par les propriétés que vous souhaitez filtrer
-          return (
-            item.name.toLowerCase().includes(value.toLowerCase())
-          );
+          return item.name.toLowerCase().includes(value.toLowerCase());
         });
       } else {
         // Si aucune valeur de recherche, on réinitialise les données filtrées
@@ -636,12 +751,12 @@ export default {
     async handleValidate(row) {
       row.state = "validated";
       const res = await axios.post("/actor/validate", row);
-      message.success('Actor successfully validated.', 5);
+      message.success("Actor successfully validated.", 5);
     },
     async handleDelete(row) {
       this.table2Data = this.table2Data.filter((item) => item.id !== row.id);
       const res = await axios.post("/actor/delete", row);
-      message.success('Actor successfully deleted.', 5);
+      message.success("Actor successfully deleted.", 5);
     },
     handleEdit(row) {
       this.editData = row;
@@ -652,12 +767,11 @@ export default {
       const res = await axios.post("/actor/update", this.editData);
       this.openEditOrg = false;
       this.loadingEdit = false;
-      message.success('Actor successfully edited.', 5);
+      message.success("Actor successfully edited.", 5);
     },
     async handleOkOrg() {
       this.loadingAdd = true;
       try {
-
         const res = await axios.post("/actor/create", this.data);
         if (res.status == 200) {
           this.table2Data = res.data.users.data;
@@ -672,19 +786,17 @@ export default {
             superficie: "",
             handicap: "non",
             occupation: "",
-            nbrBetail: ""
+            nbrBetail: "",
           };
           this.loadingAdd = false;
           this.openOrg = false;
-          message.success('Actor successfully registered.', 5);
+          message.success("Actor successfully registered.", 5);
         }
         this.loadingAdd = false;
-
       } catch (error) {
-        message.error('Vérifiez vos champs.', 5);
+        message.error("Vérifiez vos champs.", 5);
         this.loadingAdd = false;
       }
-
     },
     filterOptionDep(input, option) {
       return (
@@ -695,7 +807,6 @@ export default {
     },
   },
   async created() {
-
     const res = await axios.get("/actor/utilities");
     const resP = await axios.get("/actor/paginate6");
 
@@ -706,6 +817,7 @@ export default {
     if (resP.status == 200) {
       this.table2Data = resP.data.users.data;
       this.filteredData = resP.data.users.data;
+      this.anim = false;
     }
   },
   mounted() {
