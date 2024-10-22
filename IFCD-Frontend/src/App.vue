@@ -67,5 +67,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
+.layout-dashboard .ant-layout-header{
+  border-radius: 0px;
+}
 </style>

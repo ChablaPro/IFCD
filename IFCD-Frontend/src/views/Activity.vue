@@ -1537,7 +1537,7 @@ export default {
       this.domaines = res.data.domaines.map((vill) => vill.name);
       this.types = res.data.events.map((mail) => mail.name);
       this.communes = res.data.communes.map((mail) => mail.name);
-      this.villages = res.data.villages.map((mail) => mail.name);
+      this.villages = res.data.villages?.map((mail) => mail.name);
       this.options = res.data.actors.map((actor) => {
         // Assurez-vous que actor.name existe
         return {
