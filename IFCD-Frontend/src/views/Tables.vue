@@ -31,101 +31,124 @@
             <a-radio :style="radioStyle" value="non">No</a-radio>
           </a-radio-group>
         </p>
-        <p>
-          <label>Department</label>
-          <a-select
-            v-model="data.depOrg"
-            show-search
-            placeholder="Select a Department"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
-                option.componentOptions.children[0].text
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-            "
-          >
-            <a-select-option
-              v-for="(depart, i) in departs"
-              :value="depart"
-              :key="i"
-            >
-              {{ depart }}
-            </a-select-option>
-          </a-select>
-        </p>
-        <p>
-          <label>Commune</label>
-          <a-select
-            v-model="data.comOrg"
-            show-search
-            placeholder="Select a Commune"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
-                option.componentOptions.children[0].text
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-            "
-          >
-            <a-select-option v-for="(com, i) in communes" :value="com" :key="i">
-              {{ com }}
-            </a-select-option>
-          </a-select>
-        </p>
-        <p>
-          <label>Arrondissement</label>
-          <a-select
-            v-model="data.arrOrg"
-            show-search
-            placeholder="Select a Arrondissement"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
-                option.componentOptions.children[0].text
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-            "
-          >
-            <a-select-option
-              v-for="(arr, i) in arrondissements"
-              :value="arr"
-              :key="i"
-            >
-              {{ arr }}
-            </a-select-option>
-          </a-select>
-        </p>
-        <p>
-          <label>Village</label>
-          <a-select
-            v-model="data.vilOrg"
-            show-search
-            placeholder="Select a Village"
-            option-filter-prop="children"
-            style="width: 100%"
-            :filter-option="
-              (input, option) =>
-                option.componentOptions.children[0].text
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-            "
-          >
-            <a-select-option v-for="(vil, i) in villages" :value="vil" :key="i">
-              {{ vil }}
-            </a-select-option>
-          </a-select>
-        </p>
+          <Row :gutter="16">
+            <Col span="12">
+                <div>
+                  <p>
+                    <label>Department</label>
+                    <a-select
+                      v-model="data.depOrg"
+                      show-search
+                      placeholder="Select a Department"
+                      option-filter-prop="children"
+                      style="width: 100%"
+                      :filter-option="
+                        (input, option) =>
+                          option.componentOptions.children[0].text
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                      "
+                    >
+                      <a-select-option
+                        v-for="(depart, i) in departs"
+                        :value="depart"
+                        :key="i"
+                      >
+                        {{ depart }}
+                      </a-select-option>
+                    </a-select>
+                  </p>
+                </div>
+            </Col>
+            <Col span="12">
+                <div>
+                  <p>
+                    <label>Commune</label>
+                    <a-select
+                      v-model="data.comOrg"
+                      show-search
+                      placeholder="Select a Commune"
+                      option-filter-prop="children"
+                      style="width: 100%"
+                      :filter-option="
+                        (input, option) =>
+                          option.componentOptions.children[0].text
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                      "
+                    >
+                      <a-select-option v-for="(com, i) in communes" :value="com" :key="i">
+                        {{ com }}
+                      </a-select-option>
+                    </a-select>
+                  </p>
+                </div>
+            </Col>
+          </Row>
+          
+          <Row :gutter="16">
+            <Col span="12">
+                <div>
+                  <p>
+                    <label>Borough</label>
+                    <a-select
+                      v-model="data.arrOrg"
+                      show-search
+                      placeholder="Select a Arrondissement"
+                      option-filter-prop="children"
+                      style="width: 100%"
+                      :filter-option="
+                        (input, option) =>
+                          option.componentOptions.children[0].text
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                      "
+                    >
+                      <a-select-option
+                        v-for="(arr, i) in arrondissements"
+                        :value="arr"
+                        :key="i"
+                      >
+                        {{ arr }}
+                      </a-select-option>
+                    </a-select>
+                  </p>
+                </div>
+            </Col>
+            <Col span="12">
+                <div>
+                  <p>
+                    <label>Village</label>
+                    <a-select
+                      v-model="data.vilOrg"
+                      show-search
+                      placeholder="Select a Village"
+                      option-filter-prop="children"
+                      style="width: 100%"
+                      :filter-option="
+                        (input, option) =>
+                          option.componentOptions.children[0].text
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                      "
+                    >
+                      <a-select-option v-for="(vil, i) in villages" :value="vil" :key="i">
+                        {{ vil }}
+                      </a-select-option>
+                    </a-select>
+                  </p>
+                </div>
+            </Col>
+          </Row>
+        
+        
         <p>
           <label>Address/House</label>
           <a-input v-model="data.addressOrg" />
         </p>
 
         <p>
-          <label>Type of OPA</label>
+          <label>King of OPA</label>
           <a-select v-model="data.typeOPA" style="width: 100%" @focus="focus">
             <a-select-option value="Coopérative">Cooperative</a-select-option>
             <a-select-option value="Association">Association</a-select-option>
@@ -353,6 +376,7 @@
             <a-radio :style="radioStyle" value="non">No</a-radio>
           </a-radio-group>
         </p>
+        
         <p>
           <label>Department</label>
           <a-select
@@ -398,7 +422,7 @@
           </a-select>
         </p-->
         <p>
-          <label>Arrondissement</label>
+          <label>Borough</label>
           <a-select
             v-model="editData.arrondissement"
             show-search
@@ -446,7 +470,7 @@
           <a-input v-model="editData.adresse" />
         </p>
         <p>
-          <label>Type of OPA</label>
+          <label>Kind of OPA</label>
           <a-select
             v-model="editData.typeOpa"
             style="width: 100%"
@@ -507,7 +531,7 @@
           <a-input v-model="editData.courriel" />
         </p>
         <p>
-          <label>Maillons</label>
+          <label>Links</label>
           <a-select
             v-model="editData.maillon"
             show-search
@@ -824,13 +848,13 @@ const table1Data = [
 //'id', 'denominationOpa', 'typeOpa', 'village', 'position', 'dateCreaction', 'email'
 const table2Columns = [
   {
-    title: "Organisation",
+    title: "Organization",
     dataIndex: "denominationOpa",
     scopedSlots: { customRender: "denominationOpa" },
     width: 300,
   },
   {
-    title: "Type",
+    title: "Kind",
     dataIndex: "typeOpa",
     class: "font-semibold text-muted",
   },
@@ -845,7 +869,7 @@ const table2Columns = [
     class: "font-semibold text-muted text-sm",
   },
   {
-    title: "Date de création",
+    title: "Creation date",
     dataIndex: "created_at",
     class: "font-semibold text-muted text-sm",
   },

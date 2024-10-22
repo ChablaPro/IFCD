@@ -58,34 +58,46 @@
         </a-row>
       </p>
       <p>
-        <label>Name</label>
+        <label>Full Name</label>
         <a-input v-model="data.name" />
       </p>
+          
+          <Row :gutter="16">
+            <Col span="12">
+                <div>
+                  <p>
+                    <label>Gender</label>
+                    <a-select
+                      v-model="data.genre"
+                      show-search
+                      placeholder="Select a gender"
+                      option-filter-prop="children"
+                      style="width: 100%"
+                      :filter-option="
+                        (input, option) =>
+                          option.componentOptions.children[0].text
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                      "
+                    >
+                      <a-select-option value="Man"> Man </a-select-option>
+                      <a-select-option value="Woman"> Woman </a-select-option>
+                    </a-select>
+                  </p>
+                </div>
+            </Col>
+            <Col span="12">
+                <div>
+                  <p>
+                    <label>Age</label>
+                    <a-input-number style="width: 100%" min="1" v-model="data.age" />
+                  </p>
+                </div>
+            </Col>
+          </Row>
+
       <p>
-        <label>Gender</label>
-        <a-select
-          v-model="data.genre"
-          show-search
-          placeholder="Select a gender"
-          option-filter-prop="children"
-          style="width: 100%"
-          :filter-option="
-            (input, option) =>
-              option.componentOptions.children[0].text
-                .toLowerCase()
-                .includes(input.toLowerCase())
-          "
-        >
-          <a-select-option value="Man"> Man </a-select-option>
-          <a-select-option value="Woman"> Woman </a-select-option>
-        </a-select>
-      </p>
-      <p>
-        <label>Age</label>
-        <a-input-number style="width: 100%" min="1" v-model="data.age" />
-      </p>
-      <p>
-        <label>Langage</label>
+        <label>Language</label>
         <a-input v-model="data.langue" />
       </p>
       <p>
@@ -218,34 +230,47 @@
         </a-row>
       </p>
       <p>
-        <label>Name</label>
+        <label>Full Name</label>
         <a-input v-model="editData.name" />
       </p>
+      <Row :gutter="16">
+            <Col span="12">
+                <div>
+                  <p>
+                    <label>Gender</label>
+                    <a-select
+                      v-model="editData.genre"
+                      show-search
+                      placeholder="Select a gender"
+                      option-filter-prop="children"
+                      style="width: 100%"
+                      :filter-option="
+                        (input, option) =>
+                          option.componentOptions.children[0].text
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                      "
+                    >
+                      <a-select-option value="Man"> Man </a-select-option>
+                      <a-select-option value="Woman"> Woman </a-select-option>
+                    </a-select>
+                  </p>
+                </div>
+            </Col>
+            <Col span="12">
+                <div>
+                  <p>
+                    <label>Age</label>
+                    <a-input-number style="width: 100%" min="1" v-model="editData.age" />
+                  </p>
+                </div>
+            </Col>
+          </Row>
+
+      
+      
       <p>
-        <label>Gender</label>
-        <a-select
-          v-model="editData.genre"
-          show-search
-          placeholder="Select a gender"
-          option-filter-prop="children"
-          style="width: 100%"
-          :filter-option="
-            (input, option) =>
-              option.componentOptions.children[0].text
-                .toLowerCase()
-                .includes(input.toLowerCase())
-          "
-        >
-          <a-select-option value="Man"> Man </a-select-option>
-          <a-select-option value="Woman"> Woman </a-select-option>
-        </a-select>
-      </p>
-      <p>
-        <label>Age</label>
-        <a-input-number style="width: 100%" min="1" v-model="editData.age" />
-      </p>
-      <p>
-        <label>Langage</label>
+        <label>Language</label>
         <a-input v-model="editData.langue" />
       </p>
       <p>
@@ -541,12 +566,12 @@ const table2Columns = [
     width: 300,
   },
   {
-    title: "Name",
+    title: "Full Name",
     dataIndex: "name",
     class: "font-semibold text-muted",
   },
   {
-    title: "Genre",
+    title: "Gender",
     dataIndex: "genre",
     class: "font-semibold text-muted text-sm",
   },
@@ -556,12 +581,12 @@ const table2Columns = [
     class: "font-semibold text-muted text-sm",
   },
   {
-    title: "Langue",
+    title: "Language",
     dataIndex: "langue",
     class: "font-semibold text-muted text-sm",
   },
   {
-    title: "Niveau",
+    title: "Level",
     dataIndex: "niveau",
     class: "font-semibold text-muted text-sm",
   },
