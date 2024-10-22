@@ -7,13 +7,307 @@
   <div>
     <a-modal v-model="openOrg" width="1000px" title="Add Activity">
       <p>
+        <Steps :current="current" />
+      </p>
+
+<!-- Localisation-->
+    <div v-if="current == 0">
+
+      <p>
+        <label>Country</label>
+        <a-select
+          v-model="data.pays"
+          show-search
+          placeholder="Select a country"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option  value="Burkina Faso">
+            Burkina Faso 
+          </a-select-option>
+          <a-select-option  value="Mali">
+            Mali 
+          </a-select-option>
+          <a-select-option  value="Niger">
+            Niger
+          </a-select-option>
+          <a-select-option  value="Nigéria">
+            Nigéria 
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Region</label>
+        <a-select
+          v-model="data.region"
+          show-search
+          placeholder="Select a state"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+        <a-select-option value="Tahoua " v-if="data.pays=='Niger'">Tahoua</a-select-option>
+        <a-select-option value="Maradi" v-if="data.pays=='Niger'">Maradi</a-select-option>
+        <a-select-option value="Zinder" v-if="data.pays=='Niger'">Zinder</a-select-option>
+        <a-select-option value="Sikasso" v-if="data.pays=='Mali'">Sikasso</a-select-option>
+        <a-select-option value="Ségou" v-if="data.pays=='Mali'">Ségou</a-select-option>
+        <a-select-option value="Koulikoro" v-if="data.pays=='Mali'">Koulikoro</a-select-option>
+        <a-select-option value="Hauts Bassins" v-if="data.pays=='Burkina Faso'">Hauts Bassins</a-select-option>
+        <a-select-option value="Boucle du Mouhoun" v-if="data.pays=='Burkina Faso'">Boucle du Mouhoun</a-select-option>
+        <a-select-option value="Centre" v-if="data.pays=='Burkina Faso'">Centre</a-select-option>
+        <a-select-option value="Centre-Est" v-if="data.pays=='Burkina Faso'">Centre-Est</a-select-option>
+        <a-select-option value="Kano" v-if="data.pays=='Nigeria'">Kano</a-select-option>
+        <a-select-option value="Jigawa" v-if="data.pays=='Nigeria'">Jigawa</a-select-option>
+        <a-select-option value="Bauchi" v-if="data.pays=='Nigeria'">Bauchi</a-select-option>
+        </a-select>
+      </p>
+      
+      <p>
+        <label>Name of the watershed</label>
+        <a-select
+          v-model="data.bassin"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+        <a-select-option value="Maggia" v-if="data.pays=='Niger'">Maggia</a-select-option>
+<a-select-option value="Goulbi" v-if="data.pays=='Niger'">Goulbi</a-select-option>
+<a-select-option value="Korama" v-if="data.pays=='Niger'">Korama</a-select-option>
+<a-select-option value="Bassin du Haut Bani" v-if="data.pays=='Mali'">Bassin du Haut Bani</a-select-option>
+<a-select-option value="Bassin du Niger" v-if="data.pays=='Mali'">Bassin du Niger</a-select-option>
+<a-select-option value="Bassin de Selingué" v-if="data.pays=='Mali'">Bassin de Selingué</a-select-option>
+<a-select-option value="Sous bassin du Kou" v-if="data.pays=='Burkina Faso'">Sous bassin du Kou</a-select-option>
+<a-select-option value="Sous bassin du Mouhoun inférieur" v-if="data.pays=='Burkina Faso'">Sous bassin du Mouhoun inférieur</a-select-option>
+<a-select-option value="Bassin du Nakanbé" v-if="data.pays=='Burkina Faso'">Bassin du Nakanbé</a-select-option>
+<a-select-option value="Yartiti watershed" v-if="data.pays=='Nigeria'">Yartiti watershed</a-select-option>
+<a-select-option value="Fajewa watershed" v-if="data.pays=='Nigeria'">Fajewa watershed</a-select-option>
+<a-select-option value="Hadeija river basin" v-if="data.pays=='Nigeria'">Hadeija river basin</a-select-option>
+<a-select-option value="Jama’are watershed" v-if="data.pays=='Nigeria'">Jama’are watershed</a-select-option>
+<a-select-option value="Yankari river basin" v-if="data.pays=='Nigeria'">Yankari river basin</a-select-option>
+
+        </a-select>
+      </p>
+      <p>
+        <label>Department</label>
+        <a-select
+          v-model="data.etat"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option
+            v-for="(depart, i) in departs"
+            :value="depart"
+            :key="i"
+          >
+            {{ depart }}
+          </a-select-option>
+        </a-select>
+      </p>
+      
+      <p>
+        <label>Commune</label>
+        <a-select
+          v-model="data.commune"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option
+            v-for="(depart, i) in communes"
+            :value="depart"
+            :key="i"
+          >
+            {{ depart }}
+          </a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Village</label>
+        <a-select
+          v-model="data.village"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option
+            v-for="(depart, i) in villages"
+            :value="depart"
+            :key="i"
+          >
+            {{ depart }}
+          </a-select-option>
+        </a-select>
+      </p>
+
+
+    </div>
+    <div v-if="current == 1">
+
+      <!-- Localisation-->
+  <br><br>
+      <p>
+        <label>Partner</label>
+        <a-select
+          v-model="data.partner"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option value="IFDC">IFDC</a-select-option>
+          <a-select-option value="SNV">SNV</a-select-option>
+          <a-select-option value="WUR">WUR</a-select-option>
+          <a-select-option value="IITA">IITA</a-select-option>
+          <a-select-option value="ICRAF">ICRAF</a-select-option>
+          <a-select-option value="AGRA">AGRA</a-select-option>
+          <a-select-option value="IWMI">IWMI</a-select-option>
+          <a-select-option value="ISRIC">ISRIC</a-select-option>
+          <a-select-option value="FSRP" v-if="['Burkina Faso', 'Niger', 'Mali'].includes(data.pays)">FSRP</a-select-option>
+            <a-select-option value="Pro_Arides" v-if="['Burkina Faso', 'Mali', 'Niger'].includes(data.pays)">Pro_Arides</a-select-option>
+            <a-select-option value="PRAPS" v-if="['Burkina Faso', 'Mali', 'Niger'].includes(data.pays)">PRAPS</a-select-option>
+            <a-select-option value="PRECA" v-if="data.pays=='Burkina Faso'">PRECA</a-select-option>
+            <a-select-option value="PACES II" v-if="data.pays=='Burkina Faso'">PACES II (BF)</a-select-option>
+            <a-select-option value="ACReSAL" v-if="data.pays=='Nigeria'">ACReSAL</a-select-option>
+            <a-select-option value="L_PRES" v-if="data.pays=='Nigeria'">L_PRES</a-select-option>
+            <a-select-option value="PRECIS" v-if="data.pays=='Niger'">PRECIS</a-select-option>
+            <a-select-option value="PGIP" v-if="data.pays=='Niger'">PGIP</a-select-option>
+            <a-select-option value="PISEN" v-if="data.pays=='Niger'">PISEN</a-select-option>
+          <a-select-option value="Others">Others</a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Theme of the activity</label>
+        <a-select
+          v-model="data.theme"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+        <a-select-option value="SWC">SWC</a-select-option>
+    <a-select-option value="ISFM">ISFM</a-select-option>
+    <a-select-option value="Agroforesterie">Agroforesterie</a-select-option>
+    <a-select-option value="GESI">GESI</a-select-option>
+    <a-select-option value="Policy/reglementation">Policy/reglementation</a-select-option>
+    <a-select-option value="autres">autres</a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Event date</label>
+        <a-date-picker v-model="data.date" style="width: 100%" />
+      </p>
+
+      <p>
+        <label>Objective</label>
+        <a-select
+    v-model="data.objectif"
+    show-search
+    placeholder="Select a goal"
+    option-filter-prop="children"
+    style="width: 100%"
+    :filter-option="(input, option) =>
+      option.componentOptions.children[0].text
+        .toLowerCase()
+        .includes(input.toLowerCase())"
+  >
+    <a-select-option value="Reduce yield gaps">Sustainably reduce yield gaps and maintain yield stability for small-scale food producers, particularly women, in the Sahel.</a-select-option>
+    <a-select-option value="Ecologically sustainable farming">Convert fragile farmland into ecologically sustainable farming systems.</a-select-option>
+    <a-select-option value="Increase resilience">Increase the resilience of small-scale food producers and their agroecological systems to climate change and other shocks.</a-select-option>
+    <a-select-option value="Soil fertility management">Strategize soil fertility management and strengthen the implementation capacity of national, sub-national, and civil society organizations.</a-select-option>
+    <a-select-option value="Policy and marketing conditions">Set policy and marketing conditions to stimulate soil fertility interventions by farmers and chain actors.</a-select-option>
+  </a-select>
+
+      </p>
+      
+     
+      <p>
+        <label>Address</label>
+        <a-input v-model="data.lieu" />
+      </p>
+
+      <p>
+        <label>Domain</label>
+        <a-select
+          v-model="data.domaine"
+          show-search
+          placeholder="Select a domain"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+        <a-select-option value="Bundling">Bundling</a-select-option>
+        <a-select-option value="Integrate">Integrate</a-select-option>
+        <a-select-option value="Convening">Convening</a-select-option>
+        <a-select-option value="Brokering">Brokering</a-select-option>
+        <a-select-option value="Scoping and learning">Scoping and learning</a-select-option>
+        </a-select>
+      </p>
+
+      <p>
         <label>Activity Picture</label>
         <a-upload-dragger
           v-if="!data.picture"
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'https://api.queenbloh.com/api/activity/upload'"
+          :action="'http://127.0.0.1:8000/api/activity/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChange"
@@ -34,7 +328,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'https://api.queenbloh.com' + data.picture"
+                :src="'http://127.0.0.1:8000' + data.picture"
                 v-if="data.picture"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -62,7 +356,7 @@
         <a-input v-model="data.titre" />
       </p>
       <p>
-        <label>Type</label>
+        <label>Type of support advice</label>
         <a-select
           v-model="data.type"
           show-search
@@ -76,19 +370,65 @@
                 .includes(input.toLowerCase())
           "
         >
-          <a-select-option
-            v-for="(depart, i) in types"
-            :value="depart"
-            :key="i"
-          >
-            {{ depart }}
-          </a-select-option>
+        <a-select-option value="Parcelle de démonstration">Parcelle de démonstration</a-select-option>
+        <a-select-option value="Foraine via les projections vidéo/poster/boîte à outils">Foraine via les projections vidéo/poster/boîte à outils</a-select-option>
+        <a-select-option value="Coaching (suivi individuel ou en groupe)">Coaching (suivi individuel ou en groupe)</a-select-option>
         </a-select>
       </p>
+
+      <p>
+        <label>Full name of agent</label>
+        <a-input v-model="data.fullname" />
+      </p>
+
+      <p>
+        <label>Agent Contact</label>
+        <a-input v-model="data.contact" />
+      </p>
+    </div>
+     
+     
+      
+
+      <template #footer>
+        <a-button key="back" @click="openOrg = false" v-if="current == 0">Cancel</a-button>
+        <a-button key="back" @click="handleNext" v-if="current == 0"
+          >Next</a-button
+        >
+        <a-button key="back" @click="handlePrevious" v-if="current == 1"
+          >Previous</a-button
+        >
+        <a-button
+          key="submit"
+          type="primary"
+          :loading="loadingAdd"
+          @click="handleOkOrg"
+          v-if="current == 1"
+          >Submit</a-button
+        >
+        <!--a-button key="back" @click="openOrg = false">Cancel</a-button>
+        <a-button
+          key="submit"
+          type="primary"
+          :loading="loadingAdd"
+          @click="handleOkOrg"
+          >Submit</a-button
+        -->
+      </template>
+    </a-modal>
+
+    <a-modal v-model="openEditOrg" width="1000px" title="Edit Activity">
+      <p>
+        <Steps :current="current" />
+      </p>
+
+<!-- Localisation-->
+    <div v-if="current == 0">
+
       <p>
         <label>Country</label>
         <a-select
-          v-model="data.pays"
+          v-model="editData.pays"
           show-search
           placeholder="Select a country"
           option-filter-prop="children"
@@ -100,17 +440,89 @@
                 .includes(input.toLowerCase())
           "
         >
-          <a-select-option v-for="(depart, i) in pays" :value="depart" :key="i">
-            {{ depart }}
+          <a-select-option  value="Burkina Faso">
+            Burkina Faso 
+          </a-select-option>
+          <a-select-option  value="Mali">
+            Mali 
+          </a-select-option>
+          <a-select-option  value="Niger">
+            Niger
+          </a-select-option>
+          <a-select-option  value="Nigéria">
+            Nigéria 
           </a-select-option>
         </a-select>
       </p>
       <p>
-        <label>State</label>
+        <label>Region</label>
         <a-select
-          v-model="data.etat"
+          v-model="editData.region"
           show-search
           placeholder="Select a state"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+        <a-select-option value="Tahoua " v-if="data.pays=='Niger'">Tahoua</a-select-option>
+        <a-select-option value="Maradi" v-if="data.pays=='Niger'">Maradi</a-select-option>
+        <a-select-option value="Zinder" v-if="data.pays=='Niger'">Zinder</a-select-option>
+        <a-select-option value="Sikasso" v-if="data.pays=='Mali'">Sikasso</a-select-option>
+        <a-select-option value="Ségou" v-if="data.pays=='Mali'">Ségou</a-select-option>
+        <a-select-option value="Koulikoro" v-if="data.pays=='Mali'">Koulikoro</a-select-option>
+        <a-select-option value="Hauts Bassins" v-if="data.pays=='Burkina Faso'">Hauts Bassins</a-select-option>
+        <a-select-option value="Boucle du Mouhoun" v-if="data.pays=='Burkina Faso'">Boucle du Mouhoun</a-select-option>
+        <a-select-option value="Centre" v-if="data.pays=='Burkina Faso'">Centre</a-select-option>
+        <a-select-option value="Centre-Est" v-if="data.pays=='Burkina Faso'">Centre-Est</a-select-option>
+        <a-select-option value="Kano" v-if="data.pays=='Nigeria'">Kano</a-select-option>
+        <a-select-option value="Jigawa" v-if="data.pays=='Nigeria'">Jigawa</a-select-option>
+        <a-select-option value="Bauchi" v-if="data.pays=='Nigeria'">Bauchi</a-select-option>
+        </a-select>
+      </p>
+      
+      <p>
+        <label>Name of the watershed</label>
+        <a-select
+          v-model="editData.bassin"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+        <a-select-option value="Maggia" v-if="data.pays=='Niger'">Maggia</a-select-option>
+<a-select-option value="Goulbi" v-if="data.pays=='Niger'">Goulbi</a-select-option>
+<a-select-option value="Korama" v-if="data.pays=='Niger'">Korama</a-select-option>
+<a-select-option value="Bassin du Haut Bani" v-if="data.pays=='Mali'">Bassin du Haut Bani</a-select-option>
+<a-select-option value="Bassin du Niger" v-if="data.pays=='Mali'">Bassin du Niger</a-select-option>
+<a-select-option value="Bassin de Selingué" v-if="data.pays=='Mali'">Bassin de Selingué</a-select-option>
+<a-select-option value="Sous bassin du Kou" v-if="data.pays=='Burkina Faso'">Sous bassin du Kou</a-select-option>
+<a-select-option value="Sous bassin du Mouhoun inférieur" v-if="data.pays=='Burkina Faso'">Sous bassin du Mouhoun inférieur</a-select-option>
+<a-select-option value="Bassin du Nakanbé" v-if="data.pays=='Burkina Faso'">Bassin du Nakanbé</a-select-option>
+<a-select-option value="Yartiti watershed" v-if="data.pays=='Nigeria'">Yartiti watershed</a-select-option>
+<a-select-option value="Fajewa watershed" v-if="data.pays=='Nigeria'">Fajewa watershed</a-select-option>
+<a-select-option value="Hadeija river basin" v-if="data.pays=='Nigeria'">Hadeija river basin</a-select-option>
+<a-select-option value="Jama’are watershed" v-if="data.pays=='Nigeria'">Jama’are watershed</a-select-option>
+<a-select-option value="Yankari river basin" v-if="data.pays=='Nigeria'">Yankari river basin</a-select-option>
+
+        </a-select>
+      </p>
+      <p>
+        <label>Department</label>
+        <a-select
+          v-model="editData.etat"
+          show-search
+          placeholder="Select a commune"
           option-filter-prop="children"
           style="width: 100%"
           :filter-option="
@@ -129,10 +541,11 @@
           </a-select-option>
         </a-select>
       </p>
+      
       <p>
         <label>Commune</label>
         <a-select
-          v-model="data.commune"
+          v-model="editData.commune"
           show-search
           placeholder="Select a commune"
           option-filter-prop="children"
@@ -154,9 +567,132 @@
         </a-select>
       </p>
       <p>
+        <label>Village</label>
+        <a-select
+          v-model="editData.village"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option
+            v-for="(depart, i) in villages"
+            :value="depart"
+            :key="i"
+          >
+            {{ depart }}
+          </a-select-option>
+        </a-select>
+      </p>
+
+
+    </div>
+    <div v-if="current == 1">
+
+      <!-- Localisation-->
+  <br><br>
+      <p>
+        <label>Partner</label>
+        <a-select
+          v-model="editData.partner"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+          <a-select-option value="IFDC">IFDC</a-select-option>
+          <a-select-option value="SNV">SNV</a-select-option>
+          <a-select-option value="WUR">WUR</a-select-option>
+          <a-select-option value="IITA">IITA</a-select-option>
+          <a-select-option value="ICRAF">ICRAF</a-select-option>
+          <a-select-option value="AGRA">AGRA</a-select-option>
+          <a-select-option value="IWMI">IWMI</a-select-option>
+          <a-select-option value="ISRIC">ISRIC</a-select-option>
+          <a-select-option value="FSRP" v-if="['Burkina Faso', 'Niger', 'Mali'].includes(data.pays)">FSRP</a-select-option>
+            <a-select-option value="Pro_Arides" v-if="['Burkina Faso', 'Mali', 'Niger'].includes(data.pays)">Pro_Arides</a-select-option>
+            <a-select-option value="PRAPS" v-if="['Burkina Faso', 'Mali', 'Niger'].includes(data.pays)">PRAPS</a-select-option>
+            <a-select-option value="PRECA" v-if="data.pays=='Burkina Faso'">PRECA</a-select-option>
+            <a-select-option value="PACES II" v-if="data.pays=='Burkina Faso'">PACES II (BF)</a-select-option>
+            <a-select-option value="ACReSAL" v-if="data.pays=='Nigeria'">ACReSAL</a-select-option>
+            <a-select-option value="L_PRES" v-if="data.pays=='Nigeria'">L_PRES</a-select-option>
+            <a-select-option value="PRECIS" v-if="data.pays=='Niger'">PRECIS</a-select-option>
+            <a-select-option value="PGIP" v-if="data.pays=='Niger'">PGIP</a-select-option>
+            <a-select-option value="PISEN" v-if="data.pays=='Niger'">PISEN</a-select-option>
+          <a-select-option value="Others">Others</a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Theme of the activity</label>
+        <a-select
+          v-model="editData.theme"
+          show-search
+          placeholder="Select a commune"
+          option-filter-prop="children"
+          style="width: 100%"
+          :filter-option="
+            (input, option) =>
+              option.componentOptions.children[0].text
+                .toLowerCase()
+                .includes(input.toLowerCase())
+          "
+        >
+        <a-select-option value="SWC">SWC</a-select-option>
+    <a-select-option value="ISFM">ISFM</a-select-option>
+    <a-select-option value="Agroforesterie">Agroforesterie</a-select-option>
+    <a-select-option value="GESI">GESI</a-select-option>
+    <a-select-option value="Policy/reglementation">Policy/reglementation</a-select-option>
+    <a-select-option value="autres">autres</a-select-option>
+        </a-select>
+      </p>
+      <p>
+        <label>Event date</label>
+        <a-date-picker v-model="editData.date" style="width: 100%" />
+      </p>
+
+      <p>
+        <label>Objective</label>
+        <a-select
+    v-model="editData.objectif"
+    show-search
+    placeholder="Select a goal"
+    option-filter-prop="children"
+    style="width: 100%"
+    :filter-option="(input, option) =>
+      option.componentOptions.children[0].text
+        .toLowerCase()
+        .includes(input.toLowerCase())"
+  >
+    <a-select-option value="Reduce yield gaps">Sustainably reduce yield gaps and maintain yield stability for small-scale food producers, particularly women, in the Sahel.</a-select-option>
+    <a-select-option value="Ecologically sustainable farming">Convert fragile farmland into ecologically sustainable farming systems.</a-select-option>
+    <a-select-option value="Increase resilience">Increase the resilience of small-scale food producers and their agroecological systems to climate change and other shocks.</a-select-option>
+    <a-select-option value="Soil fertility management">Strategize soil fertility management and strengthen the implementation capacity of national, sub-national, and civil society organizations.</a-select-option>
+    <a-select-option value="Policy and marketing conditions">Set policy and marketing conditions to stimulate soil fertility interventions by farmers and chain actors.</a-select-option>
+  </a-select>
+
+      </p>
+      
+     
+      <p>
+        <label>Address</label>
+        <a-input v-model="editData.lieu" />
+      </p>
+
+      <p>
         <label>Domain</label>
         <a-select
-          v-model="data.domaine"
+          v-model="editData.domaine"
           show-search
           placeholder="Select a domain"
           option-filter-prop="children"
@@ -168,45 +704,14 @@
                 .includes(input.toLowerCase())
           "
         >
-          <a-select-option
-            v-for="(depart, i) in domaines"
-            :value="depart"
-            :key="i"
-          >
-            {{ depart }}
-          </a-select-option>
+        <a-select-option value="Bundling">Bundling</a-select-option>
+        <a-select-option value="Integrate">Integrate</a-select-option>
+        <a-select-option value="Convening">Convening</a-select-option>
+        <a-select-option value="Brokering">Brokering</a-select-option>
+        <a-select-option value="Scoping and learning">Scoping and learning</a-select-option>
         </a-select>
       </p>
-      <p>
-        <label>Objectif</label>
-        <a-input v-model="data.objectif" />
-      </p>
-      <p>
-        <label>Bassin</label>
-        <a-input v-model="data.bassin" />
-      </p>
-      <p>
-        <label>Event date</label>
-        <a-date-picker v-model="data.date" style="width: 100%" />
-      </p>
-      <p>
-        <label>Address</label>
-        <a-input v-model="data.lieu" />
-      </p>
 
-      <template #footer>
-        <a-button key="back" @click="openOrg = false">Cancel</a-button>
-        <a-button
-          key="submit"
-          type="primary"
-          :loading="loadingAdd"
-          @click="handleOkOrg"
-          >Submit</a-button
-        >
-      </template>
-    </a-modal>
-
-    <a-modal v-model="openEditOrg" width="1000px" title="Edit Activity">
       <p>
         <label>Activity Picture</label>
         <a-upload-dragger
@@ -214,7 +719,7 @@
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'https://api.queenbloh.com/api/activity/upload'"
+          :action="'http://127.0.0.1:8000/api/activity/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChange"
@@ -235,7 +740,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'https://api.queenbloh.com' + editData.picture"
+                :src="'http://127.0.0.1:8000' + editData.picture"
                 v-if="editData.picture"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -263,7 +768,7 @@
         <a-input v-model="editData.titre" />
       </p>
       <p>
-        <label>Type</label>
+        <label>Type of support advice</label>
         <a-select
           v-model="editData.type"
           show-search
@@ -277,123 +782,22 @@
                 .includes(input.toLowerCase())
           "
         >
-          <a-select-option
-            v-for="(depart, i) in types"
-            :value="depart"
-            :key="i"
-          >
-            {{ depart }}
-          </a-select-option>
+        <a-select-option value="Parcelle de démonstration">Parcelle de démonstration</a-select-option>
+        <a-select-option value="Foraine via les projections vidéo/poster/boîte à outils">Foraine via les projections vidéo/poster/boîte à outils</a-select-option>
+        <a-select-option value="Coaching (suivi individuel ou en groupe)">Coaching (suivi individuel ou en groupe)</a-select-option>
         </a-select>
       </p>
+
       <p>
-        <label>Country</label>
-        <a-select
-          v-model="editData.pays"
-          show-search
-          placeholder="Select a country"
-          option-filter-prop="children"
-          style="width: 100%"
-          :filter-option="
-            (input, option) =>
-              option.componentOptions.children[0].text
-                .toLowerCase()
-                .includes(input.toLowerCase())
-          "
-        >
-          <a-select-option v-for="(depart, i) in pays" :value="depart" :key="i">
-            {{ depart }}
-          </a-select-option>
-        </a-select>
+        <label>Full name of agent</label>
+        <a-input v-model="editData.fullname" />
       </p>
+
       <p>
-        <label>State</label>
-        <a-select
-          v-model="editData.etat"
-          show-search
-          placeholder="Select a state"
-          option-filter-prop="children"
-          style="width: 100%"
-          :filter-option="
-            (input, option) =>
-              option.componentOptions.children[0].text
-                .toLowerCase()
-                .includes(input.toLowerCase())
-          "
-        >
-          <a-select-option
-            v-for="(depart, i) in departs"
-            :value="depart"
-            :key="i"
-          >
-            {{ depart }}
-          </a-select-option>
-        </a-select>
+        <label>Agent Contact</label>
+        <a-input v-model="editData.contact" />
       </p>
-      <p>
-        <label>Commune</label>
-        <a-select
-          v-model="editData.commune"
-          show-search
-          placeholder="Select a commune"
-          option-filter-prop="children"
-          style="width: 100%"
-          :filter-option="
-            (input, option) =>
-              option.componentOptions.children[0].text
-                .toLowerCase()
-                .includes(input.toLowerCase())
-          "
-        >
-          <a-select-option
-            v-for="(depart, i) in communes"
-            :value="depart"
-            :key="i"
-          >
-            {{ depart }}
-          </a-select-option>
-        </a-select>
-      </p>
-      <p>
-        <label>Domain</label>
-        <a-select
-          v-model="editData.domaine"
-          show-search
-          placeholder="Select a domain"
-          option-filter-prop="children"
-          style="width: 100%"
-          :filter-option="
-            (input, option) =>
-              option.componentOptions.children[0].text
-                .toLowerCase()
-                .includes(input.toLowerCase())
-          "
-        >
-          <a-select-option
-            v-for="(depart, i) in domaines"
-            :value="depart"
-            :key="i"
-          >
-            {{ depart }}
-          </a-select-option>
-        </a-select>
-      </p>
-      <p>
-        <label>Objectif</label>
-        <a-input v-model="editData.objectif" />
-      </p>
-      <p>
-        <label>Bassin</label>
-        <a-input v-model="editData.bassin" />
-      </p>
-      <p>
-        <label>Event date</label>
-        <a-date-picker v-model="editData.date" style="width: 100%" />
-      </p>
-      <p>
-        <label>Address</label>
-        <a-input v-model="editData.lieu" />
-      </p>
+
       <p v-if="editData.state == 'validated'">
         <label>Status</label>
         <a-select
@@ -424,18 +828,40 @@
           :options="options"
         ></a-select>
       </p>
+    </div>
+     
+     
+      
 
       <template #footer>
-        <a-button key="back" @click="openEditOrg = false">Cancel</a-button>
+        
+        <a-button key="back" @click="openEditOrg = false" v-if="current == 0">Cancel</a-button>
+        <a-button key="back" @click="handleNext" v-if="current == 0"
+          >Next</a-button
+        >
+        <a-button key="back" @click="handlePrevious" v-if="current == 1"
+          >Previous</a-button
+        >
         <a-button
           key="submit"
           type="primary"
           :loading="loadingEdit"
           @click="handleEditOrg"
+          v-if="current == 1"
           >Submit</a-button
         >
+        <!--a-button key="back" @click="openOrg = false">Cancel</a-button>
+        <a-button
+          key="submit"
+          type="primary"
+          :loading="loadingAdd"
+          @click="handleOkOrg"
+          >Submit</a-button
+        -->
       </template>
     </a-modal>
+
+   
 
     <a-modal v-model="openInfoOrg" width="1000px" title="View Activity">
       <CardBillingInfoOrg
@@ -526,7 +952,7 @@
                   fill="#111827"
                 />
               </svg>
-              Add New Activities
+              Add New Activity
             </a-button>
           </div>
         </a-col>
@@ -534,7 +960,7 @@
         <a-col
           :span="24"
           :md="12"
-          style="margin-top: 10px; margin-bottom: 40px; width: 500px"
+          style="margin-top: 10px; margin-bottom: 40px;"
         >
           <a-input-search
             v-model="search"
@@ -560,8 +986,8 @@
             :id="project.date"
             :title="project.titre"
             :content="project.objectif"
-            :cover="'https://api.queenbloh.com' + project.picture"
-            :team="['https://api.queenbloh.com' + project.user.photo]"
+            :cover="'http://127.0.0.1:8000' + project.picture"
+            :team="['http://127.0.0.1:8000' + project.user.photo]"
             @handleValidate="handleValidate"
             @handleDelete="handleDelete"
             @handleEdit="handleEdit"
@@ -581,7 +1007,7 @@
 
 <script>
 import { message } from "ant-design-vue";
-import Steps from "./Steps.vue";
+import Steps from "./stepActivity.vue";
 
 // "Authors" table component.
 import CardAuthorTable from "../components/Cards/CardAuthorTable";
@@ -844,7 +1270,15 @@ export default {
         date: "",
         lieu: "",
         state: "",
+        region: "",
+            village: "",
+            partner: "",
+            theme: "",
+            fullname: "",
+            contact: "",
       },
+
+      villages: [],
 
       pays: [],
       departs: [],
@@ -1058,6 +1492,13 @@ export default {
             date: "",
             lieu: "",
             state: "",
+            region: "",
+            village: "",
+            partner: "",
+            theme: "",
+            fullname: "",
+            contact: "",
+
           };
           this.loadingAdd = false;
           this.openOrg = false;
@@ -1096,6 +1537,7 @@ export default {
       this.domaines = res.data.domaines.map((vill) => vill.name);
       this.types = res.data.events.map((mail) => mail.name);
       this.communes = res.data.communes.map((mail) => mail.name);
+      this.villages = res.data.villages.map((mail) => mail.name);
       this.options = res.data.actors.map((actor) => {
         // Assurez-vous que actor.name existe
         return {

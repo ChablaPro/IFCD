@@ -65,7 +65,7 @@
         </div>
       </a-col>
 
-      <a-col :span="24" :md="12" style="margin-top: 10px; width: 500px">
+      <a-col :span="24" :md="12" style="margin-top: 10px;">
         <a-input-search
           v-model="search"
           placeholder="input search text"

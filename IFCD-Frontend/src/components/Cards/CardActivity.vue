@@ -8,7 +8,7 @@
         {{ content }}
       </p>
       <a-row type="flex" :gutter="6" class="card-footer" align="middle">
-        <a-col :span="20">
+        <a-col :xs="24" :sm="20" :md="20" :lg="20">
           <a-space>
             <a-button
               size="small"
@@ -25,7 +25,7 @@
             >
           </a-space>
         </a-col>
-        <a-col :span="4" class="text-right">
+        <a-col :xs="24" :sm="4" :md="4" :lg="4" class="text-right">
           <a-space class="avatar-chips">
             <a-avatar
               size="small"
@@ -36,6 +36,7 @@
           </a-space>
         </a-col>
       </a-row>
+
     </a-card>
     <!-- / Project Card -->
   </div>

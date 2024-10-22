@@ -76,6 +76,7 @@ class ActivityController extends Controller
         $departs = Department::select('name')->orderBy('id', 'desc')->get();
         $events = EventName::select('name')->orderBy('id', 'desc')->get();
         $actors = Actor::select('id','name')->orderBy('id', 'desc')->get();
+        $villages = Village::select('id','name')->orderBy('id', 'desc')->get();
 
 
         return response()->json([ 
@@ -85,7 +86,8 @@ class ActivityController extends Controller
             'departs' => $departs,
             'events' => $events,
             'communes' => $communes,
-            'actors' => $actors 
+            'actors' => $actors,
+            'villages' => $villages 
         ]);
 
     }
@@ -140,7 +142,13 @@ class ActivityController extends Controller
             'bassin' => $request->bassin,
             'date' => $request->date,
             'lieu' => $request->lieu,
-            'user_id' => $user->id
+            'user_id' => $user->id,
+            'region' => $request->region,
+            'village' => $request->village,
+            'partner' => $request->partner,
+            'theme' => $request->theme,
+            'fullname' => $request->fullname,
+            'contact' => $request->contact,
         ]);
 
         

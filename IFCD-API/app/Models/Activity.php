@@ -22,7 +22,13 @@ class Activity extends Model
             'lieu',
             'state',
             'picture',
-            'user_id'
+            'user_id',
+            'region',
+            'village',
+            'partner',
+            'theme',
+            'fullname',
+            'contact'
     ];
 
     public function actors(){

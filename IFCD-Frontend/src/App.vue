@@ -7,6 +7,7 @@
 
 <template>
   <div id="app">
+    <div class="gtranslate_wrapper"></div>
     <component :is="layout">
       <router-view />
     </component>
@@ -23,19 +24,45 @@ export default {
     },
   },
   mounted() {
-    // Ajout du premier script
-    window.gtranslateSettings = {
-      default_language: "en",
-      native_language_names: true,
-      languages: ["en", "fr"],
-      wrapper_selector: ".gtranslate_wrapper"
-    };
+     // Vérifier si l'écran est large (1024px et plus)
+  if (window.innerWidth > 768) {
+    // Charger le script de configuration de GTranslate
+    const scriptSettings = document.createElement("script");
+    scriptSettings.innerHTML = `window.gtranslateSettings = {
+      "default_language": "en",
+      "native_language_names": true,
+      "languages": ["en", "fr"],
+      "wrapper_selector": ".gtranslate_wrapper",
+      "horizontal_position": "left",
+      "vertical_position": "bottom"
+    };`;
+    document.head.appendChild(scriptSettings);
 
-    // Ajout du deuxième script dynamiquement
-    const script = document.createElement('script');
-    script.src = "https://cdn.gtranslate.net/widgets/latest/dropdown.js";
-    script.defer = true;
-    document.body.appendChild(script);
+    // Charger le script externe de GTranslate
+    const scriptGTranslate = document.createElement("script");
+    scriptGTranslate.src = "https://cdn.gtranslate.net/widgets/latest/dropdown.js";
+    scriptGTranslate.defer = true;
+    document.head.appendChild(scriptGTranslate);
+  }
+  if (window.innerWidth <768) {
+    // Charger le script de configuration de GTranslate
+    const scriptSettings = document.createElement("script");
+    scriptSettings.innerHTML = `window.gtranslateSettings = {
+      "default_language": "en",
+      "native_language_names": true,
+      "languages": ["en", "fr"],
+      "wrapper_selector": ".gtranslate_wrapper",
+      "horizontal_position": "right",
+      "vertical_position": "top"
+    };`;
+    document.head.appendChild(scriptSettings);
+
+    // Charger le script externe de GTranslate
+    const scriptGTranslate = document.createElement("script");
+    scriptGTranslate.src = "https://cdn.gtranslate.net/widgets/latest/dropdown.js";
+    scriptGTranslate.defer = true;
+    document.head.appendChild(scriptGTranslate);
+  }
   }
 };
 </script>
