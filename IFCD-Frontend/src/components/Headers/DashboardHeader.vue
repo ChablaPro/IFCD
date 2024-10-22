@@ -16,6 +16,7 @@
             >
             <a-breadcrumb-item>{{ this.$route.name }}</a-breadcrumb-item>
           </a-breadcrumb>
+
           <!-- / Header Breadcrumbs -->
 
           <!-- Header Page Title -->
@@ -50,6 +51,7 @@
           </a-button>
 
           <a-space>
+            <div class="gtranslate_wrapper"></div>
             <a-dropdown
               :trigger="['click']"
               overlayClassName="header-notifications-dropdown"
