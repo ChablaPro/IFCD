@@ -27,7 +27,7 @@
                 fill="#111827" />
             </svg>
           </span>
-          <span class="label">Home</span>
+          <span class="label">Home Page</span>
         </router-link>
       </a-menu-item>
       <a-menu-item>
