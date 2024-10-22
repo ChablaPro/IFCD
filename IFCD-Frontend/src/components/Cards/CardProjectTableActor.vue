@@ -300,6 +300,9 @@ export default {
 };
 </script>
 <style>
+.layout-dashboard .ant-card {
+    border-radius: 0px;
+}
 .ant-table-column-title {
   font-weight: bold;
   color: green;

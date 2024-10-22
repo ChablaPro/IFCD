@@ -406,6 +406,9 @@ export default {
 </script>
 
 <style >
+.layout-dashboard .ant-card {
+    border-radius: 0px;
+}
 .loader {
   width: 60px;
   aspect-ratio: 2;

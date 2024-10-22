@@ -307,7 +307,7 @@
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'http://127.0.0.1:8000/api/activity/upload'"
+          :action="'https://api.queenbloh.com/api/activity/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChange"
@@ -328,7 +328,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'http://127.0.0.1:8000' + data.picture"
+                :src="'https://api.queenbloh.com' + data.picture"
                 v-if="data.picture"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -719,7 +719,7 @@
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'http://127.0.0.1:8000/api/activity/upload'"
+          :action="'https://api.queenbloh.com/api/activity/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChange"
@@ -740,7 +740,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'http://127.0.0.1:8000' + editData.picture"
+                :src="'https://api.queenbloh.com' + editData.picture"
                 v-if="editData.picture"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -986,8 +986,8 @@
             :id="project.date"
             :title="project.titre"
             :content="project.objectif"
-            :cover="'http://127.0.0.1:8000' + project.picture"
-            :team="['http://127.0.0.1:8000' + project.user.photo]"
+            :cover="'https://api.queenbloh.com' + project.picture"
+            :team="['https://api.queenbloh.com' + project.user.photo]"
             @handleValidate="handleValidate"
             @handleDelete="handleDelete"
             @handleEdit="handleEdit"

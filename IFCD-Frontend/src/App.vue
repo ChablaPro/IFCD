@@ -25,7 +25,7 @@ export default {
   },
   mounted() {
      // Vérifier si l'écran est large (1024px et plus)
-  if (window.innerWidth > 768) {
+  /*if (window.innerWidth > 768) {
     // Charger le script de configuration de GTranslate
     const scriptSettings = document.createElement("script");
     scriptSettings.innerHTML = `window.gtranslateSettings = {
@@ -43,8 +43,8 @@ export default {
     scriptGTranslate.src = "https://cdn.gtranslate.net/widgets/latest/dropdown.js";
     scriptGTranslate.defer = true;
     document.head.appendChild(scriptGTranslate);
-  }
-  if (window.innerWidth <768) {
+  }*/
+ /* if (window.innerWidth <768) {
     // Charger le script de configuration de GTranslate
     const scriptSettings = document.createElement("script");
     scriptSettings.innerHTML = `window.gtranslateSettings = {
@@ -62,7 +62,7 @@ export default {
     scriptGTranslate.src = "https://cdn.gtranslate.net/widgets/latest/dropdown.js";
     scriptGTranslate.defer = true;
     document.head.appendChild(scriptGTranslate);
-  }
+  }*/
   }
 };
 </script>

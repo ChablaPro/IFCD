@@ -10,12 +10,12 @@
         <!-- Header Breadcrumbs & Title Column -->
         <a-col :span="24" :md="6">
           <!-- Header Breadcrumbs -->
-          <a-breadcrumb>
+          <!--a-breadcrumb>
             <a-breadcrumb-item
               ><router-link to="/"> Pages</router-link></a-breadcrumb-item
             >
             <a-breadcrumb-item>{{ this.$route.name }}</a-breadcrumb-item>
-          </a-breadcrumb>
+          </a-breadcrumb-->
 
           <!-- / Header Breadcrumbs -->
 

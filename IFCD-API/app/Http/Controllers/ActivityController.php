@@ -187,9 +187,12 @@ class ActivityController extends Controller
     // Supprimer un utilisateur par son ID
     public function delete(Request $request)
     {
-        $user = Activity::find($request->id);
+            $user = Activity::find($request->id);
+
+            $user->actors()->detach();
       
             $user->delete();
+
             return response()->json(['message' => 'User deleted successfully'], 200);
         
     }

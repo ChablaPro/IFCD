@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card class="card-project">
+    <a-card class="card-project" >
       <img style="max-height: 200px" slot="cover" alt="example" :src="cover" />
       <div class="card-tag">{{ id }}</div>
       <h5>{{ title }}</h5>
@@ -90,6 +90,9 @@ export default {
 </script>
 
 <style >
+.layout-dashboard .ant-card {
+    border-radius: 0px;
+}
 .loader {
   width: 60px;
   aspect-ratio: 2;
