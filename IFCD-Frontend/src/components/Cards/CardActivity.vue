@@ -2,11 +2,16 @@
   <div>
     <a-card class="card-project" >
       
-      <img style="height: 200px; object-fit: cover; object-position: top;" slot="cover" alt="example" :src="cover" />
-      <div class="card-tag">
+      <div class="img-content">
+        <img style="height: 200px; object-fit: cover; object-position: top;" alt="example" :src="cover" />
+        <div class="badge">
+          {{row.state}}
+        </div>
+      </div>
+      <div class="card-tag" style="margin-top: 20px;">
         <Row>
             <Col span="12" style="font-size:smaller;"><Icon type="md-calendar" />  {{ id }}</Col>
-            <Col span="12" style="font-size:smaller;"> <Icon type="ios-pin-outline" /> {{place}}</Col>
+            <Col span="12" style="font-size:smaller; display: flex; justify-content: flex-end;"> <Icon type="ios-pin-outline" /> {{place}}</Col>
         </Row>
         
       </div>
@@ -107,6 +112,27 @@ export default {
 </script>
 
 <style >
+.img-content {
+  position: relative;
+}
+
+.img-content img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.badge {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  background-color: green;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
 .layout-dashboard .ant-card {
     border-radius: 0px;
 }
