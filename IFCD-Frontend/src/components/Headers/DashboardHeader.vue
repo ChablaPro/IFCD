@@ -51,7 +51,7 @@
           </a-button>
 
           <a-space>
-            <!--div class="gtranslate_wrapper"></div-->
+            <div class="gtranslate_wrapper"></div>
             <a-dropdown
               :trigger="['click']"
               overlayClassName="header-notifications-dropdown"
@@ -275,6 +275,45 @@ export default {
     onSearch(value) {},
   },
   mounted: function () {
+      // Inject the GTranslate wrapper div (optional, already in template)
+      const gtranslateWrapper = document.querySelector('.gtranslate_wrapper');
+    if (!gtranslateWrapper) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'gtranslate_wrapper';
+      document.body.appendChild(wrapper);
+    }
+
+    // Inject GTranslate settings script
+    const gtranslateSettingsScript = document.createElement('script');
+    gtranslateSettingsScript.innerHTML = `window.gtranslateSettings = {
+      "default_language": "en",
+      "native_language_names": true,
+      "languages": ["en", "fr"],
+      "wrapper_selector": ".gtranslate_wrapper"
+    };`;
+    document.head.appendChild(gtranslateSettingsScript);
+
+    // Inject GTranslate dropdown script
+    const gtranslateDropdownScript = document.createElement('script');
+    gtranslateDropdownScript.src = "https://cdn.gtranslate.net/widgets/latest/dropdown.js";
+    gtranslateDropdownScript.defer = true;
+    document.head.appendChild(gtranslateDropdownScript);
+
+    // Inject Google Tag Manager script
+    const gtagScript = document.createElement('script');
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-MPTGE6VXX5";
+    gtagScript.async = true;
+    document.head.appendChild(gtagScript);
+
+    // Initialize Google Analytics after the script is loaded
+    gtagScript.onload = () => {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        window.dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-MPTGE6VXX5');
+    };
     // Set the wrapper to the proper element, layout wrapper.
     this.wrapper = document.getElementById("layout-dashboard");
   },

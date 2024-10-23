@@ -984,6 +984,7 @@
           <CardProject
             :row="project"
             :id="project.date"
+            :place="project.lieu"
             :title="project.titre"
             :content="project.objectif"
             :cover="'https://api.queenbloh.com' + project.picture"

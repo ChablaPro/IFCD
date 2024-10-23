@@ -7,7 +7,6 @@
 
 <template>
   <div id="app">
-    <div class="gtranslate_wrapper"></div>
     <component :is="layout">
       <router-view />
     </component>

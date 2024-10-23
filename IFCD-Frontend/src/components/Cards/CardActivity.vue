@@ -1,41 +1,44 @@
 <template>
   <div>
     <a-card class="card-project" >
-      <img style="max-height: 200px" slot="cover" alt="example" :src="cover" />
-      <div class="card-tag">{{ id }}</div>
-      <h5>{{ title }}</h5>
-      <p>
-        {{ content }}
+      
+      <img style="height: 200px; object-fit: cover; object-position: top;" slot="cover" alt="example" :src="cover" />
+      <div class="card-tag">
+        <Row>
+            <Col span="12" style="font-size:smaller;"><Icon type="md-calendar" />  {{ id }}</Col>
+            <Col span="12" style="font-size:smaller;"> <Icon type="ios-pin-outline" /> {{place}}</Col>
+        </Row>
+        
+      </div>
+      <h5 style="min-height: 30px; font-size:medium;" >{{ limitText(title) }}</h5>
+      <p style="min-height: 50px;">
+        {{ limitText(content) }}
       </p>
-      <a-row type="flex" :gutter="6" class="card-footer" align="middle">
-        <a-col :xs="24" :sm="20" :md="20" :lg="20">
-          <a-space>
-            <a-button
-              size="small"
-              @click="validated(row)"
-              v-if="row.state == 'new'"
-              >VALIDATE</a-button
-            >
-            <a-button size="small" @click="view(row)">VIEW</a-button>
-            <a-button size="small" primary type="primary" @click="edited(row)"
-              >EDIT</a-button
-            >
-            <a-button size="small" danger type="danger" @click="deleted(row)"
-              >DELETE</a-button
-            >
-          </a-space>
-        </a-col>
-        <a-col :xs="24" :sm="4" :md="4" :lg="4" class="text-right">
-          <a-space class="avatar-chips">
-            <a-avatar
+      <Row>
+          <Col span="20" style="gap: 5px;">
+                <Button size="small" ghost 
+                  @click="validated(row)"
+                  v-if="row.state == 'new'" type="success"
+                  style="margin-right: 5px; margin-bottom: 5px;">Validate</Button
+                >
+                <Button size="small" ghost type="info" @click="view(row)" style="margin-right: 5px; margin-bottom: 5px;">View</Button>
+                <Button size="small" ghost type="warning" @click="edited(row)"
+                style="margin-right: 5px; margin-bottom: 5px;">Edit</Button
+                >
+                <Button size="small" ghost type="error" @click="deleted(row)"
+                style="margin-bottom: 5px;">Delete</Button
+                >
+          </Col>
+          <Col span="4">
+              <a-avatar
               size="small"
               v-for="(img, index) in team"
               :key="index"
               :src="img"
-            />
-          </a-space>
-        </a-col>
-      </a-row>
+              />
+          </Col>
+        </Row>
+     
 
     </a-card>
     <!-- / Project Card -->
@@ -55,6 +58,10 @@ export default {
       type: String,
       default: "",
     },
+    place: {
+      type: String,
+      default: "",
+    },
     content: {
       type: String,
       default: "",
@@ -70,9 +77,19 @@ export default {
     row: [],
   },
   data() {
-    return {};
+    return {
+      maxLength: 50,
+    };
   },
   methods: {
+
+    limitText(text) {
+      if (text.length > this.maxLength) {
+        return text.slice(0, this.maxLength) + "..."; // Ajouter '...' si le texte est tronqué
+      }
+      return text;
+    },
+
     deleted(row) {
       this.$emit("handleDelete", row);
     },
