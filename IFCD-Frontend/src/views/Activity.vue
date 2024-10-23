@@ -996,8 +996,12 @@
           ></CardProject>
         </a-col>
 
+        
+
         <!-- / Project Column -->
       </a-row>
+      <br>
+      <Page :current="currentPage" :total="totalBlogs" :page-size="perPage" @on-change="handleChangeEvent" style="color: black;"/>
       <div style="display: flex; justify-content: center" v-if="anim">
         <div class="loader"></div>
       </div>
@@ -1304,6 +1308,9 @@ export default {
 
       // Associating "Projects" table columns with its corresponding property.
       table2Columns: table2Columns,
+      currentPage: 1,
+      totalBlogs: 0,
+      perPage: 6,
     };
   },
   computed: {
@@ -1314,6 +1321,34 @@ export default {
     },
   },
   methods: {
+    handleChangeEvent(page){
+      this.fetchBlogs(page);
+    },
+
+    async fetchBlogs(page = 1) {
+      axios
+        .get(`/activity/paginate6?page=${page}&perPage=${this.perPage}`)
+        .then((response) => {
+          this.events = response.data.activities.data.map((activity) => {
+              return {
+                ...activity,
+                date: this.formatDate(activity.date), // Formate l'attribut date
+              };
+            });
+            this.filteredData = response.data.activities.data.map((activity) => {
+              return {
+                ...activity,
+                date: this.formatDate(activity.date), // Formate l'attribut date
+              };
+            });
+          this.currentPage = response.data.activities.current_page;
+          this.totalBlogs = response.data.activities.total;
+          this.anim = false;
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la récupération des blogs :", error);
+        });
+    },
     incrementMaxTagCount() {
       this.maxTagCount++;
     },
@@ -1472,6 +1507,7 @@ export default {
       const res = await axios.post("/activity/update", this.editData);
       this.openEditOrg = false;
       this.loadingEdit = false;
+      this.current = 0;
       message.success("Activity successfully edited.", 5);
     },
     async handleOkOrg() {
@@ -1479,7 +1515,8 @@ export default {
       try {
         const res = await axios.post("/activity/create", this.data);
         if (res.status == 200) {
-          this.events = res.data.activities.data;
+          this.current = 0;
+          this.fetchBlogs();
           this.data = {
             titre: "",
             picture: "",
@@ -1529,7 +1566,7 @@ export default {
   },
   async created() {
     const res = await axios.get("/activity/utilities");
-    const resP = await axios.get("/activity/paginate6");
+    //const resP = await axios.get("/activity/paginate6");
 
     if (res.status == 200) {
       this.departs = res.data.departs.map((depart) => depart.name);
@@ -1548,7 +1585,7 @@ export default {
       });
     }
 
-    if (resP.status == 200) {
+    /*if (resP.status == 200) {
       this.events = resP.data.activities.data.map((activity) => {
         return {
           ...activity,
@@ -1563,7 +1600,9 @@ export default {
       });
 
       this.anim = false;
-    }
+    }*/
+
+    this.fetchBlogs();
   },
   mounted() {
     this.inputRef = this.$refs.inputRef;

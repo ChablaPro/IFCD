@@ -1048,6 +1048,7 @@ export default {
       const res = await axios.post("/compagny/update", this.editData);
       this.openEditOrg = false;
       this.loadingEdit = false;
+      this.currentEdit= 0;
       message.success("Organization successfully edited.", 5);
     },
     async handleOkOrg() {
@@ -1055,6 +1056,7 @@ export default {
       try {
         const res = await axios.post("/compagny/create", this.data);
         if (res.status == 200) {
+          this.current = 0;
           this.table2Data = res.data.compagnies.data.map((company) => {
             return {
               ...company,
