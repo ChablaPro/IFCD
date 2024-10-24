@@ -8,6 +8,7 @@ use App\Models\Actor;
 use App\Models\Arrondissement;
 use App\Models\Chaine;
 use App\Models\Commune;
+use App\Models\Compagny;
 use App\Models\Department;
 use App\Models\Domaine;
 use App\Models\EventName;
@@ -77,6 +78,7 @@ class ActivityController extends Controller
         $events = EventName::select('name')->orderBy('id', 'desc')->get();
         $actors = Actor::select('id','name')->orderBy('id', 'desc')->get();
         $villages = Village::select('id','name')->orderBy('id', 'desc')->get();
+        $users = Compagny::orderBy('id', 'desc')->get();
 
 
         return response()->json([ 
@@ -87,7 +89,8 @@ class ActivityController extends Controller
             'events' => $events,
             'communes' => $communes,
             'actors' => $actors,
-            'villages' => $villages 
+            'villages' => $villages,
+            'users' => $users,
         ]);
 
     }
