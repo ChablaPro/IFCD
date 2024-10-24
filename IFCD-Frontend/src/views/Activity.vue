@@ -376,7 +376,7 @@
         </a-select>
       </p>
 
-      <p>
+      <!--p>
         <label>Full name of agent</label>
         <a-input v-model="data.fullname" />
       </p>
@@ -384,7 +384,7 @@
       <p>
         <label>Agent Contact</label>
         <a-input v-model="data.contact" />
-      </p>
+      </p-->
     </div>
      
      
@@ -788,7 +788,7 @@
         </a-select>
       </p>
 
-      <p>
+      <!--p>
         <label>Full name of agent</label>
         <a-input v-model="editData.fullname" />
       </p>
@@ -796,7 +796,7 @@
       <p>
         <label>Agent Contact</label>
         <a-input v-model="editData.contact" />
-      </p>
+      </p-->
 
       <p v-if="editData.state == 'validated'">
         <label>Status</label>
@@ -826,7 +826,9 @@
           placeholder="Select Item..."
           :max-tag-text-length="maxTagTextLength"
           :options="options"
-        ></a-select>
+        >
+      
+       </a-select>
       </p>
     </div>
      
@@ -972,16 +974,10 @@
         </a-col>
       </a-row>
 
-      <a-row type="flex" :gutter="[24, 24]" align="stretch">
-        <!-- Project Column -->
-        <a-col
-          :span="24"
-          :md="12"
-          :xl="6"
-          v-for="(project, index) in events"
-          :key="index"
-        >
-          <CardProject
+      <Row  :gutter="16" justify="center">
+          <Col :xs="24" :sm="20" :md="16" :lg="8"  v-for="(project, index) in events">
+              <div>
+                <CardProject
             :row="project"
             :id="project.date"
             :place="project.lieu"
@@ -994,12 +990,11 @@
             @handleEdit="handleEdit"
             @handleView="handleView"
           ></CardProject>
-        </a-col>
+              </div>
+          </Col>
+      </Row>
 
-        
-
-        <!-- / Project Column -->
-      </a-row>
+     
       <br>
       <Page :current="currentPage" :total="totalBlogs" :page-size="perPage" @on-change="handleChangeEvent" style="color: black;"/>
       <div style="display: flex; justify-content: center" v-if="anim">

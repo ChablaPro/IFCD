@@ -51,7 +51,7 @@
           </a-button>
 
           <a-space>
-            <div class="gtranslate_wrapper"></div>
+            <!--div class="gtranslate_wrapper"></div-->
             <a-dropdown
               :trigger="['click']"
               overlayClassName="header-notifications-dropdown"
