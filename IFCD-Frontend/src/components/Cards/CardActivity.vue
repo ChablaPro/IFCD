@@ -125,11 +125,10 @@ export default {
   position: absolute;
   bottom: 0px;
   left: 0px;
-  background-color: green;
+  background-color: #FFA500;
   color: white;
   padding: 5px 10px;
   font-size: 12px;
-  border-radius: 3px;
   font-weight: bold;
 }
 
