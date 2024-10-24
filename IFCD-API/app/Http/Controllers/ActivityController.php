@@ -173,17 +173,26 @@ class ActivityController extends Controller
     // Mettre à jour les informations d'un utilisateur par son ID
     public function update(Request $request)
     {
-        $user = Activity::with(['user', 'actors'])->find($request->id);
-        $dataToUpdate = $request->except(['id', 'user', 'actors' ,'created_at', 'updated_at']); // Exclure 'user'
-        if ($user) {
-            $user->update($dataToUpdate);
+        // Récupérer l'activité avec ses relations 'user' et 'actors'
+        $activity = Activity::with(['user', 'actors'])->find($request->id);
+        
+        // Exclure les champs non nécessaires lors de la mise à jour
+        $dataToUpdate = $request->except(['id', 'user', 'actors', 'created_at', 'updated_at']);
+        
+        // Vérifier si l'activité existe
+        if ($activity) {
+            // Mise à jour des informations de l'activité
+            $activity->update($dataToUpdate);
+            
+            // Si des actorIds sont fournis, les ajouter sans doublons
             if ($request->actorIds) {
-                $user->actors()->attach($request->actorIds);
+                // Utilisation de syncWithoutDetaching pour éviter les doublons
+                $activity->actors()->syncWithoutDetaching($request->actorIds);
             }
             
-            return response()->json(['user' => $user], 200);
+            return response()->json(['activity' => $activity], 200);
         } else {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['message' => 'Activity not found'], 404);
         }
     }
 

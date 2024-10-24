@@ -345,7 +345,7 @@
               danger
               style="width: 100%"
               v-if="data.picture"
-              @click="handleRemove"
+              @click="handleRemove(data.picture)"
               >Remove Image</a-button
             >
           </a-col>
@@ -757,7 +757,7 @@
               danger
               style="width: 100%"
               v-if="editData.picture"
-              @click="handleRemove"
+              @click="handleRemove(editData.picture)"
               >Remove Image</a-button
             >
           </a-col>
@@ -819,21 +819,10 @@
 
       <p v-if="editData.state == 'done'">
         <label>Add existing actor</label>
-          <a-select
-            v-model="editData.actorIds"
-            mode="multiple"
-            style="width: 100%"
-            placeholder="Select Item..."
-            :max-tag-text-length="maxTagTextLength"
-            :options="options"
-            :filter-option="
-            (input, option) =>
-              option.componentOptions.children[0].text
-                .toLowerCase()
-                .includes(input.toLowerCase())
-          "
-          >
-        </a-select>
+        <Select name="categorie" filterable multiple v-model="editData.actorIds" id="categorie" placeholder="Choose an actor">
+                            <Option v-for="(category, i) in options" :key="i" :value="category.id">{{ category.name }}</Option>
+                        </Select>
+   
       </p> <br>
       <p v-if="editData.state == 'done'">
         <Collapse v-model="value">
@@ -886,7 +875,7 @@
               danger
               style="width: 100%"
               v-if="actor.avatar"
-              @click="handleRemove"
+              @click="handleRemove(actor.avatar)"
               >Remove Image</a-button
             >
           </a-col>
@@ -1519,13 +1508,13 @@ export default {
         const res = await axios.post("/actor/create", this.actor);
         if (res.status == 200) {
          // this.table2Data = res.data.users.data;
-          this.options = res.data.users.data.map((actor) => {
-            // Assurez-vous que actor.name existe
-            return {
-              label: actor.name,
-              value: actor.id,
-            };
-          });
+          this.options = res.data.users.data;
+          const newActorId = res.data.users.data[0].id;
+
+          if (!this.editData.actorIds.includes(newActorId)) {
+              this.editData.actorIds.push(newActorId);
+          }
+         
           this.actor = {
             name: "",
             avatar: "",
@@ -1588,9 +1577,9 @@ export default {
     decrementMaxTagTextLength() {
       this.maxTagTextLength--;
     },
-    async handleRemove() {
+    async handleRemove(url) {
       const res = await axios.post("/actor/delete-img", {
-        photo: this.data.picture,
+        photo: url,
       });
       this.data.picture = "";
     },
@@ -1760,6 +1749,7 @@ export default {
       this.openEditOrg = false;
       this.loadingEdit = false;
       this.current = 0;
+      this.fetchBlogs();
       message.success("Activity successfully edited.", 5);
     },
     async handleOkOrg() {
@@ -1833,13 +1823,7 @@ export default {
       this.types = res.data.events.map((mail) => mail.name);
       this.communes = res.data.communes.map((mail) => mail.name);
       this.villages = res.data.villages?.map((mail) => mail.name);
-      this.options = res.data.actors.map((actor) => {
-        // Assurez-vous que actor.name existe
-        return {
-          label: actor.name,
-          value: actor.id,
-        };
-      });
+      this.options = res.data.actors
     }
 
     /*if (resP.status == 200) {
