@@ -11,7 +11,7 @@
 				<div class="col-info">
 					<Row :gutter="16">
 							<Col span="8">
-								<a-descriptions title="Title" :column="1">
+								<a-descriptions title="Title : " :column="1">
 
 								<a-descriptions-item >
 									{{ info.titre }}
@@ -68,7 +68,7 @@
 				<div class="col-info">
 					<Row :gutter="16">
 							<Col span="8">
-								<a-descriptions title="Objective" :column="1">
+								<a-descriptions title="Objective : " :column="1">
 
 								<a-descriptions-item >
 									{{ info.objectif }}
@@ -77,19 +77,19 @@
 								</a-descriptions>
 							</Col>
 							<Col span="8">
-								<a-descriptions title="Coordinated by : " :column="1">
+								<a-descriptions title="Domain: " :column="1">
 
 									<a-descriptions-item >
-										{{ info.user.name }}
+										{{ info.domaine }}
 									</a-descriptions-item>
 
 									</a-descriptions>
 							</Col>
 							<Col span="8">
-								<a-descriptions title="Date :" :column="1">
+								<a-descriptions title="Address :" :column="1">
 
 									<a-descriptions-item >
-										{{ info.date }}
+										{{ info.lieu }}
 									</a-descriptions-item>
 
 								</a-descriptions>
@@ -114,19 +114,64 @@
 			</a-card>
 			</a-col>
 			<a-col :span="24">
-				<a-card :bordered="false" class="Actors lists">
+				<a-card :bordered="false" class="card-billing-info">
 					<div class="col-info">
-						<a-descriptions title="Add By" :column="1">
-							<a-descriptions-item label="Full Name">
-								{{ info.user.name }}
-							</a-descriptions-item>
-							<a-descriptions-item label="Email">
-								{{ info.user.email }}
-							</a-descriptions-item>
-							<!--a-descriptions-item label="Date Creaction">
-								{{ info.user.created_at }}
-							</a-descriptions-item-->
-						</a-descriptions>
+								<a-table
+								:loading="anim"
+								:columns="table2Columns"
+								:data-source="table2Data"
+								:pagination="true"
+								style="margin-top: 25px"
+								>
+								<template slot="name" slot-scope="name">
+									<a>{{ name }}</a>
+								</template>
+
+								
+
+								<template slot="code" slot-scope="code">
+									<h6 class="m-0">
+									{{ code }}
+									</h6>
+								</template>
+
+
+								<template slot="genre" slot-scope="genre">
+									<div class="text-right text-sm font-semibold text-muted pr-15">
+										{{ genre }}
+									</div>
+								</template>
+
+								<template slot="age" slot-scope="age">
+									<div class="progress-right">
+									<div class="text-right text-sm font-semibold text-muted pr-15">
+										{{ age }}
+									</div>
+									</div>
+								</template>
+
+								<template slot="langue" slot-scope="langue">
+									
+									<div class="text-right text-sm font-semibold text-muted pr-15">
+										{{ langue }}
+									</div>
+								</template>
+								<template slot="niveau" slot-scope="niveau">
+									<div class="text-right text-sm font-semibold text-muted pr-15">
+										{{ niveau }}
+									</div>
+								</template>
+
+								<!--template slot="user" slot-scope="user">
+									<div class="progress-right">
+									<div class="text-right text-sm font-semibold text-muted pr-15">
+										{{ user.email }}
+									</div>
+									</div>
+								</templat-->
+
+								
+								</a-table>
 					</div>
 					<!--div class="col-action">
 						<a-button type="link" size="small">
@@ -152,6 +197,10 @@
 </template>
 
 <script>
+import axios from "axios";
+
+
+
 
 	export default ({
 		props: {
@@ -159,6 +208,51 @@
 		},
 		data() {
 			return {
+				table2Columns : [
+  {
+    title: "Code",
+    dataIndex: "code",
+    scopedSlots: { customRender: "code" },
+    width: 300,
+  },
+  {
+    title: "Full Name",
+    dataIndex: "name",
+    class: "font-semibold text-muted",
+  },
+  {
+    title: "Gender",
+    dataIndex: "genre",
+    class: "font-semibold text-muted text-sm",
+  },
+  {
+    title: "Age",
+    dataIndex: "age",
+    class: "font-semibold text-muted text-sm",
+  },
+  {
+    title: "Language",
+    dataIndex: "langue",
+    class: "font-semibold text-muted text-sm",
+  },
+  {
+    title: "Level",
+    dataIndex: "niveau",
+    class: "font-semibold text-muted text-sm",
+  },
+ /* {
+    title: "Add by",
+    dataIndex: "user",
+    scopedSlots: { customRender: "user" },
+    class: "font-semibold text-muted text-sm",
+  },*/
+  
+],
+				compagnies: [],
+				table2Data: [],
+      filteredData: [],
+	  anim: false
+
 			}
 		},
 		methods: {
@@ -168,7 +262,12 @@
 			edited(){
 				this.$emit('handleEditInfo', this.info);
 			}
+		},
+		created(){
+			this.table2Data = this.info.actors;
+			console.log(this.info.actors)
 		}
+		
 	})
 
 </script>
