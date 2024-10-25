@@ -599,7 +599,9 @@ const table2Columns = [
   {
     title: "Actions",
     scopedSlots: { customRender: "editBtn" },
-    width: 50,
+    key: 'editBtn',
+    fixed: 'right',
+    width: 300,
   },
 ];
 
@@ -617,6 +619,7 @@ export default {
   },
   data() {
     return {
+      screenWidth: window.innerWidth,
       anim: true,
       fileList: [],
       loadingAdd: false,
@@ -670,6 +673,7 @@ export default {
     };
   },
   computed: {
+   
     uploadHeaders() {
       return {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -677,6 +681,9 @@ export default {
     },
   },
   methods: {
+    handleResize() {
+            this.screenWidth = window.innerWidth;
+            },
     async handleRemove() {
       const res = await axios.post("/actor/delete-img", {
         photo: this.data.avatar,
@@ -847,7 +854,13 @@ export default {
   },
   mounted() {
     this.inputRef = this.$refs.inputRef;
+    window.addEventListener('resize', this.handleResize);
   },
+  beforeDestroy() {
+      window.removeEventListener('resize', this.handleResize);
+  },
+
+           
 };
 </script>
 

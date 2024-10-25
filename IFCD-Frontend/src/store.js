@@ -25,7 +25,7 @@ export default new Vuex.Store({
   actions: {
     async login({ commit }, credentials) {
       try {
-        const response = await axios.post('https://api.queenbloh.com/api/login', credentials);
+        const response = await axios.post('http://127.0.0.1:8000/api/login', credentials);
         const token = response.data.token;
         const user = response.data.user;
 
@@ -41,7 +41,7 @@ export default new Vuex.Store({
     },
     async logout({ commit }) {
       try {
-        await axios.post('https://api.queenbloh.com/api/logout');
+        await axios.post('http://127.0.0.1:8000/api/logout');
         localStorage.removeItem('token');
         delete axios.defaults.headers.common['Authorization'];
 
@@ -52,7 +52,7 @@ export default new Vuex.Store({
     },
     async fetchUser({ commit }) {
       try {
-        const response = await axios.get('https://api.queenbloh.com/api/user');
+        const response = await axios.get('http://127.0.0.1:8000/api/user');
         commit('SET_USER', response.data);
       } catch (error) {
         throw error;

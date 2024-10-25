@@ -81,7 +81,7 @@
       :columns="columns"
       :data-source="data"
       :pagination="true"
-      style="margin-top: 25px"
+      style="margin-top: 25px" :scroll="{ x: 1500 }"
     >
       <template slot="name" slot-scope="text">
         <a>{{ text }}</a>
@@ -229,6 +229,7 @@
         </a-space>
       </template>
     </a-table>
+    
   </a-card>
   <!-- / Projects Table Column -->
 </template>
@@ -300,6 +301,14 @@ export default {
 };
 </script>
 <style>
+.ant-table-fixed-right .ant-table-thead > tr > th:first-child {
+    text-align: center;
+}
+
+.ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+    text-align: center;
+}
+
 .layout-dashboard .ant-card {
     border-radius: 0px;
 }

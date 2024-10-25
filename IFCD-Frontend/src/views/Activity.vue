@@ -307,7 +307,7 @@
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'https://api.queenbloh.com/api/activity/upload'"
+          :action="'http://127.0.0.1:8000/api/activity/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChange"
@@ -328,7 +328,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'https://api.queenbloh.com' + data.picture"
+                :src="'http://127.0.0.1:8000' + data.picture"
                 v-if="data.picture"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -469,19 +469,19 @@
                 .includes(input.toLowerCase())
           "
         >
-        <a-select-option value="Tahoua " v-if="data.pays=='Niger'">Tahoua</a-select-option>
-        <a-select-option value="Maradi" v-if="data.pays=='Niger'">Maradi</a-select-option>
-        <a-select-option value="Zinder" v-if="data.pays=='Niger'">Zinder</a-select-option>
-        <a-select-option value="Sikasso" v-if="data.pays=='Mali'">Sikasso</a-select-option>
-        <a-select-option value="Ségou" v-if="data.pays=='Mali'">Ségou</a-select-option>
-        <a-select-option value="Koulikoro" v-if="data.pays=='Mali'">Koulikoro</a-select-option>
-        <a-select-option value="Hauts Bassins" v-if="data.pays=='Burkina Faso'">Hauts Bassins</a-select-option>
-        <a-select-option value="Boucle du Mouhoun" v-if="data.pays=='Burkina Faso'">Boucle du Mouhoun</a-select-option>
-        <a-select-option value="Centre" v-if="data.pays=='Burkina Faso'">Centre</a-select-option>
-        <a-select-option value="Centre-Est" v-if="data.pays=='Burkina Faso'">Centre-Est</a-select-option>
-        <a-select-option value="Kano" v-if="data.pays=='Nigeria'">Kano</a-select-option>
-        <a-select-option value="Jigawa" v-if="data.pays=='Nigeria'">Jigawa</a-select-option>
-        <a-select-option value="Bauchi" v-if="data.pays=='Nigeria'">Bauchi</a-select-option>
+        <a-select-option value="Tahoua " v-if="editData.pays=='Niger'">Tahoua</a-select-option>
+        <a-select-option value="Maradi" v-if="editData.pays=='Niger'">Maradi</a-select-option>
+        <a-select-option value="Zinder" v-if="editData.pays=='Niger'">Zinder</a-select-option>
+        <a-select-option value="Sikasso" v-if="editData.pays=='Mali'">Sikasso</a-select-option>
+        <a-select-option value="Ségou" v-if="editData.pays=='Mali'">Ségou</a-select-option>
+        <a-select-option value="Koulikoro" v-if="editData.pays=='Mali'">Koulikoro</a-select-option>
+        <a-select-option value="Hauts Bassins" v-if="editData.pays=='Burkina Faso'">Hauts Bassins</a-select-option>
+        <a-select-option value="Boucle du Mouhoun" v-if="editData.pays=='Burkina Faso'">Boucle du Mouhoun</a-select-option>
+        <a-select-option value="Centre" v-if="editData.pays=='Burkina Faso'">Centre</a-select-option>
+        <a-select-option value="Centre-Est" v-if="editData.pays=='Burkina Faso'">Centre-Est</a-select-option>
+        <a-select-option value="Kano" v-if="editData.pays=='Nigeria'">Kano</a-select-option>
+        <a-select-option value="Jigawa" v-if="editData.pays=='Nigeria'">Jigawa</a-select-option>
+        <a-select-option value="Bauchi" v-if="editData.pays=='Nigeria'">Bauchi</a-select-option>
         </a-select>
       </p>
       
@@ -500,20 +500,20 @@
                 .includes(input.toLowerCase())
           "
         >
-        <a-select-option value="Maggia" v-if="data.pays=='Niger'">Maggia</a-select-option>
-<a-select-option value="Goulbi" v-if="data.pays=='Niger'">Goulbi</a-select-option>
-<a-select-option value="Korama" v-if="data.pays=='Niger'">Korama</a-select-option>
-<a-select-option value="Bassin du Haut Bani" v-if="data.pays=='Mali'">Bassin du Haut Bani</a-select-option>
-<a-select-option value="Bassin du Niger" v-if="data.pays=='Mali'">Bassin du Niger</a-select-option>
-<a-select-option value="Bassin de Selingué" v-if="data.pays=='Mali'">Bassin de Selingué</a-select-option>
-<a-select-option value="Sous bassin du Kou" v-if="data.pays=='Burkina Faso'">Sous bassin du Kou</a-select-option>
-<a-select-option value="Sous bassin du Mouhoun inférieur" v-if="data.pays=='Burkina Faso'">Sous bassin du Mouhoun inférieur</a-select-option>
-<a-select-option value="Bassin du Nakanbé" v-if="data.pays=='Burkina Faso'">Bassin du Nakanbé</a-select-option>
-<a-select-option value="Yartiti watershed" v-if="data.pays=='Nigeria'">Yartiti watershed</a-select-option>
-<a-select-option value="Fajewa watershed" v-if="data.pays=='Nigeria'">Fajewa watershed</a-select-option>
-<a-select-option value="Hadeija river basin" v-if="data.pays=='Nigeria'">Hadeija river basin</a-select-option>
-<a-select-option value="Jama’are watershed" v-if="data.pays=='Nigeria'">Jama’are watershed</a-select-option>
-<a-select-option value="Yankari river basin" v-if="data.pays=='Nigeria'">Yankari river basin</a-select-option>
+        <a-select-option value="Maggia" v-if="editData.pays=='Niger'">Maggia</a-select-option>
+<a-select-option value="Goulbi" v-if="editData.pays=='Niger'">Goulbi</a-select-option>
+<a-select-option value="Korama" v-if="editData.pays=='Niger'">Korama</a-select-option>
+<a-select-option value="Bassin du Haut Bani" v-if="editData.pays=='Mali'">Bassin du Haut Bani</a-select-option>
+<a-select-option value="Bassin du Niger" v-if="editData.pays=='Mali'">Bassin du Niger</a-select-option>
+<a-select-option value="Bassin de Selingué" v-if="editData.pays=='Mali'">Bassin de Selingué</a-select-option>
+<a-select-option value="Sous bassin du Kou" v-if="editData.pays=='Burkina Faso'">Sous bassin du Kou</a-select-option>
+<a-select-option value="Sous bassin du Mouhoun inférieur" v-if="editData.pays=='Burkina Faso'">Sous bassin du Mouhoun inférieur</a-select-option>
+<a-select-option value="Bassin du Nakanbé" v-if="editData.pays=='Burkina Faso'">Bassin du Nakanbé</a-select-option>
+<a-select-option value="Yartiti watershed" v-if="editData.pays=='Nigeria'">Yartiti watershed</a-select-option>
+<a-select-option value="Fajewa watershed" v-if="editData.pays=='Nigeria'">Fajewa watershed</a-select-option>
+<a-select-option value="Hadeija river basin" v-if="editData.pays=='Nigeria'">Hadeija river basin</a-select-option>
+<a-select-option value="Jama’are watershed" v-if="editData.pays=='Nigeria'">Jama’are watershed</a-select-option>
+<a-select-option value="Yankari river basin" v-if="editData.pays=='Nigeria'">Yankari river basin</a-select-option>
 
         </a-select>
       </p>
@@ -620,16 +620,16 @@
           <a-select-option value="AGRA">AGRA</a-select-option>
           <a-select-option value="IWMI">IWMI</a-select-option>
           <a-select-option value="ISRIC">ISRIC</a-select-option>
-          <a-select-option value="FSRP" v-if="['Burkina Faso', 'Niger', 'Mali'].includes(data.pays)">FSRP</a-select-option>
-            <a-select-option value="Pro_Arides" v-if="['Burkina Faso', 'Mali', 'Niger'].includes(data.pays)">Pro_Arides</a-select-option>
-            <a-select-option value="PRAPS" v-if="['Burkina Faso', 'Mali', 'Niger'].includes(data.pays)">PRAPS</a-select-option>
-            <a-select-option value="PRECA" v-if="data.pays=='Burkina Faso'">PRECA</a-select-option>
-            <a-select-option value="PACES II" v-if="data.pays=='Burkina Faso'">PACES II (BF)</a-select-option>
-            <a-select-option value="ACReSAL" v-if="data.pays=='Nigeria'">ACReSAL</a-select-option>
-            <a-select-option value="L_PRES" v-if="data.pays=='Nigeria'">L_PRES</a-select-option>
-            <a-select-option value="PRECIS" v-if="data.pays=='Niger'">PRECIS</a-select-option>
-            <a-select-option value="PGIP" v-if="data.pays=='Niger'">PGIP</a-select-option>
-            <a-select-option value="PISEN" v-if="data.pays=='Niger'">PISEN</a-select-option>
+          <a-select-option value="FSRP" v-if="['Burkina Faso', 'Niger', 'Mali'].includes(editData.pays)">FSRP</a-select-option>
+            <a-select-option value="Pro_Arides" v-if="['Burkina Faso', 'Mali', 'Niger'].includes(editData.pays)">Pro_Arides</a-select-option>
+            <a-select-option value="PRAPS" v-if="['Burkina Faso', 'Mali', 'Niger'].includes(editData.pays)">PRAPS</a-select-option>
+            <a-select-option value="PRECA" v-if="editData.pays=='Burkina Faso'">PRECA</a-select-option>
+            <a-select-option value="PACES II" v-if="editData.pays=='Burkina Faso'">PACES II (BF)</a-select-option>
+            <a-select-option value="ACReSAL" v-if="editData.pays=='Nigeria'">ACReSAL</a-select-option>
+            <a-select-option value="L_PRES" v-if="editData.pays=='Nigeria'">L_PRES</a-select-option>
+            <a-select-option value="PRECIS" v-if="editData.pays=='Niger'">PRECIS</a-select-option>
+            <a-select-option value="PGIP" v-if="editData.pays=='Niger'">PGIP</a-select-option>
+            <a-select-option value="PISEN" v-if="editData.pays=='Niger'">PISEN</a-select-option>
           <a-select-option value="Others">Others</a-select-option>
         </a-select>
       </p>
@@ -719,7 +719,7 @@
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'https://api.queenbloh.com/api/activity/upload'"
+          :action="'http://127.0.0.1:8000/api/activity/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChange"
@@ -740,7 +740,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'https://api.queenbloh.com' + editData.picture"
+                :src="'http://127.0.0.1:8000' + editData.picture"
                 v-if="editData.picture"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -837,7 +837,7 @@
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'https://api.queenbloh.com/api/actor/upload'"
+          :action="'http://127.0.0.1:8000/api/actor/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChangeActor"
@@ -858,7 +858,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'https://api.queenbloh.com' + actor.avatar"
+                :src="'http://127.0.0.1:8000' + actor.avatar"
                 v-if="actor.avatar"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -1153,8 +1153,8 @@
             :place="project.lieu"
             :title="project.titre"
             :content="project.objectif"
-            :cover="'https://api.queenbloh.com' + project.picture"
-            :team="['https://api.queenbloh.com' + project.user.photo]"
+            :cover="'http://127.0.0.1:8000' + project.picture"
+            :team="['http://127.0.0.1:8000' + project.user.photo]"
             @handleValidate="handleValidate"
             @handleDelete="handleDelete"
             @handleEdit="handleEdit"
@@ -1582,6 +1582,7 @@ export default {
         photo: url,
       });
       this.data.picture = "";
+      this.editData.picture = "";
     },
     // Handle upload change events
     handleChange(info) {

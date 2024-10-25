@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Actor;
 use App\Models\Compagny;
 use App\Models\User;
@@ -151,9 +152,13 @@ class ActorController extends Controller
 
 
       public function deleteimg(Request $request, $hasFullPath = false){
+
             $request->validate([
                 'photo'=>'required'
             ]);
+
+            Actor::where('avatar', $request->photo)->update(['avatar' => null]);
+            Activity::where('picture', $request->photo)->update(['picture' => null]);
 
             if (!$hasFullPath) {
                 $filePath = public_path() .$request->photo;

@@ -882,7 +882,8 @@ const table2Columns = [
   {
     title: "Actions",
     scopedSlots: { customRender: "editBtn" },
-    width: 50,
+    fixed: 'right',
+    width: 300,
   },
 ];
 
