@@ -2,7 +2,7 @@
 
 	<!-- Settings Drawer -->
 	<a-drawer class="settings-drawer" :class="[rtl ? 'settings-drawer-rtl' : '']" :placement="rtl ? 'left' : 'right'"
-		:closable="false" :visible="showSettingsDrawer" width="500" :getContainer="() => wrapper"
+		:closable="false" :visible="showSettingsDrawer"  :getContainer="() => wrapper" width="100%"
 		@close="$emit('toggleSettingsDrawer', false)">
 
 		<!-- Settings Drawer Close Button -->
@@ -71,56 +71,223 @@
 				</div>
 			</div-->
 			<div class="download">
-				<h6>Logs</h6>
+				<h6>Roles</h6>
 				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
 						<caret-right-outlined :rotate="isActive ? 90 : 0" />
 					</template>
-					<a-collapse-panel key="1" header="Log 1"
+					<a-collapse-panel key="1" header="Role Settings"
 						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-						<p>Log 1 Settings</p>
-					</a-collapse-panel>
-					<a-collapse-panel key="2" header="Log 2"
-						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-						<p>Log 2 Settings</p>
-					</a-collapse-panel>
-					<a-collapse-panel key="3" header="Log 3"
-						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-						<p>Log 3 Settings</p>
+						<p>
+							<div>
+								<a-modal v-model="openRole" width="1000px" title="Add Role">
+									
+									<p>
+										<label>Role Name</label>
+										<a-input v-model="data.name" />
+									</p>
+									<template #footer>
+										<a-button key="back" @click="openRole = false" 
+										>Cancel</a-button
+										>
+										<a-button
+										key="submit"
+										type="primary"
+										:loading="loadingAdd"
+										@click="handleOkOrg"
+										>Submit</a-button
+										>
+									</template>
+								</a-modal>
+
+								<a-modal v-model="openEditRole" width="1000px" title="Edit Role">
+									<p>
+										<label>Role Name</label>
+										<a-input v-model="editData.name" />
+									</p>
+
+								<template #footer>
+									<a-button key="back" @click="openEditRole=false"
+									>Cancel</a-button
+									>
+									<a-button
+									key="submit"
+									type="primary"
+									:loading="loadingEdit"
+									@click="handleEditOrg"
+									>Submit</a-button
+									>
+								</template>
+								</a-modal>
+
+								<a-modal v-model="openInfoRole" width="1000px" title="View Organisation">
+								<CardBillingInfoOrg
+									:info="viewData"
+									@handleDeleteInfo="handleDeleteInfo"
+									@handleEditInfo="handleEditInfo"
+								>
+								</CardBillingInfoOrg>
+
+								<template #footer>
+									<a-button key="back" @click="handleCancelInfo">Cancel</a-button>
+								</template>
+								</a-modal>
+
+								<!-- Projects Table -->
+								<a-row :gutter="24" type="flex">
+								<!-- Projects Table Column -->
+								<a-col :span="24" class="mb-24">
+									<!-- Projects Table Column -->
+									<CardProjectTable2
+									:anim="anim"
+									:data="table2Data"
+									:columns="table2Columns"
+									@openFunc="handleOpenFunc"
+									@handleValidate="handleValidate"
+									@handleDelete="handleDelete"
+									@handleEdit="handleEdit"
+									@handleView="handleView"
+									@handleNotValidate="handleNotValidate"
+									@handleAll="handleAll"
+									@search="handleSearch"
+									>
+									</CardProjectTable2>
+									<!-- / Projects Table Column -->
+								</a-col>
+								<!-- / Projects Table Column -->
+								</a-row>
+								<!-- / Projects Table -->
+							</div>
+						</p>
 					</a-collapse-panel>
 				</a-collapse>
 			</div>
 
 			<div class="download">
-				<h6>Sessions</h6>
+				<h6>Roles Permissions</h6>
 				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
 						<caret-right-outlined :rotate="isActive ? 90 : 0" />
 					</template>
-					<a-collapse-panel key="1" header="Session 1"
-						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-						<p>Session 1 Settings</p>
-					</a-collapse-panel>
-					<a-collapse-panel key="2" header="Session 2"
-						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-						<p>Session 2 Settings</p>
-					</a-collapse-panel>
-					<a-collapse-panel key="3" header="Session 3"
-						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-						<p>Session 3 Settings</p>
+					<a-collapse-panel key="1" :header="role.name"
+						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden" v-for="(role , i) in dataR.roles" :key="i">
+						<p>
+							
+								<Row :gutter="16" >
+									<Col span="4">Page Name</Col>
+									<Col span="4">View</Col>
+									<Col span="4">Add</Col>
+									<Col span="4">Edit</Col>
+									<Col span="4">Delete</Col>
+									<Col span="4">Setting</Col>
+									<Divider />
+								</Row>
+								<Row :gutter="16" v-for="(permission, id) in role.permissions" :key="id">
+									<Col span="4">{{permission.name}}</Col>
+									<Col span="4"><Checkbox v-model="permission.view" ></Checkbox></Col>
+									<Col span="4"><Checkbox v-model="permission.add" ></Checkbox></Col>
+									<Col span="4"><Checkbox v-model="permission.edit" ></Checkbox></Col>
+									<Col span="4"><Checkbox v-model="permission.delete" ></Checkbox></Col>
+									<Col span="4"><Checkbox v-model="permission.setting" ></Checkbox></Col>
+									<Divider />
+								</Row>
+								
+						</p>
 					</a-collapse-panel>
 				</a-collapse>
 			</div>
 
 			<div class="download">
-				<h6>API</h6>
+				<h6>Users</h6>
 				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
 						<caret-right-outlined :rotate="isActive ? 90 : 0" />
 					</template>
-					<a-collapse-panel key="1" header="Endpoints"
+					<a-collapse-panel key="1" header="User Settings"
 						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
-						<p>Endpoint 1 Settings</p>
+						<p>
+
+                            <div>
+								<a-modal v-model="openUser" width="1000px" title="Add User">
+									
+									<p>
+										<label>User Name</label>
+										<a-input v-model="data.name" />
+									</p>
+									<template #footer>
+										<a-button key="back" @click="openRole = false" 
+										>Cancel</a-button
+										>
+										<a-button
+										key="submit"
+										type="primary"
+										:loading="loadingAdd"
+										@click="handleOkOrg"
+										>Submit</a-button
+										>
+									</template>
+								</a-modal>
+
+								<a-modal v-model="openEditRole" width="1000px" title="Edit User">
+									<p>
+										<label>User Name</label>
+										<a-input v-model="editData.name" />
+									</p>
+
+								<template #footer>
+									<a-button key="back" @click="openEditRole=false"
+									>Cancel</a-button
+									>
+									<a-button
+									key="submit"
+									type="primary"
+									:loading="loadingEdit"
+									@click="handleEditOrg"
+									>Submit</a-button
+									>
+								</template>
+								</a-modal>
+
+								<a-modal v-model="openInfoRole" width="1000px" title="View Organisation">
+								<CardBillingInfoOrg
+									:info="viewData"
+									@handleDeleteInfo="handleDeleteInfo"
+									@handleEditInfo="handleEditInfo"
+								>
+								</CardBillingInfoOrg>
+
+								<template #footer>
+									<a-button key="back" @click="handleCancelInfo">Cancel</a-button>
+								</template>
+								</a-modal>
+
+								<!-- Projects Table -->
+								<a-row :gutter="24" type="flex">
+								<!-- Projects Table Column -->
+								<a-col :span="24" class="mb-24">
+									<!-- Projects Table Column -->
+									<CardProjectTableUser
+									:anim="anim"
+									:data="table2Data"
+									:columns="table2Columns"
+									@openFunc="handleOpenFuncUser"
+									@handleValidate="handleValidate"
+									@handleDelete="handleDelete"
+									@handleEdit="handleEdit"
+									@handleView="handleView"
+									@handleNotValidate="handleNotValidate"
+									@handleAll="handleAll"
+									@search="handleSearch"
+									>
+									</CardProjectTableUser>
+									<!-- / Projects Table Column -->
+								</a-col>
+								<!-- / Projects Table Column -->
+								</a-row>
+								<!-- / Projects Table -->
+							</div>
+
+						</p>
 					</a-collapse-panel>
 				</a-collapse>
 			</div>
@@ -145,6 +312,15 @@
 					</a-collapse-panel>
 				</a-collapse>
 			</div>
+
+			<Row justify="end">
+
+				<Col  >
+					<Button type="error" @click="$emit('toggleSettingsDrawer', false)">Close</Button>
+				    <Button type="success" @click="saveSetting" style="margin-left: 10px;">Save</Button>
+				</Col>
+				
+			</Row>
 		</div>
 		<!-- / Settings Drawer Content -->
 
@@ -159,9 +335,175 @@ import 'vue-github-buttons/dist/vue-github-buttons.css'; // Stylesheet
 import VueGitHubButtons from 'vue-github-buttons';
 import Vue from 'vue';
 
+import { message } from "ant-design-vue";
+import Steps from "../../views/Steps.vue";
+
+// "Authors" table component.
+import CardAuthorTable from "../../components/Cards/CardAuthorTable";
+
+// "Projects" table component.
+import CardProjectTable2 from "../../components/Cards/CardProjectTableRole";
+
+
+import CardProjectTableUser from "../../components/Cards/CardProjectTableUser";
+
+import CardBillingInfoOrg from "../../components/Cards/CardBillingInfoOrg";
+
+// Table.vue
+import axios from "axios";
+
+// "Authors" table list of columns and their properties.
+const table1Columns = [
+  {
+    title: "AUTHOR",
+    dataIndex: "author",
+    scopedSlots: { customRender: "author" },
+  },
+  {
+    title: "FUNCTION",
+    dataIndex: "func",
+    scopedSlots: { customRender: "func" },
+  },
+  {
+    title: "STATUS",
+    dataIndex: "status",
+    scopedSlots: { customRender: "status" },
+  },
+  {
+    title: "EMPLOYED",
+    dataIndex: "employed",
+    class: "text-muted",
+  },
+  {
+    title: "",
+    scopedSlots: { customRender: "editBtn" },
+    width: 50,
+  },
+];
+
+// "Authors" table list of rows and their properties.
+const table1Data = [
+  {
+    key: "1",
+    author: {
+      avatar: "images/face-2.jpg",
+      name: "Michael John",
+      email: "michael@mail.com",
+    },
+    func: {
+      job: "Manager",
+      department: "Organization",
+    },
+    status: 1,
+    employed: "23/04/18",
+  },
+  {
+    key: "2",
+    author: {
+      avatar: "images/face-3.jpg",
+      name: "Alexa Liras",
+      email: "alexa@mail.com",
+    },
+    func: {
+      job: "Programator",
+      department: "Developer",
+    },
+    status: 0,
+    employed: "23/12/20",
+  },
+  {
+    key: "3",
+    author: {
+      avatar: "images/face-1.jpg",
+      name: "Laure Perrier",
+      email: "laure@mail.com",
+    },
+    func: {
+      job: "Executive",
+      department: "Projects",
+    },
+    status: 1,
+    employed: "13/04/19",
+  },
+  {
+    key: "4",
+    author: {
+      avatar: "images/face-4.jpg",
+      name: "Miriam Eric",
+      email: "miriam@mail.com",
+    },
+    func: {
+      job: "Marketing",
+      department: "Organization",
+    },
+    status: 1,
+    employed: "03/04/21",
+  },
+  {
+    key: "5",
+    author: {
+      avatar: "images/face-5.jpeg",
+      name: "Richard Gran",
+      email: "richard@mail.com",
+    },
+    func: {
+      job: "Manager",
+      department: "Organization",
+    },
+    status: 0,
+    employed: "23/03/20",
+  },
+  {
+    key: "6",
+    author: {
+      avatar: "images/face-6.jpeg",
+      name: "John Levi",
+      email: "john@mail.com",
+    },
+    func: {
+      job: "Tester",
+      department: "Developer",
+    },
+    status: 0,
+    employed: "14/04/17",
+  },
+];
+
+// "Projects" table list of columns and their properties.
+//'id', 'denominationOpa', 'typeOpa', 'village', 'position', 'dateCreaction', 'email'
+const table2Columns = [
+ 
+  {
+    title: "Name",
+    dataIndex: "name",
+    class: "font-semibold text-muted",
+  },
+  {
+    title: "Date de créaction",
+    dataIndex: "created_at",
+    class: "font-semibold text-muted",
+  },
+  {
+    title: "Actions",
+    scopedSlots: { customRender: "editBtn" },
+    fixed: 'right',
+    width: 300,
+  },
+];
+
+// "Projects" table list of rows and their properties.
+const table2Data = [];
+
 Vue.use(VueGitHubButtons, { useCache: true });
 
 export default ({
+	components: {
+		CardAuthorTable,
+		CardProjectTable2,
+		CardBillingInfoOrg,
+		CardProjectTableUser,
+		Steps,
+	},
 	props: {
 		// Settings drawer visiblility status.
 		showSettingsDrawer: {
@@ -195,6 +537,49 @@ export default ({
 	},
 	data() {
 		return {
+			openUser: false,
+            dataR: {},
+			anim: true,
+			loadingAdd: false,
+			loadingEdit: false,
+			current: 0,
+			currentEdit: 0,
+			openInfoRole: false,
+			openEditRole: false,
+			user: [],
+			editData: {},
+			viewData: [],
+			data: {
+				name: ""
+			},
+
+			departs: [],
+			communes: [],
+			arrondissements: [],
+			villages: [],
+			maillons: [],
+			juridiques: [],
+			positions: [],
+
+			nameDepOrg: "",
+			inputRef: null,
+			index: 0,
+			openRole: false,
+			newOPA: "oui",
+			// Associating "Authors" table data with its corresponding property.
+			table1Data: table1Data,
+
+			// Associating "Authors" table columns with its corresponding property.
+			table1Columns: table1Columns,
+
+			// Associating "Projects" table data with its corresponding property.
+			table2Data: [],
+			filteredData: [],
+
+			// Associating "Projects" table columns with its corresponding property.
+			table2Columns: table2Columns,
+
+
 			// The wrapper element to attach dropdowns to.
 			wrapper: document.body,
 
@@ -212,6 +597,217 @@ export default ({
 		// Set the wrapper to the proper element, layout wrapper.
 		this.wrapper = document.getElementById('layout-dashboard');
 	},
+	methods: {
+		async saveSetting(){
+
+			const res = await axios.post('/settingUpdate', this.dataR);
+			if (res.status === 200) {
+
+				this.$Notice.success({
+
+					title: "your settings are successful updated",
+
+				});
+
+				this.$emit('toggleSettingsDrawer', false)
+
+				
+			}
+
+
+		},
+    formatDate(dateString) {
+      const inputDate = new Date(dateString);
+      const year = inputDate.getFullYear();
+      const month = String(inputDate.getMonth() + 1).padStart(2, "0"); // Mois en entier, ajoute un zéro initial si < 10
+      const day = String(inputDate.getDate()).padStart(2, "0"); // Ajoute un zéro initial si le jour est < 10
+
+      return `${year}-${month}-${day}`;
+    },
+    handleNext() {
+      this.current = 1;
+    },
+    handlePrevious() {
+      this.current = 0;
+    },
+    handleEditNext() {
+      this.currentEdit = 1;
+    },
+    handleEditPrevious() {
+      this.currentEdit = 0;
+    },
+    handleSearch(value) {
+      // Ajoutez votre logique de recherche ici
+      if (value) {
+        this.table2Data = this.filteredData.filter((item) => {
+          // Remplacez 'name' et 'description' par les propriétés que vous souhaitez filtrer
+          return (
+            item.name.toLowerCase().includes(value.toLowerCase()) 
+          );
+        });
+      } else {
+        // Si aucune valeur de recherche, on réinitialise les données filtrées
+        this.table2Data = this.filteredData;
+      }
+    },
+    async handleDeleteInfo(row) {
+      this.table2Data = this.table2Data.filter((item) => item.id !== row.id);
+      const res = await axios.post("/compagny/delete", row);
+      this.openInfoRole = false;
+    },
+    async handleEditInfo(row) {
+      this.editData = row;
+      this.openInfoRole = false;
+      this.openEditRole = true;
+    },
+    handleCancelInfo() {
+      this.openInfoRole = false;
+    },
+    handleView(row) {
+      this.viewData = row;
+      this.openInfoRole = true;
+    },
+    handleNotValidate() {
+      this.table2Data = this.filteredData.filter((item) => item.state == "new");
+    },
+    async handleAll() {
+      this.table2Data = this.filteredData;
+    },
+    handleOpenFunc() {
+      this.openRole = true; // Met à jour opeOrg lorsque l'événement est reçu
+    },
+
+	handleOpenFuncUser() {
+      this.openUser = true; // Met à jour opeOrg lorsque l'événement est reçu
+    },
+    async handleValidate(row) {
+      row.state = "validated";
+      const res = await axios.post("/compagny/validate", row);
+      message.success("Organization successfully validated.", 5);
+    },
+    async handleDelete(row) {
+      this.table2Data = this.table2Data.filter((item) => item.id !== row.id);
+      const res = await axios.post("/delete_role", row);
+      message.success("Role successfully deleted.", 5);
+    },
+    handleEdit(row) {
+      this.editData = row;
+      this.openEditRole = true;
+    },
+    async handleEditOrg() {
+      this.loadingEdit = true;
+      const res = await axios.post("/edit_role", this.editData);
+      this.openEditRole = false;
+      this.loadingEdit = false;
+      message.success("Role successfully edited.", 5);
+    },
+    async handleOkOrg() {
+      this.loadingAdd = true;
+      try {
+        const res = await axios.post("/create_role", this.data);
+        if (res.status == 200) {
+          this.table2Data = res.data.roles.data.map((company) => {
+            return {
+              ...company,
+              created_at: this.formatDate(company.created_at), // Formate l'attribut date
+            };
+          });
+          this.data = {
+           name : ""
+          };
+          this.loadingAdd = false;
+          this.openRole = false;
+          message.success("Role successfully registered.", 5);
+        }
+        this.loadingAdd = false;
+      } catch (error) {
+        this.loadingAdd = false;
+        message.error("Check your fields.", 5);
+      }
+    },
+    filterOptionDep(input, option) {
+      return (
+        option.componentOptions.children[0].text
+          .toLowerCase()
+          .indexOf(input.toLowerCase()) >= 0
+      );
+    },
+  },
+  async created() {
+    const res = await axios.get('/settings');
+     const allRole = await axios.get('/get_roles');
+
+    const resP = await axios.get("/role/paginate6");
+
+
+
+    if (resP.status == 200) {
+      this.table2Data = resP.data.roles.data.map((company) => {
+        return {
+          ...company,
+          created_at: this.formatDate(company.created_at), // Formate l'attribut date
+        };
+      });
+	  
+      this.filteredData = resP.data.roles.data.map((company) => {
+        return {
+          ...company,
+          created_at: this.formatDate(company.created_at), // Formate l'attribut date
+        };
+      });
+
+      this.anim = false;
+    }
+
+	if (res.status === 200) {
+        this.dataR = res.data.settings;
+
+        if (allRole.status === 200) {
+           
+            const defaultPermissions = [
+            { name: "Home", view: true, add: true, edit: true, delete: false, setting: false },
+            { name: "Organisation", view: true, add: true, edit: true, delete: false, setting: false },
+            { name: "Actor", view: true, add: true, edit: true, delete: false, setting: false },
+            { name: "Activity", view: true, add: true, edit: true, delete: false, setting: false },
+			{ name: "Approval", view: true, add: true, edit: true, delete: false, setting: false },
+            { name: "Settings", view: true, add: true, edit: true, delete: true, setting: true },
+           ];
+            
+
+         // Initialisation de this.dataR.roles si nécessaire
+         if (!Array.isArray(this.dataR.roles)) {
+            this.dataR.roles = [];
+        }
+
+        // Création d'un Set pour suivre les noms de rôles déjà présents dans this.dataR.roles
+        const existingNames = new Set(this.dataR.roles.map(role => role.name));
+
+        // Ajout des rôles s'ils n'existent pas et ajout des permissions par défaut si nécessaire
+        allRole.data.roles.forEach(async(role) => {
+            if (!existingNames.has(role.name)) {
+                existingNames.add(role.name);
+
+                const roleWithPermissions = {
+                    id: role.id,
+                    name: role.name,
+                    permissions: role.permissions ? role.permissions : defaultPermissions
+                };
+
+                this.dataR.roles.push(roleWithPermissions);
+                await axios.post('/settingUpdate', this.dataR);
+            }
+        });
+
+
+        
+
+                
+            
+        }
+
+       
+     }
+  },
 })
 
 </script>

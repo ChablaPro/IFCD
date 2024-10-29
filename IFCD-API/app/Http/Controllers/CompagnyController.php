@@ -38,7 +38,7 @@ class CompagnyController extends Controller
 
     public function compagnies()
     {
-        $compagnies = Compagny::with('user')->orderBy('id', 'desc')
+        $compagnies = Compagny::with('user', 'actors')->orderBy('id', 'desc')
             ->paginate(6);
 
         return response()->json([

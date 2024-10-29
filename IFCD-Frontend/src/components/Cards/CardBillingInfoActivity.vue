@@ -211,50 +211,49 @@ import axios from "axios";
 		data() {
 			return {
 				table2Columns : [
-  {
-    title: "Code",
-    dataIndex: "code",
-    scopedSlots: { customRender: "code" },
-    width: 300,
-  },
-  {
-    title: "Full Name",
-    dataIndex: "name",
-    class: "font-semibold text-muted",
-  },
-  {
-    title: "Gender",
-    dataIndex: "genre",
-    class: "font-semibold text-muted text-sm",
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    class: "font-semibold text-muted text-sm",
-  },
-  {
-    title: "Language",
-    dataIndex: "langue",
-    class: "font-semibold text-muted text-sm",
-  },
-  {
-    title: "Level",
-    dataIndex: "niveau",
-    class: "font-semibold text-muted text-sm",
-  },
- /* {
-    title: "Add by",
-    dataIndex: "user",
-    scopedSlots: { customRender: "user" },
-    class: "font-semibold text-muted text-sm",
-  },*/
-  
-],
+	{
+	title: "Code",
+	dataIndex: "code",
+	scopedSlots: { customRender: "code" },
+	width: 300,
+	},
+	{
+	title: "Full Name",
+	dataIndex: "name",
+	class: "font-semibold text-muted",
+	},
+	{
+	title: "Gender",
+	dataIndex: "genre",
+	class: "font-semibold text-muted text-sm",
+	},
+	{
+	title: "Age",
+	dataIndex: "age",
+	class: "font-semibold text-muted text-sm",
+	},
+	{
+	title: "Language",
+	dataIndex: "langue",
+	class: "font-semibold text-muted text-sm",
+	},
+	{
+	title: "Level",
+	dataIndex: "niveau",
+	class: "font-semibold text-muted text-sm",
+	},
+	/* {
+	title: "Add by",
+	dataIndex: "user",
+	scopedSlots: { customRender: "user" },
+	class: "font-semibold text-muted text-sm",
+	},*/
+
+				],
 				compagnies: [],
 				table2Data: [],
-      filteredData: [],
-	  anim: false
-
+				filteredData: [],
+				anim: false
 			}
 		},
 		methods: {

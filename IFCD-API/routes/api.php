@@ -9,6 +9,8 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\JuridiqueController;
 use App\Http\Controllers\MaillonController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatistiqueController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VillageController;
@@ -33,6 +35,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [UserController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+
+    //Settings
+    Route::post('/settingUpdate', [SettingController::class, 'update']);
+    Route::get('/settings', [SettingController::class, 'settings']);
 
     //Routes de user
     Route::post('/logout', [UserController::class, 'logout']);
@@ -97,6 +103,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/activity/delete-img', [ActivityController::class, 'deleteImg']);
     Route::get('/activity/past', [ActivityController::class, 'getLastSixPastActivities']);
     Route::get('/activity/last6', [ActivityController::class, 'getLastSix']);
+
+
+    //Roles
+    Route::get('/role/paginate6', [RoleController::class, 'roles']);
+    Route::post('/create_role', [RoleController::class, 'addRole']);
+    Route::get('/get_roles', [RoleController::class, 'getRoles']);
+    Route::get('/get_rolesO', [RoleController::class, 'getRolesO']);
+    Route::post('/edit_role', [RoleController::class, 'editRole']);
+    Route::post('/delete_role', [RoleController::class, 'deleteRole']);
+    Route::get('/getRole/{id}', [RoleController::class, 'getRole']);
+    Route::get("/searchRole/{str}", [RoleController::class, "search"]);
 
 
     Route::get('/stats', [StatistiqueController::class, 'index']);

@@ -378,13 +378,16 @@
         >
           <h6>Participated activities</h6>
           <br />
-          <CardProject
-            :row="project"
-            :id="project.id"
-            :title="project.titre"
-            :content="project.objectif"
-            :cover="'https://api.queenbloh.com' + project.picture"
-          ></CardProject>
+          <Card >
+            <CardProject
+              :row="project"
+              :id="project.date"
+              :place="project.lieu"
+              :title="project.titre"
+              :content="project.objectif"
+              :cover="'https://api.queenbloh.com' + project.picture"
+            ></CardProject>
+          </Card>
         </a-col>
       </a-row>
 

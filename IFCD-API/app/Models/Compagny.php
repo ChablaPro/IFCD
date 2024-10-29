@@ -43,4 +43,9 @@ class Compagny extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function actors()
+    {
+        return $this->hasMany(Actor::class);
+    }
 }
