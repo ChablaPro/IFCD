@@ -7,28 +7,7 @@
 		</template-->
 		<a-row :gutter="[24, 24]">
 			<a-col :span="24">
-			<a-card :bordered="false" class="card-billing-info">
-				<div class="col-info">
-					<a-descriptions title="Personal Information" :column="1">
-
-						<a-descriptions-item label="Name">
-							{{ info.name }}
-						</a-descriptions-item>
-
-						<a-descriptions-item label="Age">
-							{{ info.age }}
-						</a-descriptions-item>
-
-						<a-descriptions-item label="Language">
-							{{ info.langue }}
-						</a-descriptions-item>
-
-						<a-descriptions-item label="Contact person">
-							{{ info.niveau }}
-						</a-descriptions-item>
-						
-					</a-descriptions>
-				</div>
+				
 				<div class="col-action">
 					<a-button type="link" size="small"  @click="deleted">
 						<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -49,6 +28,46 @@
 						</svg>
 						<span class="text-dark">DOWNLOAD PDF</span>
 					</a-button>
+				</div> <br>
+			<a-card :bordered="false" class="card-billing-info">
+				<div class="col-info">
+					<Row :gutter="16">
+						<Col :xs="24" :sm="24" :md="10" :lg="8">
+							<a-descriptions title="" :column="1">
+
+								<a-descriptions-item >
+									<a-avatar src="https://www.antdv.com/assets/logo.1ef800a8.svg" />
+								</a-descriptions-item>
+
+
+								<a-descriptions-item label="Code">
+									{{ info.code }}
+								</a-descriptions-item>
+								
+							</a-descriptions>
+						</Col>
+						<Col :xs="24" :sm="24" :md="10" :lg="16">
+							<a-descriptions title="Personal Information" :column="1">
+
+								<a-descriptions-item label="Name">
+									{{ info.name }}
+								</a-descriptions-item>
+
+								<a-descriptions-item label="Age">
+									{{ info.age }}
+								</a-descriptions-item>
+
+								<a-descriptions-item label="Language">
+									{{ info.langue }}
+								</a-descriptions-item>
+
+								<a-descriptions-item label="Contact person">
+									{{ info.niveau }}
+								</a-descriptions-item>
+								
+							</a-descriptions>
+						</Col>
+					</Row>
 				</div>
 			</a-card>
 			</a-col>
