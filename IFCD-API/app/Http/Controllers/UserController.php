@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Mail\InscriptionMessage;
 use App\Models\Setting;
 use App\Models\User;
@@ -12,6 +13,44 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+
+    public function createAdmin(Request $request)
+    {
+  
+      //validation request
+  
+      $this->validate($request, [
+        'name' => 'required',
+        'email' => 'bail|required|email|unique:users',
+        'password' => 'bail|required|min:6',
+        'role_id' => 'required'
+      ]);
+  
+      $password = bcrypt($request->password);
+  
+      $userData = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $password,
+        'role_id' => $request->role_id,
+        'pays'=>$request->pays
+      ];
+  
+      // Vérifie si $request->photo n'est pas vide
+      if ($request->photo !== null) {
+        // Si $request->photo n'est pas vide, ajoutez-le aux données utilisateur
+        $userData['photo'] = $request->photo;
+      }
+  
+      $user = User::create($userData);
+  
+  
+  
+      return response()->json([
+        'admin' => new UserResource($user)
+      ]);
+    }
+
     public function index()
     {
     
@@ -24,6 +63,16 @@ class UserController extends Controller
             'user9D' => $user9D,
         ]);
     }
+
+    public function getAdmins()
+  {
+
+    $admins = User::WhereNotNull('email')->orderBy('id', 'desc')->get();
+
+    return response()->json([
+      'admins' => UserResource::collection($admins)
+    ]);
+  }
 
     public function register(Request $request)
     {

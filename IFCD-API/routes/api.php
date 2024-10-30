@@ -104,6 +104,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/activity/past', [ActivityController::class, 'getLastSixPastActivities']);
     Route::get('/activity/last6', [ActivityController::class, 'getLastSix']);
 
+    Route::get('/getAdmins', [UserController::class, 'getAdmins']);
+
 
     //Roles
     Route::get('/role/paginate6', [RoleController::class, 'roles']);
@@ -114,6 +116,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/delete_role', [RoleController::class, 'deleteRole']);
     Route::get('/getRole/{id}', [RoleController::class, 'getRole']);
     Route::get("/searchRole/{str}", [RoleController::class, "search"]);
+    Route::post('/add_admin', [UserController::class, 'createAdmin']);
 
 
     Route::get('/stats', [StatistiqueController::class, 'index']);

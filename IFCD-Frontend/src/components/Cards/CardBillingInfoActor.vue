@@ -36,7 +36,7 @@
 							<a-descriptions title="" :column="1">
 
 								<a-descriptions-item >
-									<a-avatar :src="'https://api.queenbloh.com'+info.avatar" style="width: 100px; height: 100px;" />
+									<a-avatar :src="'http://127.0.0.1:8000'+info.avatar" style="width: 100px; height: 100px;" />
 								</a-descriptions-item>
 
 

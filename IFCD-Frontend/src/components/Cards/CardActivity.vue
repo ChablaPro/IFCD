@@ -3,7 +3,7 @@
     <a-card class="card-project" >
       
       <div class="img-content">
-        <img style="height: 200px; object-fit: cover; object-position: top;" alt="example" :src="cover!=='https://api.queenbloh.comnull'?cover:'https://api.queenbloh.com/defaultPro.jpg'" />
+        <img style="height: 200px; object-fit: cover; object-position: top;" alt="example" :src="cover!=='http://127.0.0.1:8000null'?cover:'http://127.0.0.1:8000/defaultPro.jpg'" />
         <div class="badge">
           {{row.state}}
         </div>

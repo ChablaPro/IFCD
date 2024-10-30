@@ -207,85 +207,199 @@
 						style="background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden">
 						<p>
 
-                            <div>
-								<a-modal v-model="openUser" width="1000px" title="Add User">
+                            <div >
+								<Row>
+									<Col span="12" ><Button type="primary"  @click="modalAdd = true" ><Icon type="ios-add" /> Add</Button></Col>
+									<Col span="12" ><Input search placeholder="Enter something..." v-model="searchUser" @keyup="searchRoleUser" autocomplete="cc-exp"/></Col>
+								</Row>
+							
+							 <br>
+
+							<!--Tableau de données-->
+
+								<div style="text-align: center;">
 									
-									<p>
-										<label>User Name</label>
-										<a-input v-model="data.name" />
-									</p>
-									<template #footer>
-										<a-button key="back" @click="openRole = false" 
-										>Cancel</a-button
-										>
-										<a-button
-										key="submit"
-										type="primary"
-										:loading="loadingAdd"
-										@click="handleOkOrg"
-										>Submit</a-button
-										>
-									</template>
-								</a-modal>
+									<Table border :row-class-name="rowClassName" :columns="columns" :data="dataUsers" v-if="dataUsers.length > 0">
+										<template #name="{ row }">
+											<strong>{{ row.name }}</strong>
+										</template>
+										<template #email="{ row }">
+											<strong>{{ row.email }}</strong>
+										</template>
+										<template #role="{ row }">
+											<strong>{{ row.role }}</strong>
+										</template>
+										<template #action="{ row, index }">
+											<div>
+												<Button type="primary" size="small" style="margin-right: 5px" @click="showEditModal(row, index)" >Edit</Button>
+												<Button type="error" size="small" @click="showDeletingModal(row, index)" >Delete</Button>
+											</div>
+										</template>
+										
+									</Table>
+									<span class="loader" v-if="dataUsers.length <=0 "></span>
 
-								<a-modal v-model="openEditRole" width="1000px" title="Edit User">
-									<p>
-										<label>User Name</label>
-										<a-input v-model="editData.name" />
-									</p>
+									<!--Modal d'ajout'-->
+									<Modal
+										v-model="modalAdd">
+										<template #header>
+											<p style="text-align:center">
+												<Icon type="md-add" />
+												<span>Add User</span>
+											</p>
+										</template>
+										<div >
 
-								<template #footer>
-									<a-button key="back" @click="openEditRole=false"
-									>Cancel</a-button
-									>
-									<a-button
-									key="submit"
-									type="primary"
-									:loading="loadingEdit"
-									@click="handleEditOrg"
-									>Submit</a-button
-									>
-								</template>
-								</a-modal>
+											<p >
 
-								<a-modal v-model="openInfoRole" width="1000px" title="View Organisation">
-								<CardBillingInfoOrg
-									:info="viewData"
-									@handleDeleteInfo="handleDeleteInfo"
-									@handleEditInfo="handleEditInfo"
-								>
-								</CardBillingInfoOrg>
+												<a-upload-dragger
+												v-if="!dataUser.photo"
+												:file-list="fileList"
+												name="photo"
+												:multiple="false"
+												:action="'http://127.0.0.1:8000/api/actor/upload'"
+												:headers="uploadHeaders"
+												:before-upload="beforeUpload"
+												@change="handleChange"
+												@drop="handleDrop"
+												>
+													<p class="ant-upload-drag-icon">
+														<inbox-outlined></inbox-outlined>
+													</p>
+													<p class="ant-upload-text">
+														Click or drag an image to this area to upload
+													</p>
+													<p class="ant-upload-hint">
+														Support for a single image upload. Strictly upload only image files
+														(jpeg, png, jpg, gif) with a maximum size of 2MB.
+													</p>
+												</a-upload-dragger>
+												<a-row type="flex">
+												<a-col class="col-img" :span="24" :xl="12">
+													<div class="card-img-bg">
+														<img
+															:src="'http://127.0.0.1:8000' + dataUser.photo"
+															 v-if="dataUser.photo"
+															  style="max-width: 150px; border-radius: 5px"
+														/>
+													</div>
+												</a-col>
+												<a-col
+													class="col-content"
+													:span="24"
+													:xl="12"
+													style="justify-content: center"
+												>
+													<a-button
+													type="danger"
+													danger
+													style="width: 100%"
+													v-if="dataUser.photo"
+													@click="handleRemove"
+													>Remove Image</a-button
+													>
+												</a-col>
+												</a-row>
+												
+											</p>
 
-								<template #footer>
-									<a-button key="back" @click="handleCancelInfo">Cancel</a-button>
-								</template>
-								</a-modal>
+										</div> <br>
+										<div >
+											<p>User Name <span style="color: red;">*</span></p>
+											<p ><Input v-model="dataUser.name" placeholder="Ex: John Doe"  /></p>
+										</div> <br>
+										<div >
+											<p>User Email <span style="color: red;">*</span></p>
+											<p ><Input v-model="dataUser.email" placeholder="Ex: john@gmail.com"  /></p>
+										</div> <br>
+										<div >
+											<p>User Password <span style="color: red;">*</span></p>
+											<p>
+												<Input
+												v-model="dataUser.password"
+												placeholder="Enter password"
+												type="password" password
+												/>
+											</p>
+											<!--p v-if="!passwordValid">
+												The password must contain at least 6 characters, one uppercase letter, and one special character.
+											</p-->
+											</div>
+											<!--div >
+												<Progress :percent="40" status="wrong" v-if="passwordStrength==40"/>
+												<Progress :percent="60"  v-if="passwordStrength==60" :stroke-color="['#f5578b', '#34A1DC']" />
+												<Progress :percent="100"  v-if="passwordStrength==100"/>
+											</div--> <br>
+										<div >
+											<p>User confirm_password <span style="color: red;">*</span></p>
+											<p ><Input v-model="dataUser.password_confirm" type="password" placeholder="Confirm your password" password  /></p>
+											
+											<!--p>
+												<div v-if="passwordConfirmValid">
+												Passwords must match.
+												<Progress :percent="60"  :stroke-color="['#f5578b', '#34A1DC']" />
+												</div>
+												<div v-else>
+													<Progress :percent="100"  />
+												</div>
+											</p-->
+											
+										</div> <br>
 
-								<!-- Projects Table -->
-								<a-row :gutter="24" type="flex">
-								<!-- Projects Table Column -->
-								<a-col :span="24" class="mb-24">
-									<!-- Projects Table Column -->
-									<CardProjectTableUser
-									:anim="anim"
-									:data="table2Data"
-									:columns="table2Columns"
-									@openFunc="handleOpenFuncUser"
-									@handleValidate="handleValidate"
-									@handleDelete="handleDelete"
-									@handleEdit="handleEdit"
-									@handleView="handleView"
-									@handleNotValidate="handleNotValidate"
-									@handleAll="handleAll"
-									@search="handleSearch"
-									>
-									</CardProjectTableUser>
-									<!-- / Projects Table Column -->
-								</a-col>
-								<!-- / Projects Table Column -->
-								</a-row>
-								<!-- / Projects Table -->
-							</div>
+										<div >
+											<p>User Country </p>
+											<p >
+												<a-select
+												v-model="dataUser.pays"
+												show-search
+												placeholder="Select a country"
+												option-filter-prop="children"
+												style="width: 100%"
+												:filter-option="
+													(input, option) =>
+													option.componentOptions.children[0].text
+														.toLowerCase()
+														.includes(input.toLowerCase())
+												"
+												>
+													<a-select-option  value="Burkina Faso">
+														Burkina Faso 
+													</a-select-option>
+													<a-select-option  value="Mali">
+														Mali 
+													</a-select-option>
+													<a-select-option  value="Niger">
+														Niger
+													</a-select-option>
+													<a-select-option  value="Nigéria">
+														Nigéria 
+													</a-select-option>
+												</a-select>
+											</p>
+											
+											
+										</div> <br>
+										<div >
+											<p>User Role <span style="color: red;">*</span></p>
+											<p >
+												<Select v-model="dataUser.role_id" placeholder="Select a role" >
+													<Option v-for="item in getRole" :value="item.id" :key="item.id">{{ item.name }}</Option>
+												</Select>
+											</p>
+										</div>
+										<template #footer>
+											<Button type="default"  @click="modalAdd = false">Cancel</Button>
+											<Button type="success" :loading="modal_loading" @click="saveUser">Save</Button>
+										</template>
+
+									</Modal>
+
+								</div>
+
+								<!--Tableau de données-->
+
+								
+				            </div>
 
 						</p>
 					</a-collapse-panel>
@@ -537,6 +651,29 @@ export default ({
 	},
 	data() {
 		return {
+			modal_loading: false,
+			getRole:{},
+			fileList: [],
+			modalAdd: false,
+			modalEdit: false,
+            modalDelete: false,
+			editDataUser: [],
+			dataUsers: [             
+                ],
+				//Tableau à envoyer au controlleur
+                dataUser: {
+                    name: "",
+                    email: "",
+                    password: "",
+                    role_id: "",
+                    password_confirm: "",
+                    photo: "",
+                    tel: "",
+					pays: ""
+                },
+			screenWidth: window.innerWidth,
+			modalAddUser: false,
+			searchUser: "",
 			openUser: false,
             dataR: {},
 			anim: true,
@@ -594,10 +731,228 @@ export default ({
 		}
 	},
 	mounted: function () {
+		window.addEventListener('resize', this.handleResize);
 		// Set the wrapper to the proper element, layout wrapper.
 		this.wrapper = document.getElementById('layout-dashboard');
 	},
+	beforeDestroy() {
+                window.removeEventListener('resize', this.handleResize);
+            },
 	methods: {
+		isvalidEmail: async function(email) {
+                const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+                if (!emailPattern.test(email)) {
+                    return false;
+                }
+
+                try {
+                    const emailCheck = await axios.post('/check_email', { email });
+                    return !emailCheck.data.exists; // Si l'email existe, retourne false, sinon retourne true
+                } catch (error) {
+                    console.error("Error checking email:", error);
+                    return false; // En cas d'erreur, retourne false
+                }
+            },
+		async saveUser(){
+                this.modal_loading = true;
+
+                if (this.dataUser.name.trim()=="" || this.dataUser.email.trim() =="" || this.dataUser.role_id =="" || this.dataUser.pays =="" || this.dataUser.password.trim() == ""  || this.dataUser.password_confirm.trim() == "") {
+                    this.$Message.error({
+                        content: "The form inputs are required!",
+                        duration: 10,
+                        closable: true
+                    });
+
+                    this.modal_loading = false;
+                }else{
+
+                    
+
+                        if (  this.dataUser.password != this.dataUser.password_confirm || !(await this.isvalidEmail(this.dataUser.email))) {
+
+                            if (!(await this.isvalidEmail(this.dataUser.email))) {
+                                this.$Message.error({
+                                content: " Email is not correct or already exists!",
+                                duration: 10,
+                                closable: true
+                            });
+                            }
+
+                            if (this.dataUser.password != this.dataUser.password_confirm) {
+                                this.$Message.error({
+                                content: "Passwords are not correct !",
+                                duration: 10,
+                                closable: true
+                            });
+                            }
+                           
+
+                        this.modal_loading= false;
+                        } else{
+
+                      
+
+                        this.dataUser.photo = `${this.dataUser.photo}`;
+
+                        const saves = await axios.post('/add_admin', this.dataUser);
+
+                        if(saves.status === 200){
+
+
+                            this.modalAdd = false;
+
+                            this.dataUsers.unshift(saves.data.admin);
+
+                            this.$Message.success({
+                                    content: "the user was created successfully",
+                                    duration: 10,
+                                    closable: true
+                                });
+
+
+                            this.dataUser.name = '';
+                            this.dataUser.email="";
+                            this.dataUser.password="";
+                            this.dataUser.role_id="";
+                            this.dataUser.photo="";
+                            this.dataUser.password_confirm="";
+                            this.dataUser.pays = "";
+                            
+                            this.modal_loading= false;
+                            
+
+                       }else{
+
+                                this.$Message.warning({
+                                    content: "Try again, please",
+                                    duration: 10,
+                                    closable: true
+                                });
+                                
+                                    this.modal_loading= false;
+                        }
+
+                    }
+                }
+            },
+	async handleRemove() {
+      const res = await axios.post("/actor/delete-img", {
+        photo: this.dataUser.photo,
+      });
+      this.dataUser.photo = "";
+    },
+    // Handle upload change events
+    handleChange(info) {
+      const status = info.file.status;
+      console.log(status);
+      if (status === "done") {
+        this.fileList = [info.file]; // Restrict to a single file in the list
+
+        // Access the image URL returned from the backend
+        this.dataUser.photo = info.file.response.image_url;
+        message.success(
+          `Image uploaded successfully. URL: ${this.dataUser.photo}`
+        );
+      } else if (status === "error") {
+        message.error(`${info.file.name} image upload failed.`);
+      }
+    },
+
+    // Handle file drop event
+    handleDrop(e) {
+      console.log(e);
+    },
+
+    // Before uploading, validate if the file is an image and restrict to only one image
+    beforeUpload(file) {
+      const isImage = file.type.startsWith("image/");
+      const isLt2M = file.size / 1024 / 1024 < 2; // Check if the file is less than 2MB
+
+      if (!isImage) {
+        message.error("You can only upload image files!");
+        return false;
+      }
+      if (!isLt2M) {
+        message.error("Image must be smaller than 2MB!");
+        return false;
+      }
+
+      this.fileList = [file]; // Ensure only one file is in the list
+      return true; // Proceed with the upload
+    },
+
+
+		handleSuccess(res, file) {
+						if (this.isEditingItem) {
+							return (this.editDataUser.photo = res.image_url);
+						}
+						this.dataUser.photo = res.image_url;
+					},
+
+					handleError(res, file) {
+						this.$Notice.warning({
+							title: "Le format de ce fichier est incorrect",
+							desc: `${
+							file.errors.file.length
+								? file.errors.file[0]
+								: "Quelque chose se déroule mal!"
+							}`,
+						});
+                },
+
+                handleFormatError(file) {
+					this.$Notice.warning({
+						title: "Le format du fichier est incorrect",
+						desc:
+						"Le fichier " +
+						file.name +
+						" est incorrect, svp sélectionner jpg ou png.",
+					});
+                },
+
+                handleMaxSize(file) {
+					this.$Notice.warning({
+						title: "Excès de la taille su fichier",
+						desc: "Le fichier " + file.name + " est trop lourd, pas plus que 50M.",
+					});
+                },
+
+		showEditModal(row, index) {
+                this.editDataUser = row;
+                this.modalEdit = true;
+                this.index = index;
+            },
+
+            async showDeletingModal(row, deleteIndex) {
+                this.modalDelete = true;
+                this.editDataUser = row;
+                //this.deleteItem = row;
+                //this.deleteIndex = deleteIndex;
+                //this.showDeleteModal = true;
+            },
+		handleResize() {
+            this.screenWidth = window.innerWidth;
+            },
+		async searchRoleUser(){
+                if(this.searchUser.length > 0){
+                    const res = await axios.get('/searchUser/' + this.search)
+                    if(res.status === 200){
+                        this.dataUsers = res.data.user
+                    }
+                }else{
+                    const all = await axios.get('/getAdmins')
+                    if(all.status === 200){
+                        this.dataUsers = all.data.admins
+                    }
+                }
+            },
+			rowClassName (row, index) {
+                if (this.variableGlobale) {
+                    return 'demo-table-info-row';
+                } 
+                return '';
+            },
 		async saveSetting(){
 
 			const res = await axios.post('/settingUpdate', this.dataR);
@@ -733,13 +1088,54 @@ export default ({
       );
     },
   },
+  computed:{
+	columns() {
+                return [
+                {
+                        title: 'Name',
+                        slot: 'name',
+                        width: this.screenWidth > 1024 ? undefined : 150,
+                    },
+                    {
+                        title: 'Email',
+                        slot: 'email',
+                        width: this.screenWidth > 1024 ? undefined : 150,
+                    },
+                    {
+                        title: 'Role',
+                        slot: 'role',
+                        width: this.screenWidth > 1024 ? undefined : 150,
+                    },
+                    
+                    
+                    {
+                        title: 'Action',
+                        slot: 'action',
+                        align: 'center',
+                        fixed: 'right',
+                        width: 150,
+                        // Pas de largeur définie pour occuper l'espace restant
+                    }
+                ];
+            },
+    uploadHeaders() {
+	return {
+	Authorization: `Bearer ${localStorage.getItem("token")}`,
+	};
+},
+  },
   async created() {
+	const role =await axios.get('/get_roles')
     const res = await axios.get('/settings');
      const allRole = await axios.get('/get_roles');
-
+	 const all = await axios.get('/getAdmins')
     const resP = await axios.get("/role/paginate6");
 
+	if(role.status === 200){
 
+                this.getRole = role.data.roles
+              
+            }
 
     if (resP.status == 200) {
       this.table2Data = resP.data.roles.data.map((company) => {
@@ -807,6 +1203,10 @@ export default ({
 
        
      }
+
+	 if(all.status === 200){
+                this.dataUsers = all.data.admins
+            }
   },
 })
 

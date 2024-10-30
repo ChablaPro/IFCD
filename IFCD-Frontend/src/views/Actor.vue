@@ -13,7 +13,7 @@
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'https://api.queenbloh.com/api/actor/upload'"
+          :action="'http://127.0.0.1:8000/api/actor/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChange"
@@ -34,7 +34,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'https://api.queenbloh.com' + data.avatar"
+                :src="'http://127.0.0.1:8000' + data.avatar"
                 v-if="data.avatar"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -185,7 +185,7 @@
           :file-list="fileList"
           name="photo"
           :multiple="false"
-          :action="'https://api.queenbloh.com/api/actor/upload'"
+          :action="'http://127.0.0.1:8000/api/actor/upload'"
           :headers="uploadHeaders"
           :before-upload="beforeUpload"
           @change="handleChange"
@@ -206,7 +206,7 @@
           <a-col class="col-img" :span="24" :xl="12">
             <div class="card-img-bg">
               <img
-                :src="'https://api.queenbloh.com' + editData.avatar"
+                :src="'http://127.0.0.1:8000' + editData.avatar"
                 v-if="editData.avatar"
                 style="max-width: 150px; border-radius: 5px"
               />
@@ -385,7 +385,7 @@
               :place="project.lieu"
               :title="project.titre"
               :content="project.objectif"
-              :cover="'https://api.queenbloh.com' + project.picture"
+              :cover="'http://127.0.0.1:8000' + project.picture"
             ></CardProject>
           </Card>
         </a-col>

@@ -26,7 +26,7 @@ import axios from 'axios';
 
 
 // Configuration d'axios
-axios.defaults.baseURL = 'https://api.queenbloh.com/api';
+axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
 if (store.state.token) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
 }
