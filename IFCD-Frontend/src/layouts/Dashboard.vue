@@ -129,6 +129,9 @@
 				return this.$route.meta.layoutClass ;
 			},
 		},
+		async created(){
+			await this.$store.dispatch('fetchPermissions');
+		}
 	})
 
 </script>

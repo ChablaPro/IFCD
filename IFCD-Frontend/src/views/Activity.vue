@@ -1113,7 +1113,7 @@
         <a-col
           :span="24"
           :md="12"
-          style="margin-top: 10px; margin-bottom: 40px; width: 300px"
+          style="margin-top: 10px; margin-bottom: 40px; width: 300px" v-if="permissions[3].name === 'Activity' && permissions[3].add"
         >
           <div>
             <a-button type="dashed" block @click="handleOpenFunc">
@@ -1199,6 +1199,7 @@ import CardProject from "../components/Cards/CardActivity";
 
 // Table.vue
 import axios from "axios";
+
 
 // "Authors" table list of columns and their properties.
 const table1Columns = [
@@ -1507,6 +1508,11 @@ export default {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       };
     },
+
+    
+    permissions() {
+                return this.$store.getters.userPermissions;
+                },
   },
   methods: {
     async handleOkActor() {

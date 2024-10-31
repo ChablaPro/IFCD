@@ -70,7 +70,7 @@
 					</a-button>
 				</div>
 			</div-->
-			<div class="download">
+			<div class="download" v-if="permissions[5].name === 'Settings' && permissions[5].view">
 				<h6>Roles</h6>
 				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
@@ -163,7 +163,7 @@
 				</a-collapse>
 			</div>
 
-			<div class="download">
+			<div class="download" v-if="permissions[5].name === 'Settings' && permissions[5].view">
 				<h6>Roles Permissions</h6>
 				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
@@ -197,7 +197,7 @@
 				</a-collapse>
 			</div>
 
-			<div class="download">
+			<div class="download" v-if="permissions[5].name === 'Settings' && permissions[5].view">
 				<h6>Users</h6>
 				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
@@ -579,7 +579,7 @@
 				</a-collapse>
 			</div>
 
-			<div class="download">
+			<div class="download" v-if="permissions[5].name === 'Settings' && permissions[5].view">
 				<h6>User Permissions</h6>
 				<a-collapse v-model:activeKey="activeKey" :bordered="false" style="background: rgb(255, 255, 255)">
 					<template #expandIcon="{ isActive }">
@@ -604,7 +604,7 @@
 
 				<Col  >
 					<Button type="error" @click="$emit('toggleSettingsDrawer', false)">Close</Button>
-				    <Button type="success" @click="saveSetting" style="margin-left: 10px;">Save</Button>
+				    <Button type="success" @click="saveSetting" style="margin-left: 10px;" v-if="permissions[5].name === 'Settings' && permissions[5].add">Save</Button>
 				</Col>
 				
 			</Row>

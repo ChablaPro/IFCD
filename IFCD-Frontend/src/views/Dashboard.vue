@@ -330,7 +330,7 @@ export default {
   },
 
   async created() {
-    this.$store.dispatch('fetchPermissions');
+    
     const res = await axios.get("/activity/past");
     const resL = await axios.get("/activity/last6");
     const statsD = await axios.get("/stats");

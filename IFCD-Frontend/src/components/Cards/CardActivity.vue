@@ -23,15 +23,15 @@
           <Col span="20" style="gap: 5px;">
                 <Button size="small" ghost 
                   @click="validated(row)"
-                  v-if="row.state == 'new'" type="success"
-                  style="margin-right: 5px; margin-bottom: 5px;">Validate</Button
+                  v-if="row.state == 'new' && permissions[3].name === 'Activity' && permissions[3].edit" type="success"
+                  style="margin-right: 5px; margin-bottom: 5px;" >Validate</Button
                 >
                 <Button size="small" ghost type="info" @click="view(row)" style="margin-right: 5px; margin-bottom: 5px;">View</Button>
                 <Button size="small" ghost type="warning" @click="edited(row)"
-                style="margin-right: 5px; margin-bottom: 5px;">Edit</Button
+                style="margin-right: 5px; margin-bottom: 5px;" v-if="permissions[3].name === 'Activity' && permissions[3].edit">Edit</Button
                 >
                 <Button size="small" ghost type="error" @click="deleted(row)"
-                style="margin-bottom: 5px;">Delete</Button
+                style="margin-bottom: 5px;" v-if="permissions[3].name === 'Activity' && permissions[3].delete">Delete</Button
                 >
           </Col>
           <Col span="4">
@@ -85,6 +85,12 @@ export default {
     return {
       maxLength: 50,
     };
+  },
+  computed: {
+   
+    permissions() {
+                return this.$store.getters.userPermissions;
+                },
   },
   methods: {
 

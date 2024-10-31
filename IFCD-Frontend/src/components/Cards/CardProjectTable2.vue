@@ -43,7 +43,7 @@
         padding: 0 30px;
       "
     >
-      <a-col :span="24" :md="12" style="margin-top: 10px; width: 300px">
+      <a-col :span="24" :md="12" style="margin-top: 10px; width: 300px" v-if="permissions[1].name === 'Organisation' && permissions[1].add">
         <div>
           <a-button type="dashed" block @click="emitOpenFunc">
             <svg
@@ -163,7 +163,7 @@
             </svg>
           </a-button>
 
-          <a-button type="link" :data-id="row.id" @click="edited(row)">
+          <a-button type="link" :data-id="row.id" @click="edited(row)" v-if="permissions[1].name === 'Organisation' && permissions[1].edit">
             <svg
               width="20"
               height="20"
@@ -182,7 +182,7 @@
             </svg>
           </a-button>
 
-          <a-button type="link" :data-id="row.id" @click="deleted(row)">
+          <a-button type="link" :data-id="row.id" @click="deleted(row)" v-if="permissions[1].name === 'Organisation' && permissions[1].delete">
             <svg
               width="20"
               height="20"
@@ -203,7 +203,7 @@
             type="link"
             :data-id="row.id"
             @click="validated(row)"
-            v-if="row.state == 'new'"
+            v-if="row.state == 'new' && permissions[1].name === 'Organisation' && permissions[1].edit"
           >
             <svg
               width="20"
@@ -259,6 +259,19 @@ export default {
     /*setInterval(() => {
       this.now = new Date();
     }, 1000);*/
+  },
+
+  computed: {
+    uploadHeaders() {
+      return {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      };
+    },
+
+    
+    permissions() {
+                return this.$store.getters.userPermissions;
+                },
   },
 
   methods: {
