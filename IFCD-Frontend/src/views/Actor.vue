@@ -416,7 +416,7 @@
         >
         </CardProjectTable2>
         <!-- / Projects Table Column -->
-      </a-col>
+      </a-col>CardProjectTable2
       <!-- / Projects Table Column -->
     </a-row>
     <!-- / Projects Table -->
@@ -682,6 +682,12 @@ export default {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       };
     },
+
+    
+    permissions() {
+                return this.$store.getters.userPermissions;
+                },
+ 
   },
   methods: {
     handleResize() {
