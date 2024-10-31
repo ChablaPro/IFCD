@@ -12,7 +12,7 @@
 
     <!-- Sidebar Navigation Menu -->
     <a-menu theme="light" mode="inline">
-      <a-menu-item>
+      <a-menu-item  v-if="permissions[0].name === 'Home' && permissions[0].view">
         <router-link to="/dashboard">
           <span class="icon">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,7 +30,7 @@
           <span class="label">Home Page</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item>
+      <a-menu-item v-if="permissions[1].name === 'Organisation' && permissions[1].view">
         <router-link to="/tables">
           <span class="icon">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,7 +45,7 @@
           <span class="label">Organizations</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item>
+      <a-menu-item v-if="permissions[2].name === 'Actor' && permissions[2].view">
         <router-link to="/actors">
           <span class="icon">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,8 +57,8 @@
           </span>
           <span class="label">Actors</span>
         </router-link>
-      </a-menu-item>
-      <a-menu-item>
+      </a-menu-item >
+      <a-menu-item v-if="permissions[3].name === 'Activity' && permissions[3].view">
         <router-link to="/activities">
           <span class="icon">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -329,7 +329,19 @@ export default {
       // sidebarCollapsedModel: this.sidebarCollapsed,
     };
   },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+
+
+    permissions() {
+            return this.$store.getters.userPermissions;
+            },
+
+  },
   methods: {
+    
     logout() {
       this.$store.dispatch('logout').then(() => {
         this.$router.push('/sign-in');

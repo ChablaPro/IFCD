@@ -4,15 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Mail\InscriptionMessage;
+use App\Models\Role;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+    public function checkEmail(Request $request)
+    {
+        $email = $request->email;
+        $exists = User::where('email', $email)->exists();
+        return response()->json(['exists' => $exists]);
+    }
 
     public function createAdmin(Request $request)
     {
@@ -74,6 +82,84 @@ class UserController extends Controller
     ]);
   }
 
+
+   //Edit Admin
+   public function editAdmin(Request $request)
+   {
+ 
+     $password = bcrypt($request->password);
+ 
+     $role = Role::where('name', $request->role)->first();
+ 
+     $userData = [
+       'name' => $request->name,
+       'email' => $request->email,
+       'role_id' => $role->id,
+       'pays'=>$request->pays
+     ];
+ 
+     // Ajouter le mot de passe seulement s'il est défini
+     if ($request->filled('password')) {
+         $userData['password'] = bcrypt($request->password);
+     }
+ 
+ 
+     // Vérifie si $request->photo n'est pas vide
+     if ($request->photo) {
+       // Si $request->photo n'est pas vide, ajoutez-le aux données utilisateur
+       $userData['photo'] = $request->photo;
+     }
+ 
+ 
+     $user = User::where('id', $request->id)->update($userData);
+ 
+ 
+ 
+     return response()->json([
+       'user' => $user
+     ]);
+   }
+
+   public function deleteAdmin(Request $request)
+  {
+    $this->validate($request, [
+      'id' => 'required|exists:users,id'
+    ]);
+
+    $user = Auth::user();
+
+    $userToDelete = User::find($request->id);
+    
+   /* $blogsS = Blog::where('user_id', $request->id)->get();
+
+          if ($blogsS) {
+              foreach($blogsS as $bls){
+                $bls->update([
+                  'user_id'=>$user->id
+                ]);
+            }
+          }*/
+    /*
+          $newUser = User::where('name', 'Com F.G. OKE')->first();
+      
+          if ($newUser && $newUser->id !== $userToDelete->id) {
+              // Mettez à jour les blogs associés au nouvel utilisateur
+              $userToDelete->blogs()->update(['user_id' => $newUser->id]);
+          } else {
+              // Si le nouvel utilisateur n'est pas trouvé ou est le même que l'utilisateur à supprimer,
+              // mettez à jour les blogs avec l'ID de l'utilisateur authentifié
+              $userToDelete->blogs()->update(['user_id' => Auth()->user()->id]);
+          }
+      
+          // Supprime tous les blogs associés à l'utilisateur à supprimer
+          $userToDelete->blogs()->delete();*/
+
+    // Supprime l'utilisateur
+    $userToDelete->delete();
+
+    return response()->json(['message' => 'Utilisateur supprimé avec succès']);
+  }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -132,6 +218,74 @@ class UserController extends Controller
             'token' => $token,
         ]);
     }
+
+    public function searchUser($str)
+    {
+  
+      if (!empty($str)) {
+  
+        $user = User::where('name', 'LIKE', "%{$str}%")->orderBy('id', 'desc')->get();
+  
+        return response()->json([
+          'user' => UserResource::collection($user),
+        ]);
+      }
+    }
+
+
+    public function lignePro()
+    {
+        $user = Auth::user();
+    
+        if ($user) {
+            // Join tables using the query builder
+            $userInfo = DB::table('users')
+                ->join('roles', 'users.role_id', '=', 'roles.id')
+                ->join('settings', 'settings.id', '=', DB::raw('1')) // Assuming there's a single setting with id 1
+                ->where('users.id', $user->id)
+                ->select('users.*', 'roles.name as role_name', 'roles.add as role_add', 'roles.edit as role_edit', 'roles.remove as role_remove', 'roles.setting as role_setting', 'settings.roles as settings_roles')
+                ->first();
+    
+            if ($userInfo) {
+                // Decode the settings.roles JSON to include permissions
+                $settingsRoles = json_decode($userInfo->settings_roles, true);
+    
+                // Filter to get the settings role that matches the user's role name
+                $matchingRole = null;
+                foreach ($settingsRoles as $role) {
+                    if ($role['name'] === $userInfo->role_name) {
+                        $matchingRole = $role;
+                        break;
+                    }
+                }
+    
+                return response()->json([
+                    'user' => [
+                        'id' => $userInfo->id,
+                        'name' => $userInfo->name,
+                        'email' => $userInfo->email,
+                        'email_verified_at' => $userInfo->email_verified_at,
+                        'photo' => $userInfo->photo,
+                        'role_id' => $userInfo->role_id,
+                        'created_at' => $userInfo->created_at,
+                        'updated_at' => $userInfo->updated_at,
+                        'settings_roles' => $matchingRole // Return only the matching role
+                    ]
+                    /*'role' => [
+                        'id' => $userInfo->role_id,
+                        'name' => $userInfo->role_name,
+                        'add' => $userInfo->role_add,
+                        'edit' => $userInfo->role_edit,
+                        'remove' => $userInfo->role_remove,
+                        'setting' => $userInfo->role_setting,
+                    ]*/
+                ]);
+            }
+        }
+    
+        return response()->json(['message' => 'User not found'], 404);
+    }
+    
     
 
     public function logout(Request $request)

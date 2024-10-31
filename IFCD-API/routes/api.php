@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/settings', [SettingController::class, 'settings']);
 
     //Routes de user
+    Route::post('/check_email', [UserController::class, 'checkEmail']);
     Route::post('/logout', [UserController::class, 'logout']);
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/user/show/{id}', [UserController::class, 'show']);
@@ -105,6 +106,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/activity/last6', [ActivityController::class, 'getLastSix']);
 
     Route::get('/getAdmins', [UserController::class, 'getAdmins']);
+    Route::post('/edit_admin', [UserController::class, 'editAdmin']);
+    Route::post('/delete_admin', [UserController::class, 'deleteAdmin']);
+    Route::get("/searchUser/{str}", [UserController::class, "searchUser"]);
+    Route::get('/user_en_ligne_pro', [UserController::class, 'lignePro']);
 
 
     //Roles

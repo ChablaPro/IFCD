@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     user: null,
     token: localStorage.getItem('token') || null,
+    permissions: []
   },
   mutations: {
     SET_USER(state, user) {
@@ -20,9 +21,24 @@ export default new Vuex.Store({
     CLEAR_AUTH(state) {
       state.user = null;
       state.token = null;
+    },
+    SET_PERMISSIONS(state, permissions) {
+      state.permissions = permissions;
     }
   },
   actions: {
+    async fetchPermissions({ commit }) {
+      try {
+        const resU = await axios.get('http://127.0.0.1:8000/api/user_en_ligne_pro');
+        if (resU.status === 200) {
+          const permissions = resU.data.user.settings_roles.permissions;
+          commit('SET_PERMISSIONS', permissions);
+          console.log('Permissions:', permissions);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des permissions :", error);
+      }
+    },
     async login({ commit }, credentials) {
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/login', credentials);
@@ -62,5 +78,6 @@ export default new Vuex.Store({
   getters: {
     isAuthenticated: state => !!state.token,
     getUser: state => state.user,
+    userPermissions: (state) => state.permissions
   }
 });

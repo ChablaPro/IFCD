@@ -50,7 +50,7 @@
             </svg>
           </a-button>
 
-          <a-space>
+          <a-space >
             <!--div class="gtranslate_wrapper"></div-->
             <a-dropdown
               :trigger="['click']"
@@ -97,9 +97,9 @@
             <a-dropdown
               :trigger="['click']"
               overlayClassName="header-notifications-dropdown"
-              :getPopupContainer="() => wrapper"
+              :getPopupContainer="() => wrapper"  v-if="permissions[4].name === 'Approval' && permissions[4].view"
             >
-              <a-badge count="4">
+              <a-badge count="4" >
                 <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
                   <svg
                     width="20"
@@ -124,7 +124,7 @@
                 item-layout="horizontal"
                 class="header-notifications-list"
                 :data-source="notificationsData"
-                slot="overlay"
+                slot="overlay"  
               >
                 <a-list-item slot="renderItem" slot-scope="item">
                   <a-list-item-meta>
@@ -259,6 +259,12 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+
+
+    permissions() {
+            return this.$store.getters.userPermissions;
+            },
+
   },
   methods: {
     logout() {

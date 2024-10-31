@@ -210,7 +210,8 @@
                             <div >
 								<Row>
 									<Col span="12" ><Button type="primary"  @click="modalAdd = true" ><Icon type="ios-add" /> Add</Button></Col>
-									<Col span="12" ><Input search placeholder="Enter something..." v-model="searchUser" @keyup="searchRoleUser" autocomplete="cc-exp"/></Col>
+									<Col span="12" ><Input search placeholder="Enter something..." v-model="searchUser" @keyup="searchRoleUser" @search="searchRoleUser"
+          @input="searchRoleUser" autocomplete="cc-exp"/></Col>
 								</Row>
 							
 							 <br>
@@ -225,6 +226,9 @@
 										</template>
 										<template #email="{ row }">
 											<strong>{{ row.email }}</strong>
+										</template>
+										<template #pays="{ row }">
+											<strong>{{ row.pays }}</strong>
 										</template>
 										<template #role="{ row }">
 											<strong>{{ row.role }}</strong>
@@ -392,6 +396,175 @@
 											<Button type="success" :loading="modal_loading" @click="saveUser">Save</Button>
 										</template>
 
+									</Modal>
+
+									<Modal
+										v-model="modalEdit"
+										title="Modal Edit">
+										
+										<template #header>
+											<p style="text-align:center">
+												<Icon type="ios-brush-outline" />
+												<span>Edit User</span>
+											</p>
+										</template>
+										<div >
+											<p >
+												<a-upload-dragger
+												v-if="!editDataUser.photo"
+												:file-list="fileList"
+												name="photo"
+												:multiple="false"
+												:action="'http://127.0.0.1:8000/api/upload'"
+												:headers="uploadHeaders"
+												:before-upload="beforeUpload"
+												@change="handleChangeEdit"
+												@drop="handleDrop"
+												>
+													<p class="ant-upload-drag-icon">
+														<inbox-outlined></inbox-outlined>
+													</p>
+													<p class="ant-upload-text">
+														Click or drag an image to this area to upload
+													</p>
+													<p class="ant-upload-hint">
+														Support for a single image upload. Strictly upload only image files
+														(jpeg, png, jpg, gif) with a maximum size of 2MB.
+													</p>
+												</a-upload-dragger>
+												<a-row type="flex">
+												<a-col class="col-img" :span="24" :xl="12">
+													<div class="card-img-bg">
+														<img
+															:src="'http://127.0.0.1:8000' + editDataUser.photo"
+															 v-if="editDataUser.photo"
+															  style="max-width: 150px; border-radius: 5px"
+														/>
+													</div>
+												</a-col>
+												<a-col
+													class="col-content"
+													:span="24"
+													:xl="12"
+													style="justify-content: center"
+												>
+													<a-button
+													type="danger"
+													danger
+													style="width: 100%"
+													v-if="editDataUser.photo"
+													@click="handleRemoveEdit"
+													>Remove Image</a-button
+													>
+												</a-col>
+												</a-row>
+											</p>
+
+										</div> <br>
+										<div >
+											<p>User Name <span style="color: red;">*</span></p>
+											<p ><Input v-model="editDataUser.name" placeholder="Ex: John Doe"  /></p>
+										</div> <br>
+										<div >
+											<p>User Email <span style="color: red;">*</span></p>
+											<p ><Input v-model="editDataUser.email" placeholder="Ex: john@gmail.com"  /></p>
+										</div> <br>
+										<div >
+											<p>User Password <span style="color: red;">*</span></p>
+											<p>
+												<Input
+												v-model="editDataUser.password"
+												placeholder="Enter a password"
+												type="password" password
+												@input="validateEditPassword"
+												/>
+											</p>
+											<!--p v-if="!passwordEditValid">
+												The password must contain at least 6 characters, one uppercase letter, and one special character.
+											</p-->
+											</div>
+											<!--div >
+												<Progress :percent="40" status="wrong" v-if="passwordEditStrength==40"/>
+												<Progress :percent="60"  v-if="passwordEditStrength==60" :stroke-color="['#f5578b', '#34A1DC']" />
+												<Progress :percent="100"  v-if="passwordEditStrength==100"/>
+											</div--> <br>
+										<div >
+											<p>User confirm_password <span style="color: red;">*</span></p>
+											<p ><Input v-model="editDataUser.password_confirm" type="password" password placeholder="Confirm a passwword"  @input="validateEditPasswordConfirm" /></p>
+											
+											<!--p>
+												<div v-if="passwordConfirmEditValid">
+												Passwords must match.
+												<Progress :percent="60"  :stroke-color="['#f5578b', '#34A1DC']" />
+												</div>
+												<div v-else>
+													<Progress :percent="100"  />
+												</div>
+											</p-->
+											
+										</div> <br>
+										<div >
+											<p>User Country </p>
+											<p >
+												<a-select
+												v-model="editDataUser.pays"
+												show-search
+												placeholder="Select a country"
+												option-filter-prop="children"
+												style="width: 100%"
+												:filter-option="
+													(input, option) =>
+													option.componentOptions.children[0].text
+														.toLowerCase()
+														.includes(input.toLowerCase())
+												"
+												>
+													<a-select-option  value="Burkina Faso">
+														Burkina Faso 
+													</a-select-option>
+													<a-select-option  value="Mali">
+														Mali 
+													</a-select-option>
+													<a-select-option  value="Niger">
+														Niger
+													</a-select-option>
+													<a-select-option  value="Nigéria">
+														Nigéria 
+													</a-select-option>
+												</a-select>
+											</p>
+											
+											
+										</div> <br>
+										<div >
+											<p>User Role <span style="color: red;">*</span></p>
+											<p >
+												<Select v-model="editDataUser.role" placeholder="Select a role" >
+													<Option v-for="item in getRole" :value="item.name" :key="item.id">{{ item.name }}</Option>
+												</Select>
+											</p>
+										</div>
+										<template #footer>
+											<Button type="default"  @click="modalEdit = false">Cancel</Button>
+											<Button type="success" :loading="modal_loading" @click="edit">Edit</Button>
+										</template>
+									</Modal>
+
+									<!--Modal de suppression-->
+									<Modal v-model="modalDelete" width="360" >
+										<template #header>
+											<p style="color:#f60;text-align:center">
+												<Icon type="ios-information-circle"></Icon>
+												<span>Delete confirmation</span>
+											</p>
+										</template>
+										<div style="text-align:center">
+											<p>After this user is deleted, you won't be able to use it.</p>
+											<p>Will you delete it?</p>
+										</div>
+										<template #footer>
+											<Button type="error" size="large" long :loading="modal_loading" @click="deletes">Delete</Button>
+										</template>
 									</Modal>
 
 								</div>
@@ -660,6 +833,7 @@ export default ({
 			editDataUser: [],
 			dataUsers: [             
                 ],
+				dataUsersFiltre: [],
 				//Tableau à envoyer au controlleur
                 dataUser: {
                     name: "",
@@ -739,6 +913,52 @@ export default ({
                 window.removeEventListener('resize', this.handleResize);
             },
 	methods: {
+		async deletes() {
+                try {
+
+                    this.modal_loading = true;
+
+                    const res = await axios.post('/delete_admin', this.editDataUser)
+
+                    if (res.status === 200) {
+						this.modal_loading = false;
+                        this.modalDelete = false;
+
+                        this.$Message.success({
+                            content: "The User has been successfully deleted.",
+                            duration: 10,
+                            closable: true
+                        });
+
+                        const index = this.dataUsers.findIndex(role => role.id === this.editDataUser.id);
+
+                        if(index !== -1){
+                            this.dataUsers.splice(index,1);
+                        }
+
+                        
+
+                    }else{
+                        this.$Message.warning({
+                                content: "Try again, please",
+                                duration: 10,
+                                closable: true
+                            });
+                                this.modal_loading= false;
+                    }
+                    
+                } catch (error) {
+                    
+                        this.$Message.warning({
+                                content: "Try again, please",
+                                duration: 10,
+                                closable: true
+                            });
+                                this.modal_loading= false;
+
+                }
+                
+            },
 		isvalidEmail: async function(email) {
                 const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -842,6 +1062,93 @@ export default ({
       });
       this.dataUser.photo = "";
     },
+	async handleRemoveEdit() {
+      const res = await axios.post("/actor/delete-img", {
+        photo: this.editDataUser.photo,
+      });
+      this.editDataUser.photo = "";
+    },
+
+	async edit(){
+                this.modal_loading = true;
+
+                if (this.editDataUser.name=="" || this.editDataUser.email =="" || this.editDataUser.pays =="" || this.editDataUser.role_id =="" || this.editDataUser.password == ""  || this.editDataUser.password_confirm == "") {
+                    this.$Message.error({
+                        content: "The form inputs are required!",
+                        duration: 10,
+                        closable: true
+                    });
+
+                    this.modal_loading = false;
+                }else{
+
+                    
+
+                    if (  this.editDataUser.password != this.editDataUser.password_confirm || !((/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/).test(this.editDataUser.email))) {
+
+                        if (!((/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/).test(this.editDataUser.email))) {
+                            this.$Message.error({
+                            content: " Email is not correct",
+                            duration: 10,
+                            closable: true
+                        });
+                        }
+
+                        if (this.editDataUser.password != this.editDataUser.password_confirm ) {
+                            this.$Message.error({
+                            content: "Passwords are not correct !",
+                            duration: 10,
+                            closable: true
+                        });
+                        }
+
+
+                        this.modal_loading= false;
+                    } else{
+
+                   
+
+                        this.editDataUser.photo = `${this.editDataUser.photo}`;
+
+                        const saves = await axios.post('/edit_admin', this.editDataUser);
+
+                        if(saves.status === 200){
+
+
+                            this.modalEdit = false;
+
+                            const index = this.data.findIndex(role => role.id === this.editDataUser.id)
+                            if(index !== -1){
+                            this.dataUsers[index] = this.editDataUser
+                            }
+
+                            this.$Message.success({
+                                    content: "the user was updated successfully",
+                                    duration: 10,
+                                    closable: true
+                                });
+
+
+                            this.editDataUser = {}
+
+                  
+                            
+                            this.modal_loading= false;
+                            
+
+                            }else{
+
+                                this.$Message.warning({
+                                    content: "Try again, please",
+                                    duration: 10,
+                                    closable: true
+                                });
+                                    this.modal_loading= false;
+                        }
+
+                    }
+                }
+            },
     // Handle upload change events
     handleChange(info) {
       const status = info.file.status;
@@ -853,6 +1160,22 @@ export default ({
         this.dataUser.photo = info.file.response.image_url;
         message.success(
           `Image uploaded successfully. URL: ${this.dataUser.photo}`
+        );
+      } else if (status === "error") {
+        message.error(`${info.file.name} image upload failed.`);
+      }
+    },
+
+	handleChangeEdit(info) {
+      const status = info.file.status;
+      console.log(status);
+      if (status === "done") {
+        this.fileList = [info.file]; // Restrict to a single file in the list
+
+        // Access the image URL returned from the backend
+        this.editDataUser.photo = info.file.response.image_url;
+        message.success(
+          `Image uploaded successfully. URL: ${this.editDataUser.photo}`
         );
       } else if (status === "error") {
         message.error(`${info.file.name} image upload failed.`);
@@ -934,18 +1257,19 @@ export default ({
 		handleResize() {
             this.screenWidth = window.innerWidth;
             },
-		async searchRoleUser(){
-                if(this.searchUser.length > 0){
-                    const res = await axios.get('/searchUser/' + this.search)
-                    if(res.status === 200){
-                        this.dataUsers = res.data.user
-                    }
-                }else{
-                    const all = await axios.get('/getAdmins')
-                    if(all.status === 200){
-                        this.dataUsers = all.data.admins
-                    }
-                }
+		searchRoleUser(value){
+			    // Ajoutez votre logique de recherche ici
+				if (value) {
+					this.dataUsers = this.dataUsersFiltre.filter((item) => {
+					// Remplacez 'name' et 'description' par les propriétés que vous souhaitez filtrer
+					return (
+						item.name.toLowerCase().includes(value.toLowerCase()) 
+					);
+					});
+				} else {
+					// Si aucune valeur de recherche, on réinitialise les données filtrées
+					this.dataUsers = this.dataUsersFiltre;
+				}
             },
 			rowClassName (row, index) {
                 if (this.variableGlobale) {
@@ -1089,40 +1413,60 @@ export default ({
     },
   },
   computed:{
+
 	columns() {
-                return [
-                {
-                        title: 'Name',
-                        slot: 'name',
-                        width: this.screenWidth > 1024 ? undefined : 150,
-                    },
-                    {
-                        title: 'Email',
-                        slot: 'email',
-                        width: this.screenWidth > 1024 ? undefined : 150,
-                    },
-                    {
-                        title: 'Role',
-                        slot: 'role',
-                        width: this.screenWidth > 1024 ? undefined : 150,
-                    },
-                    
-                    
-                    {
-                        title: 'Action',
-                        slot: 'action',
-                        align: 'center',
-                        fixed: 'right',
-                        width: 150,
-                        // Pas de largeur définie pour occuper l'espace restant
-                    }
-                ];
-            },
-    uploadHeaders() {
-	return {
-	Authorization: `Bearer ${localStorage.getItem("token")}`,
-	};
-},
+		return [
+		{
+				title: 'Name',
+				slot: 'name',
+				width: this.screenWidth > 1024 ? undefined : 150,
+			},
+			{
+				title: 'Email',
+				slot: 'email',
+				width: this.screenWidth > 1024 ? undefined : 150,
+			},
+			{
+				title: 'Pays',
+				slot: 'pays',
+				width: this.screenWidth > 1024 ? undefined : 150,
+			},
+			{
+				title: 'Role',
+				slot: 'role',
+				width: this.screenWidth > 1024 ? undefined : 150,
+			},
+			
+			
+			{
+				title: 'Action',
+				slot: 'action',
+				align: 'center',
+				fixed: 'right',
+				width: 150,
+				// Pas de largeur définie pour occuper l'espace restant
+			}
+		];
+	},
+
+	uploadHeaders() {
+
+			return {
+			Authorization: `Bearer ${localStorage.getItem("token")}`,
+			};
+			
+		},
+
+	user() {
+
+		return this.$store.getters.getUser;
+
+	},
+
+	permissions() {
+		return this.$store.getters.userPermissions;
+	},
+
   },
   async created() {
 	const role =await axios.get('/get_roles')
@@ -1206,6 +1550,7 @@ export default ({
 
 	 if(all.status === 200){
                 this.dataUsers = all.data.admins
+				this.dataUsersFiltre = all.data.admins
             }
   },
 })
