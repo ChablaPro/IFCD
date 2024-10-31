@@ -9,6 +9,7 @@
 		<a-button type="link" class="btn-close" @click="$emit('toggleSettingsDrawer', false)">
 			<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9">
 				<g id="close" transform="translate(0.75 0.75)">
+					
 					<path id="Path" d="M7.5,0,0,7.5" fill="none" stroke="#000" stroke-linecap="round"
 						stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" />
 					<path id="Path-2" data-name="Path" d="M0,0,7.5,7.5" fill="none" stroke="#000" stroke-linecap="round"
